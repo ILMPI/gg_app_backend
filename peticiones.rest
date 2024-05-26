@@ -21,7 +21,7 @@ Content-Type : application/json
 }
 
 
-### Login
+### Login User
 POST {{HOST}}/api/users/login
 Content-Type: application/json
 
@@ -30,3 +30,23 @@ Content-Type: application/json
     "password" : "98765"
 }
 
+
+### Get Groups
+GET {{HOST}}/api/groups
+
+### Get Groups by Id
+GET {{HOST}}/api/groups/2
+
+### Get Groups by Creator_id
+GET {{HOST}}/api/groups/creator_id/1
+
+### Create Group
+POST {{HOST}}/api/groups
+Content-Type: application/json
+
+{
+    "creator_id" : "1",
+    "title" : "Grupo de prueba gasto desde peticiones",
+    "description" : "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
+    "image_url" : "/images/grupo1_pruebas"
+}

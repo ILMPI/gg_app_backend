@@ -21,6 +21,20 @@ const getUserById = async (req, res, next) =>{
     }
 }
 
+const deleteUserById = async (req, res, next) =>{
+    try{
+        const {id}=req.params;
+        const [result] = await User.deleteById(id);
+        if (result.affectedRows===1){
+            res.json({message:'Se ha borrado el usuario'});
+        }else{
+            res.status(404).json({message:'El usuario no existe'})
+        }
+    }catch(err){
+        next(err);
+    }
+}
+
 const register = async (req, res, next) => {
    req.body.password = bcrypt.hashSync(req.body.password, 8);
     try{     
@@ -57,5 +71,5 @@ const login = async (req, res, next) => {
 }
 
 module.exports = {
-    getAllUsers, getUserById, register, login
+    getAllUsers, getUserById, register, login, deleteUserById
 }
