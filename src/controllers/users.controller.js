@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-
 const User = require('../models/users.model');
 
 const getAllUsers = async (req, res, next)=>{
@@ -36,14 +35,13 @@ const deleteUserById = async (req, res, next) =>{
 }
 
 const register = async (req, res, next) => {
-   req.body.password = bcrypt.hashSync(req.body.password, 8);
-    try{     
-        const [result] = await User.insertUser(req.body);    
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const [result] = await User.insertUser({ ...req.body, password: hashedPassword });
         res.json(result);
-    }catch(err){
+    } catch (err) {
         next(err);
     }
-
 }
 
 const login = async (req, res, next) => {

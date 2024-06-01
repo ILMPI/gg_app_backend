@@ -5,7 +5,7 @@ const {getAllUsers, getUserById, register, login} = require('../../controllers/u
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 
-router.use('/register', register);
+router.post('/register', register);
 router.use('/login', login);
 
 module.exports = router;
