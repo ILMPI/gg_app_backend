@@ -8,6 +8,12 @@ require('dotenv').config();
 // Config db
 require('./src/config/db');
 
+// Import routes
+const authRoutes = require('./src/routes/auth.routes');
+
+// Use routes
+app.use('/api/auth', authRoutes);
+
 // Creación server
 const server = http.createServer(app);
 
@@ -21,4 +27,4 @@ server.on('listening', () => {
 
 server.on('error', (error) => {
     console.log(error);
-})
+});
