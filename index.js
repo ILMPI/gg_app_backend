@@ -9,7 +9,7 @@ require('dotenv').config();
 require('./src/config/db');
 
 // Import routes
-const authRoutes = require('./src/routes/auth.routes');
+const authRoutes = require('./src/routes/api/auth');
 
 // Use routes
 app.use('/api/auth', authRoutes);

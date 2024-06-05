@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 // Import your route files
-const authRoutes = require('./auth.routes');
-const userRoutes = require('./users.routes');
-const groupRoutes = require('./groups.routes');
+const authRoutes = require('./api/auth');
+const userRoutes = require('./api/users');
+const groupRoutes = require('./api/groups');
 
 // Use your routes
 router.use('/auth', authRoutes);
