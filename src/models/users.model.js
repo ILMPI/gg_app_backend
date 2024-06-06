@@ -1,23 +1,23 @@
-const selectAll = () =>{
-    return db.query('select * from users');
-}
+const selectAll = () => {
+    return db.query('SELECT * FROM users');
+};
 
-const selectById = (id)=>{
-    return db.query('select * from users where id=?',[id]);
-}
+const selectById = (id) => {
+    return db.query('SELECT * FROM users WHERE id=?', [id]);
+};
 
-const insertUser = ({password, name, email, image_url, state})=>{
-    return db.query('insert into users (password, name, email, image_url, state) values (?,?,?,?,?)',[password, name, email, image_url, state]);
-}
+const insertUser = ({ password, name, email, image_url = null, state = 'Active' }) => {
+    return db.query('INSERT INTO users (password, name, email, image_url, state) VALUES (?, ?, ?, ?, ?)', [password, name, email, image_url, state]);
+};
 
-const deleteById = (id) =>{
-    return db.query('delete from users where id=?',[id]);
-}
+const deleteById = (id) => {
+    return db.query('DELETE FROM users WHERE id=?', [id]);
+};
 
 const selectByEmail = (email) => {
-    return db.query('select * from users where email=?',[email]);
-}
+    return db.query('SELECT * FROM users WHERE email=?', [email]);
+};
 
 module.exports = {
     selectAll, selectById, insertUser, deleteById, selectByEmail
-}
+};

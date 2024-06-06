@@ -1,1 +1,8 @@
+# Ignore environment variables file
+.env
+
+# Node modules
 node_modules/
+
+# Other files you want to ignore
+

@@ -9,25 +9,22 @@ GET {{HOST}}/api/users
 GET {{HOST}}/api/users/2
 
 ### Register User
-POST {{HOST}}/api/users/register
-Content-Type : application/json
-
-{
-    "password" : "98765",
-    "name" : "Elena",
-    "email" : "met@gmail.com",
-    "image_url" : "image/elena.jpg",
-    "state" : "Active"
-}
-
-
-### Login User
-POST {{HOST}}/api/users/login
+POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-    "email" : "met@gmail.com",
-    "password" : "98765"
+    "password": "password",
+    "name": "UserName",
+    "email": "name@gmail.com"
+}
+
+### Login User
+POST {{HOST}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "name@gmail.com",
+    "password": "password"
 }
 
 
