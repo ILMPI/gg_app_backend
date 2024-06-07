@@ -1,12 +1,13 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-
 ### Get Users
-GET {{HOST}}/api/users
+GET {{HOST}}/api/auth/users
+x-access-token: JWT token
 
 ### Get User by Id
-GET {{HOST}}/api/users/2
+GET {{HOST}}/api/auth/users/27
+x-access-token: JWT token
 
 ### Register User
 POST {{HOST}}/api/auth/register
@@ -14,8 +15,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "UserName",
-    "email": "name@gmail.com"
+    "name": "Travis Kelce",
+    "email": "travis_kelce@gmail.com"
 }
 
 ### Login User
@@ -23,10 +24,26 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "name@gmail.com",
+    "email": "travis_kelce@gmail.com",
     "password": "password"
 }
 
+### Update User Profile
+PUT {{HOST}}/api/auth/users/34
+Content-Type: application/json
+x-access-token: JWT token
+
+{
+    "name": "Mar"
+}
+
+### Search User by Email
+GET {{HOST}}/api/auth/users/email/name@gmail.com
+x-access-token: JWT token
+
+### Delete User Profile (if no active connections)
+DELETE {{HOST}}/api/auth/users/34
+x-access-token: JWT token
 
 ### Get Groups
 GET {{HOST}}/api/groups
@@ -35,15 +52,16 @@ GET {{HOST}}/api/groups
 GET {{HOST}}/api/groups/2
 
 ### Get Groups by Creator_id
-GET {{HOST}}/api/groups/creator_id/1
+GET {{HOST}}/api/groups/creator/1
 
 ### Create Group
 POST {{HOST}}/api/groups
 Content-Type: application/json
+x-access-token: <JWT token>
 
 {
-    "creator_id" : "1",
-    "title" : "Grupo de prueba gasto desde peticiones",
-    "description" : "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
-    "image_url" : "/images/grupo1_pruebas"
+    "creator_id": "1",
+    "title": "Grupo de prueba gasto desde peticiones",
+    "description": "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
+    "image_url": "/images/grupo1_pruebas"
 }
