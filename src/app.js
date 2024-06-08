@@ -7,7 +7,8 @@ app.use(express.json());
 app.use(cors());
 
 // Configuración de rutas
-app.use('/api', require('./routes/api'));
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
 
 // Middleware error
 app.use((err, req, res, next) => {
