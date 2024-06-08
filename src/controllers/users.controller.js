@@ -4,6 +4,7 @@ const User = require('../models/users.model');
 
 const getAllUsers = async (req, res, next) => {
     try {
+        console.log('getallusers')
         const [result] = await User.selectAll();
         res.send(result);
     } catch (err) {

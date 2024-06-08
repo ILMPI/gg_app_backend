@@ -3,19 +3,19 @@
 
 
 ### Get Users
-GET {{HOST}}/api/users
+GET {{HOST}}/api/auth/users
 
 ### Get User by Id
-GET {{HOST}}/api/users/2
+GET {{HOST}}/api/auth/users/2
 
 ### Register User
 POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-    "password": "password",
-    "name": "UserName",
-    "email": "name@gmail.com"
+    "password": "log8180H.",
+    "name": "Eduardo",
+    "email": "edllaor77@gmail.com"
 }
 
 ### Login User
@@ -23,8 +23,8 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "name@gmail.com",
-    "password": "password"
+    "email": "edllaor77@gmail.com",
+    "password": "log8180H."
 }
 
 
@@ -46,4 +46,18 @@ Content-Type: application/json
     "title" : "Grupo de prueba gasto desde peticiones",
     "description" : "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
     "image_url" : "/images/grupo1_pruebas"
+}
+
+### Create Expense
+POST {{HOST}}/api/expenses
+Content-Type: application/json
+
+{
+    "groups_id" : "1",
+    "concept" : "Tirolina",
+    "amount" : "300",
+    "date" : "2024-07-03 14:00:00",
+    "max_date" : "2024-07-05 14:00:00",
+    "image_url" : "/tickets/003.jpg",
+    "payer_user_id" : "3"
 }
