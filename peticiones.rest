@@ -3,7 +3,11 @@
 
 ### Get Users
 GET {{HOST}}/api/auth/users
+<<<<<<< HEAD
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsImlhdCI6MTcxNzg3NDg3MCwiZXhwIjoxNzE3OTYxMjcwfQ.dMmVuvPzFjTuI71IyR_D8lqPlJXMKvrGDkJbRnoGLBo
+=======
+x-access-token: JWT token
+>>>>>>> origin/develop
 
 ### Get User by Id
 GET {{HOST}}/api/auth/users/27
@@ -45,7 +49,10 @@ x-access-token: JWT token
 DELETE {{HOST}}/api/auth/users/34
 x-access-token: JWT token
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/develop
 ### Get Groups
 GET {{HOST}}/api/groups
 
@@ -66,6 +73,7 @@ x-access-token: <JWT token>
     "description": "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
     "image_url": "/images/grupo1_pruebas"
 }
+<<<<<<< HEAD
 
 ### Create Expense
 POST {{HOST}}/api/expenses
@@ -80,3 +88,5 @@ Content-Type: application/json
     "image_url" : "/tickets/003.jpg",
     "payer_user_id" : "3"
 }
+=======
+>>>>>>> origin/develop
