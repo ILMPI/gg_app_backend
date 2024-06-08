@@ -3,36 +3,28 @@
 
 ### Get Users
 GET {{HOST}}/api/auth/users
-<<<<<<< HEAD
-<<<<<<< HEAD
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsImlhdCI6MTcxNzg3NDg3MCwiZXhwIjoxNzE3OTYxMjcwfQ.dMmVuvPzFjTuI71IyR_D8lqPlJXMKvrGDkJbRnoGLBo
-=======
 x-access-token: JWT token
->>>>>>> origin/develop
+
 
 ### Get User by Id
 GET {{HOST}}/api/auth/users/27
 x-access-token: JWT token
-=======
+
 
 ### Get User by Id
 GET {{HOST}}/api/auth/users/2
->>>>>>> origin/feature_Eduardo
+
 
 ### Register User
 POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-<<<<<<< HEAD
+
     "password": "password",
     "name": "Travis Kelce",
     "email": "travis_kelce@gmail.com"
-=======
-    "password": "log8180H.",
-    "name": "Eduardo",
-    "email": "edllaor77@gmail.com"
->>>>>>> origin/feature_Eduardo
+
 }
 
 ### Login User
@@ -40,13 +32,10 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-<<<<<<< HEAD
+
     "email": "travis_kelce@gmail.com",
     "password": "password"
-=======
-    "email": "edllaor77@gmail.com",
-    "password": "log8180H."
->>>>>>> origin/feature_Eduardo
+
 }
 
 ### Update User Profile
@@ -66,10 +55,7 @@ x-access-token: JWT token
 DELETE {{HOST}}/api/auth/users/34
 x-access-token: JWT token
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/develop
 ### Get Groups
 GET {{HOST}}/api/groups
 
@@ -90,10 +76,7 @@ x-access-token: <JWT token>
     "description": "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
     "image_url": "/images/grupo1_pruebas"
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/feature_Eduardo
+
 
 ### Create Expense
 POST {{HOST}}/api/expenses
@@ -107,10 +90,5 @@ Content-Type: application/json
     "max_date" : "2024-07-05 14:00:00",
     "image_url" : "/tickets/003.jpg",
     "payer_user_id" : "3"
-<<<<<<< HEAD
+
 }
-=======
->>>>>>> origin/develop
-=======
-}
->>>>>>> origin/feature_Eduardo
