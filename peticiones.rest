@@ -5,18 +5,26 @@
 GET {{HOST}}/api/auth/users
 x-access-token: JWT token
 
+
 ### Get User by Id
 GET {{HOST}}/api/auth/users/27
 x-access-token: JWT token
+
+
+### Get User by Id
+GET {{HOST}}/api/auth/users/2
+
 
 ### Register User
 POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
+
     "password": "password",
     "name": "Travis Kelce",
     "email": "travis_kelce@gmail.com"
+
 }
 
 ### Login User
@@ -24,8 +32,10 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
+
     "email": "travis_kelce@gmail.com",
     "password": "password"
+
 }
 
 ### Update User Profile
@@ -44,6 +54,7 @@ x-access-token: JWT token
 ### Delete User Profile (if no active connections)
 DELETE {{HOST}}/api/auth/users/34
 x-access-token: JWT token
+
 
 ### Get Groups
 GET {{HOST}}/api/groups
@@ -64,4 +75,20 @@ x-access-token: <JWT token>
     "title": "Grupo de prueba gasto desde peticiones",
     "description": "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
     "image_url": "/images/grupo1_pruebas"
+}
+
+
+### Create Expense
+POST {{HOST}}/api/expenses
+Content-Type: application/json
+
+{
+    "groups_id" : "1",
+    "concept" : "Tirolina",
+    "amount" : "300",
+    "date" : "2024-07-03 14:00:00",
+    "max_date" : "2024-07-05 14:00:00",
+    "image_url" : "/tickets/003.jpg",
+    "payer_user_id" : "3"
+
 }

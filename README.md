@@ -50,3 +50,52 @@ node_modules/
 
 # Otros archivos que quieres ignorar
 ```
+
+API Endpoints:
+
+    User Endpoints:
+        Register: POST /api/auth/register
+        Login: POST /api/auth/login
+        Get All Users /api/auth/users
+        Get User by ID: GET /api/users/:id
+        Update User: PUT /api/users/:id
+        Delete User: DELETE /api/users/:id
+        Search User by Email: GET /api/users/search/:email
+
+    Group Endpoints:
+        Get All Groups: GET /api/groups
+        Get Group by ID: GET /api/groups/:id
+        Get Groups by Creator ID: GET /api/groups/creator/:creator_id
+        Create Group: POST /api/groups
+
+    Membership Endpoints:
+        Get All Members of a Group: GET /api/membership/group/:group_id
+        Add Member to Group: POST /api/membership
+        Update Membership Status: PUT /api/membership/:user_id/:group_id
+        Delete Membership: DELETE /api/membership/:user_id/:group_id
+
+    Expense Endpoints:
+        Get All Expenses for a Group: GET /api/expenses/group/:group_id
+        Create Expense: POST /api/expenses
+        Update Expense: PUT /api/expenses/:id
+        Delete Expense: DELETE /api/expenses/:id
+
+    Expense Assignment Endpoints:
+        Get All Expense Assignments: GET /api/expense-assignments/expense/:expense_id
+        Create Expense Assignment: POST /api/expense-assignments
+        Update Expense Assignment: PUT /api/expense-assignments/:user_id/:expense_id
+        Delete Expense Assignment: DELETE /api/expense-assignments/:user_id/:expense_id
+
+    Invitation Endpoints:
+        Get All Invitations: GET /api/invitations
+        Create Invitation: POST /api/invitations
+        Update Invitation: PUT /api/invitations/:id
+        Delete Invitation: DELETE /api/invitations/:id
+
+    Notification Endpoints:
+        Get All Notifications for a User: GET /api/notifications/user/:user_id
+        Create Notification: POST /api/notifications
+        Update Notification: PUT /api/notifications/:id
+        Delete Notification: DELETE /api/notifications/:id
+
+I
