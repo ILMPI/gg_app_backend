@@ -17,7 +17,7 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_PORT=3306
-DB_NAME=mydb
+DB_NAME=ggapp
 PORT=3000
 JWT_SECRET=your_generated_secret_key
 ```
@@ -49,8 +49,13 @@ Ejemplo de archivo .gitignore:
 node_modules/
 
 # Otros archivos que quieres ignorar
+peticiones.rest
 ```
+### * Si desea ignorar un archivo que ya está registrado, debe eliminar el seguimiento del archivo antes de agregar una regla para ignorarlo. Desde tu terminal, rastrea el archivo.
 
+`git rm --cached FILENAME`
+
+```plaintext
 API Endpoints:
 
     User Endpoints:
