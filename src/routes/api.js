@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
-// Import your route files
-const authRoutes = require('./api/auth');
-const userRoutes = require('./api/users');
-const groupRoutes = require('./api/groups');
-const expenseRoutes = require('./api/expenses');
+const verifyToken = require('../middleware/auth.middleware');
 
 // Use your routes
-router.use('/auth', authRoutes);
-router.use('/users', userRoutes);
-router.use('/groups', groupRoutes);
-router.use('/expenses', expenseRoutes);
+router.use('/users', require('./api/users'));
+router.use('/groups', verifyToken, require('./api/groups'));
+router.use('/expenses', verifyToken, require('./api/expenses'));
 
 module.exports = router;

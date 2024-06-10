@@ -1,30 +1,7 @@
-// Creación y configuración del SERVER
-const http = require('http');
-const app = require('./src/app');
+//reponsible for loading environment variables and starting the server
 
 // Config .env
 require('dotenv').config();
 
-// Config db
-require('./src/config/db');
-
-// Import routes
-const authRoutes = require('./src/routes/api/auth');
-
-// Use routes
-app.use('/api/auth', authRoutes);
-
-// Creación server
-const server = http.createServer(app);
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT);
-
-// Listeners
-server.on('listening', () => {
-    console.log(`Servidor escuchando sobre el puerto ${PORT}`);
-});
-
-server.on('error', (error) => {
-    console.log(error);
-});
+// Start the server
+require('./server');

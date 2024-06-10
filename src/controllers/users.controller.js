@@ -4,7 +4,7 @@ const User = require('../models/users.model');
 
 const getAllUsers = async (req, res, next) => {
     try {
-        console.log('getallusers')
+        console.log('getallusers');
         const [result] = await User.selectAll();
         res.send(result);
     } catch (err) {
@@ -51,7 +51,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     const { email, password } = req.body;
     try {
-        //check email
+        // Check email
         const [users] = await User.selectByEmail(email);
         if (users.length === 0) {
             return res.status(401).json({ error: 'error en email y/o password' });
@@ -59,19 +59,29 @@ const login = async (req, res, next) => {
 
         const user = users[0];
 
-        //check password
+        // Check password
         const iguales = bcrypt.compareSync(password, user.password);
         if (!iguales) {
             return res.status(401).json({ error: 'error en email y/o en password' });
         }
 
-        //generate JWT
+        // Generate JWT
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: 86400 // 24 hours
         });
 
-        //login
-        res.json({ success: 'login correcto', accessToken: token });
+        // Login response with user data
+        res.json({
+            success: 'login correcto',
+            accessToken: token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                image_url: user.image_url,
+                state: user.state
+            }
+        });
     } catch (err) {
         next(err);
     }
