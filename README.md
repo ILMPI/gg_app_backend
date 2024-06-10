@@ -51,7 +51,9 @@ node_modules/
 # Otros archivos que quieres ignorar
 peticiones.rest
 ```
-### * Si desea ignorar un archivo que ya está registrado, debe eliminar el seguimiento del archivo antes de agregar una regla para ignorarlo. Desde tu terminal, rastrea el archivo.
+### * 
+Si desea ignorar un archivo que ya está registrado, debe eliminar el seguimiento del archivo antes de agregar una regla para ignorarlo. 
+Desde tu terminal:
 
 `git rm --cached FILENAME`
 
