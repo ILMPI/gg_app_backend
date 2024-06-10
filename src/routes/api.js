@@ -3,7 +3,8 @@ const router = express.Router();
 const verifyToken = require('../middleware/auth.middleware');
 
 // Use your routes
-router.use('/users', require('./api/users'));
+router.use('/auth', require('./api/auth')); //public route
+router.use('/users', verifyToken, require('./api/users'));
 router.use('/groups', verifyToken, require('./api/groups'));
 router.use('/expenses', verifyToken, require('./api/expenses'));
 
