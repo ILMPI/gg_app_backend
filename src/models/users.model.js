@@ -1,9 +1,9 @@
 const selectAll = () => {
-    return db.query('SELECT * FROM users');
+    return db.query('SELECT id, name, email, image_url, state FROM users');
 };
 
 const selectById = (id) => {
-    return db.query('SELECT * FROM users WHERE id=?', [id]);
+    return db.query('SELECT id, name, email, image_url, state FROM users WHERE id=?', [id]);
 };
 
 const insertUser = ({ password, name, email, image_url = null, state = 'Active' }) => {

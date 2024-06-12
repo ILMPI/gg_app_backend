@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users.model');
@@ -15,32 +16,61 @@ const register = async (req, res, next) => {
 
         if (result.affectedRows === 1) {
             res.json({
-                id: result.insertId,
-                name: req.body.name,
-                email: req.body.email,
-                image_url: req.body.image_url,
-                state: req.body.state
+                success: true,
+                message: 'User registered successfully',
+                data: {
+                    id: result.insertId,
+                    name: req.body.name,
+                    email: req.body.email,
+                    image_url: req.body.image_url,
+                    state: req.body.state
+                }
             });
         } else {
-            res.status(500).json({ error: 'User registration failed' });
+            res.status(500).json({
+                success: false,
+                message: 'User registration failed',
+                data: null
+            });
         }
     } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+            data: null
+        });
         next(err);
     }
 };
 
 const login = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            message: 'Validation errors',
+            data: errors.array()
+        });
+    }
+
     const { email, password } = req.body;
     try {
         const [users] = await User.selectByEmail(email);
         if (users.length === 0) {
-            return res.status(401).json({ error: 'error en email y/o password' });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password',
+                data: null
+            });
         }
-
         const user = users[0];
         const iguales = bcrypt.compareSync(password, user.password);
         if (!iguales) {
-            return res.status(401).json({ error: 'error en email y/o en password' });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password',
+                data: null
+            });
         }
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -48,17 +78,25 @@ const login = async (req, res, next) => {
         });
 
         res.json({
-            success: 'login correcto',
-            accessToken: token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                image_url: user.image_url,
-                state: user.state
+            success: true,
+            message: 'Login successful',
+            data: {
+                accessToken: token,
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    image_url: user.image_url,
+                    state: user.state
+                }
             }
         });
     } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+            data: null
+        });
         next(err);
     }
 };
