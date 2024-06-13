@@ -2,8 +2,8 @@ const Group = require('../models/groups.model');
 
 const checkAdmin = async (req, res, next) => {
     try {
-        const userId = req.userId; // Should be req.userId as set by verifyToken
-        const groupId = req.params.groups_id || req.body.groups_id;
+        const userId = req.userId;
+        const groupId = req.params.id || req.body.groups_id;
 
         console.log('Checking admin status...');
         console.log('User ID:', userId);

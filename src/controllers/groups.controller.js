@@ -3,17 +3,20 @@ const Group = require('../models/groups.model');
 const createGroup = async (req, res) => {
     try {
         const { creator_id, title, description, image_url } = req.body;
-        await Group.insertGroup({ creator_id, title, description, image_url });
+        const result = await Group.insertGroup({ creator_id, title, description, image_url });
+        
+        const groupId = result[0].insertId;
+        
         res.status(201).json({
             success: true,
             message: 'Group created successfully',
-            data: null
+            data: { id: groupId }
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Server error',
-            data: null
+            data: { error: error.message }
         });
     }
 };
@@ -24,7 +27,7 @@ const getGroups = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Groups retrieved successfully',
-            data: groups
+            data: groups[0]
         });
     } catch (error) {
         res.status(500).json({
@@ -68,7 +71,7 @@ const getGroupsByCreatorId = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Groups retrieved successfully',
-            data: groups
+            data: groups[0]
         });
     } catch (error) {
         res.status(500).json({
@@ -93,7 +96,7 @@ const updateGroup = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error',
-            data: null
+            data: { error: error.message }
         });
     }
 };
@@ -111,7 +114,7 @@ const deleteGroup = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error',
-            data: null
+            data: { error: error.message }
         });
     }
 };
