@@ -15,7 +15,7 @@ app.use('/api', routes);
 
 // Middleware error
 app.use((err, req, res, next) => {
-    res.status(500).json({ error: err.message });
+    res.json({ error: err.message });
 });
 
 module.exports = app;
