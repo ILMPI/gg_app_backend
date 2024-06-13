@@ -45,6 +45,10 @@ const selectGroupStateByGroupId = (groupId) => {
     return db.query('SELECT * FROM `group_states` WHERE groups_id = ? ORDER BY changed_on DESC LIMIT 1', [groupId]);
 }
 
+const selectCreatorByGroupId = (groupId) => {
+    return db.query('SELECT creator_id FROM `groups` WHERE id = ?', [groupId]);
+}
+
 module.exports = {
     selectAll,
     selectById,
@@ -53,5 +57,6 @@ module.exports = {
     updateGroup,
     deleteGroup,
     activateGroup,
-    selectGroupStateByGroupId
+    selectGroupStateByGroupId,
+    selectCreatorByGroupId
 }
