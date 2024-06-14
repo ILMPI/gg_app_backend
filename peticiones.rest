@@ -26,17 +26,17 @@ Content-Type: application/json
 
 ### Get Users
 GET {{HOST}}/api/users
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 ### Get User by Id
-GET {{HOST}}/api/users/8
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+GET {{HOST}}/api/users/28
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 
 ### Update User Profile
-PUT {{HOST}}/api/users/19
+PUT {{HOST}}/api/users/29
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 {
     "name": "Veronica"
@@ -44,11 +44,11 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 
 ### Search User by Email
 GET {{HOST}}/api/users/email/ellaria@hotmail.com
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 ### Delete User Profile (if no active connections)
-DELETE {{HOST}}/api/users/15
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImlhdCI6MTcxODE2MDkyNCwiZXhwIjoxNzE4MjQ3MzI0fQ.NS3V3dZlf0FwbaODUSJ8uWDBJ97nRlx8BMJgC0Fvn7Y
+DELETE {{HOST}}/api/users/28
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 ###GROUPS
 
