@@ -12,6 +12,10 @@ const createExpense = async (req, res, next) => {
         // Inserto el gasto en la tabla de gastos
         const [result] = await Expense.insertExpense(req.body);
 
+        if (!result) {
+            throw new Error('Failed to insert expense');
+        }
+
         const [expense] = await Expense.getExpenseByConcept(req.body.concept, groups_id);
         const expenses_id = expense[0].expense_id;
         console.log(expenses_id);
@@ -48,6 +52,7 @@ const createExpense = async (req, res, next) => {
             data: result
         });
     } catch (err) {
+        console.error('Error creating expense:', err);
         res.status(500).json({
             success: false,
             message: 'Failed to create expense',
