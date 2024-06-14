@@ -7,5 +7,7 @@ router.use('/users', verifyToken, require('./api/users'));
 router.use('/groups', verifyToken, require('./api/groups'));
 router.use('/expenses', verifyToken, require('./api/expenses'));
 router.use('/membership', verifyToken, require('./api/memberships'));
+router.use('/notifications', verifyToken, require('./api/notifications'));
+
 
 module.exports = router;

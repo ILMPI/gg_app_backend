@@ -2,8 +2,9 @@ const insertExpense = ({groups_id, concept, amount, date, max_date, image_url, p
     return db.query('insert into expenses (groups_id, concept, amount, date, max_date, image_url, payer_user_id) values (?,?,?,?,?,?,?)',[groups_id, concept, amount, date, max_date, image_url, payer_user_id]);
 }
 
-const asignExpense = (users_id, expenses_id, cost, status)=>{
-    return db.query('insert into expense_assignments (users_id, expenses_id, cost, status) values (?,?,?,?)',[users_id, expenses_id, cost, status]);    
+const asignExpense = (users_id, expenses_id, group_id, cost, status)=>{
+    console.log('estoy asignando un gasto a un usuario');
+    return db.query('insert into expense_assignments (users_id, expenses_id, group_id, cost, status) values (?,?,?,?,?)',[users_id, expenses_id, group_id, cost, status]);    
 }
 
 const listMembers = (groups_id) => {

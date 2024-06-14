@@ -13,6 +13,11 @@ const insertGroup = ({ creator_id, title, description, image_url }) => {
 const selectByCreatorId = (creator_id) => {
     return db.query('SELECT * FROM `groups` WHERE creator_id = ?', [creator_id]);
 }
+
+const selectGroupByCretorAndTitle = (creator_id, title) => {
+    return db.query('SELECT * FROM ggapp.groups WHERE creator_id=? AND title=?',[creator_id, title]);
+}
+
 //SELECT id, title, description, image_url,created_on FROM  `groups` WHERE creator_id = ?;
 
 const updateGroup = (id, { title, description, image_url }) => {
@@ -58,5 +63,6 @@ module.exports = {
     deleteGroup,
     activateGroup,
     selectGroupStateByGroupId,
-    selectCreatorByGroupId
+    selectCreatorByGroupId,
+    selectGroupByCretorAndTitle
 }
