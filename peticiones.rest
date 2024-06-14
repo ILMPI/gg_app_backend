@@ -8,9 +8,9 @@ POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-    "password": "password",
-    "name": "Mona Lisa",
-    "email": "mona8lisa@gmail.com"
+    "password": "gonzalo",
+    "name": "GonLLaOr",
+    "email": "gon11@gmail.com"
 }
 
 ### Login User
@@ -18,15 +18,15 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "mona8lisa@gmail.com",
-    "password": "password"
+    "email": "gon11@gmail.com",
+    "password": "gonzalo"
 }
 
 ### USERS
 
 ### Get Users
 GET {{HOST}}/api/users
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
 
 ### Get User by Id
 GET {{HOST}}/api/users/8
@@ -43,9 +43,8 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 }
 
 ### Search User by Email
-GET {{HOST}}/api/users/email/admin@gmail.com
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
-
+GET {{HOST}}/api/users/email/ellaria@hotmail.com
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
 
 ### Delete User Profile (if no active connections)
 DELETE {{HOST}}/api/users/15
@@ -62,18 +61,18 @@ GET {{HOST}}/api/groups/2
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/1
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+GET {{HOST}}/api/groups/creator/7
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
 
 ### Create Group
 POST {{HOST}}/api/groups
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NDIxMywiZXhwIjoxNzE4MzMwNjEzfQ.-0Or8pl6CTUd6n1AMqs401w-rbJPEpKJZr2ywRQ3IOw
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzAzODgwLCJleHAiOjE3MTgzOTAyODB9.W-PvDf3f4WqujXkyBa9CSLPOl8f2-UQaUa51OvhN-rg
 
 {
-    "creator_id": "19",
-    "title": "Mi Grupo Favorito",
-    "description": "creado desde peticiones para hacer pruebas, repartir gastos, añadir, etc",
+    "creator_id": "7",
+    "title": "Viaje fin de curso",
+    "description": "creado desde peticiones para ver si se crea notificacion",
     "image_url": "/images/grupo1_pruebas"
 }
 
@@ -106,17 +105,17 @@ GET {{HOST}}/api/membership
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
 
 ### Get All Membership of a group GET {{HOST}}/api/membership/group/1
-GET {{HOST}}/api/membership/group/10
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+GET {{HOST}}/api/membership/group/15
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
 
 ### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json
 POST {{HOST}}/api/membership
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
 
 {
-    "users_id": "5",
-    "groups_id": "11",
+    "users_id": "6",
+    "groups_id": "37",
     "status": "Invited",
     "balance": "0"
 }
@@ -137,16 +136,16 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 ### Create Expense
 POST {{HOST}}/api/expenses
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
 
 {
-    "groups_id": "11",
+    "groups_id": "37",
     "concept": "Tirolina",
     "amount": "300",
     "date": "2024-07-03 14:00:00",
     "max_date": "2024-07-05 14:00:00",
     "image_url": "/tickets/003.jpg",
-    "payer_user_id": "5"
+    "payer_user_id": "6"
 }
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
@@ -178,5 +177,21 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 DELETE {{HOST}}/api/expenses/10
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NDIxMywiZXhwIjoxNzE4MzMwNjEzfQ.-0Or8pl6CTUd6n1AMqs401w-rbJPEpKJZr2ywRQ3IOw
 
+### NOTIFICATIONS
 
+### Get All Notifications
+GET {{HOST}}/api/notifications
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
 
+### Create a Notification
+POST {{HOST}}/api/notifications
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+
+{
+    "users_id": "6",
+    "status": "Unread",
+    "date": "2024-06-25 19:00",
+    "title": "Notificacion prueba",
+    "description": "Desde peticiones.rest, no generada automaticamente"
+}
