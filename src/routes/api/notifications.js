@@ -4,6 +4,6 @@ const notificationsController = require('../../controllers/notifications.control
 
 router.get('/', notificationsController.getAllNotifications);
 
-module.exports = {
-    getAllNotifications
-}
+router.post('/', notificationsController.createNotification);
+
+module.exports = router;
