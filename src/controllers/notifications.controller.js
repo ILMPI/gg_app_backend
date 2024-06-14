@@ -10,11 +10,6 @@ const getAllNotifications = async (req, res, next) => {
             data: result
         });
     }catch(err){
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
     
@@ -31,11 +26,6 @@ const createNotification = async (req, res, next) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
     

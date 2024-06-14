@@ -52,12 +52,14 @@ const createExpense = async (req, res, next) => {
             data: result
         });
     } catch (err) {
+        if (!res.headersSent) {
         console.error('Error creating expense:', err);
         res.status(500).json({
             success: false,
             message: 'Failed to create expense',
             data: null
         });
+    }
         next(err);
     }
 }
@@ -71,11 +73,13 @@ const getAllExpensesByGroup = async (req, res, next) => {
             data: result
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to retrieve expenses',
-            data: null
-        });
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to retrieve expenses',
+                data: null
+            });
+        }
         next(err);
     }
 }
@@ -106,11 +110,13 @@ const updateExpense = async (req, res, next) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to update expense',
-            data: null
-        });
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to update expense',
+                data: null
+            });
+        }
         next(err);
     }
 }
@@ -147,11 +153,13 @@ const deleteExpense = async (req, res, next) => {
             data: result
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to delete expense',
-            data: null
-        });
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to delete expense',
+                data: null
+            });
+        }
         next(err);
     }
 }
@@ -165,11 +173,13 @@ const getExpensesByUserID = async (req, res, next) => {
             data: result
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to retrieve expenses',
-            data: null
-        });
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to retrieve expenses',
+                data: null
+            });
+        }
         next(err);
     }
 }

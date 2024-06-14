@@ -35,11 +35,7 @@ const createGroup = async (req, res) => {
         });
     
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -52,11 +48,7 @@ const getGroups = async (req, res) => {
             data: groups[0]
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -78,11 +70,7 @@ const getGroupById = async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -96,11 +84,7 @@ const getGroupsByCreatorId = async (req, res) => {
             data: groups[0]
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -115,11 +99,7 @@ const updateGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -133,11 +113,7 @@ const deleteGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -159,11 +135,7 @@ const getGroupStateByGroupId = async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -177,11 +149,7 @@ const activateGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
