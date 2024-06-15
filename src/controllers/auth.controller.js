@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
         const [result] = await User.insertUser(userData);
 
         if (result.affectedRows === 1) {
-            res.json({
+            return res.json({
                 success: true,
                 message: 'User registered successfully',
                 data: {
@@ -26,19 +26,8 @@ const register = async (req, res, next) => {
                     state: req.body.state
                 }
             });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: 'User registration failed',
-                data: null
-            });
         }
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
@@ -77,7 +66,7 @@ const login = async (req, res, next) => {
             expiresIn: 86400 // 24 hours
         });
 
-        res.json({
+        return res.json({
             success: true,
             message: 'Login successful',
             data: {
@@ -92,11 +81,6 @@ const login = async (req, res, next) => {
             }
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };

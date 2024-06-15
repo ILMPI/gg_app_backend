@@ -55,11 +55,10 @@ const addMemberToGroup = async (req, res, next) => {
                 message: 'Member added successfully',
                 data: result
             }) 
-        }else{
-                
+        }else{ 
             res.json({
                 success: false,
-                message: 'USEREXISTS',
+                message: 'USER EXISTS',
                 data: null
             });
 
@@ -103,11 +102,14 @@ const deleteMembership = async (req, res, next) => {
             data: result
         });
     } catch (err) {
-        res.json({
-            success: false,
-            message: 'Failed to delete member from group',
-            data: null
-        });
+        //two errors inside the catch
+        // if(!res.headersSent){
+        //     res.json({
+        //         success: false,
+        //         message: 'Failed to delete member from group',
+        //         data: null
+        //     });
+        // }
         next(err);
     }
 }

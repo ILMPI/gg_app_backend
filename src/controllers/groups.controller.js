@@ -4,42 +4,57 @@ const Notification = require('../models/notifications.model');
 
 const Dayjs = require('dayjs'); 
 
-const createGroup = async (req, res) => {
-    try {
+// const createGroup = async (req, res, next) => {
+//     try {
 
-        const { creator_id, title, description, image_url } = req.body;
-        await Group.insertGroup({ creator_id, title, description, image_url });
+//         // const { creator_id, title, description, image_url } = req.body;
+//         // await Group.insertGroup({ creator_id, title, description, image_url });
         
-        const users_id = Number(creator_id);
-        const [group] = await Group.selectGroupByCretorAndTitle(creator_id, title);
-        const groups_id = group[0].id;
-        const status = 'Joined';
-        const balance=0;
-        const [result2] = await Membership.insertMemberToGroup({users_id, groups_id, status, balance});
+//         // const users_id = Number(creator_id);
+//         // const [group] = await Group.selectGroupByCretorAndTitle(creator_id, title);
+//         // const groups_id = group[0].id;
+//         // const status = 'Joined';
+//         // const balance=0;
+//         // const [result2] = await Membership.insertMemberToGroup({users_id, groups_id, status, balance});
         
-        const notifTitle = `Grupo ${title} creado`;
-        const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
-        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        const [result3] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
+//         // const notifTitle = `Grupo ${title} creado`;
+//         // const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
+//         // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+//         // const [result3] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
     
-/*
-        const result = await Group.insertGroup({ creator_id, title, description, image_url });
-        
+//         res.status(201).json({
+//             success: true,
+//             message: 'Group created successfully',
+//             data: { id: groupId }
+//         });
+    
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+
+const createGroup = async (req, res, next) => {
+    try {
+        const { creator_id, title, description } = req.body;
+
+        if (!creator_id || !title || !description) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required: creator_id, title, description'
+            });
+        }
+
+        const result = await Group.insertGroup({ creator_id, title, description, image_url: null });
         const groupId = result[0].insertId;
-        
-*/
+
         res.status(201).json({
             success: true,
             message: 'Group created successfully',
             data: { id: groupId }
         });
-    
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -52,11 +67,7 @@ const getGroups = async (req, res) => {
             data: groups[0]
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -78,11 +89,7 @@ const getGroupById = async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -96,11 +103,7 @@ const getGroupsByCreatorId = async (req, res) => {
             data: groups[0]
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -115,11 +118,7 @@ const updateGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -133,11 +132,7 @@ const deleteGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: { error: error.message }
-        });
+        next(error);
     }
 };
 
@@ -159,11 +154,7 @@ const getGroupStateByGroupId = async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 
@@ -177,11 +168,7 @@ const activateGroup = async (req, res) => {
             data: null
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
+        next(error);
     }
 };
 

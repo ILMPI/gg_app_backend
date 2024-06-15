@@ -10,11 +10,6 @@ const getAllUsers = async (req, res, next) => {
             data: result
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
@@ -35,11 +30,6 @@ const getUserById = async (req, res, next) => {
             data: result[0]
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
@@ -79,11 +69,6 @@ const updateUserById = async (req, res, next) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
@@ -105,11 +90,6 @@ const searchUserByEmail = async (req, res, next) => {
             data: result[0]
         });
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
@@ -151,11 +131,6 @@ const deleteUserById = async (req, res, next) => {
             });
         }
     } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'Server error',
-            data: null
-        });
         next(err);
     }
 };
