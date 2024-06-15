@@ -1,11 +1,11 @@
 {
-  "name": "tfm_backend",
+  "name": "gg_app_backend",
   "version": "1.0.0",
   "description": "Proyecto final - App Web para Compartir Gastos con amigos BACKEND",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node server.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],
