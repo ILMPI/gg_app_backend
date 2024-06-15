@@ -8,9 +8,9 @@ POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-    "password": "gonzalo",
-    "name": "GonLLaOr",
-    "email": "gon11@gmail.com"
+    "password": "password",
+    "name": "Angie",
+    "email": "eguzkia6@gmail.com"
 }
 
 ### Login User
@@ -18,8 +18,8 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "gon11@gmail.com",
-    "password": "gonzalo"
+    "email": "eguzkia6@gmail.com",
+    "password": "password"
 }
 
 ### USERS
@@ -29,8 +29,8 @@ GET {{HOST}}/api/users
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
 
 ### Get User by Id
-GET {{HOST}}/api/users/28
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
+GET {{HOST}}/api/users/27
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksImlhdCI6MTcxODQwMTQ0NCwiZXhwIjoxNzE4NDg3ODQ0fQ.KKAyezm5oHb8n4c_4NIjf5FSKbvqc9_S_tYvgUu7heU
 
 
 ### Update User Profile
@@ -67,10 +67,10 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzE
 ### Create Group
 POST {{HOST}}/api/groups
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzAzODgwLCJleHAiOjE3MTgzOTAyODB9.W-PvDf3f4WqujXkyBa9CSLPOl8f2-UQaUa51OvhN-rg
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE4NDE2NDQxLCJleHAiOjE3MTg1MDI4NDF9.ysmuiOfLWLzhg0cSW30CMnOeLos40k4WxL_jOmCrcME
 
 {
-    "creator_id": "7",
+    "creator_id": "8",
     "title": "Viaje fin de curso",
     "description": "creado desde peticiones para ver si se crea notificacion",
     "image_url": "/images/grupo1_pruebas"
@@ -176,6 +176,25 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 ### Delete Expense by expense_id DELETE {{HOST}}/api/expenses/39
 DELETE {{HOST}}/api/expenses/10
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NDIxMywiZXhwIjoxNzE4MzMwNjEzfQ.-0Or8pl6CTUd6n1AMqs401w-rbJPEpKJZr2ywRQ3IOw
+
+### NOTIFICATIONS
+
+### Get All Notifications
+GET {{HOST}}/api/notifications
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+
+### Create a Notification
+POST {{HOST}}/api/notifications
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+
+{
+    "users_id": "6",
+    "status": "Unread",
+    "date": "2024-06-25 19:00",
+    "title": "Notificacion prueba",
+    "description": "Desde peticiones.rest, no generada automaticamente"
+}
 
 ### NOTIFICATIONS
 

@@ -26,12 +26,6 @@ const register = async (req, res, next) => {
                     state: req.body.state
                 }
             });
-        } else {
-            return res.status(500).json({
-                success: false,
-                message: 'User registration failed',
-                data: null
-            });
         }
     } catch (err) {
         next(err);
@@ -77,16 +71,13 @@ const login = async (req, res, next) => {
             message: 'Login successful',
             data: {
                 accessToken: token,
-                user:{
-                    name: user.name
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    image_url: user.image_url,
+                    state: user.state
                 }
-                // user: {
-                //     id: user.id,
-                //     name: user.name,
-                //     email: user.email,
-                //     image_url: user.image_url,
-                //     state: user.state
-                // }
             }
         });
     } catch (err) {
