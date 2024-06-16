@@ -8,8 +8,7 @@ VALUES
 ('password3', 'Carlos García', 'carlos.garcia@example.com', 'https://picsum.photos/id/40/200/300', 'Active'),
 ('password4', 'Ana Fernández', 'ana.fernandez@example.com', 'https://picsum.photos/id/65/200/300', 'Active'),
 ('password5', 'Luis Martínez', 'luis.martinez@example.com', 'https://picsum.photos/id/63/200/300', 'Active'),
-('password54', 'Marina Garcia', 'marina.garcia@example.com', 'https://picsum.photos/id/82/200/300', 'Active'),
-('admin', 'admin', 'admin@gmail.com', 'https://picsum.photos/id//200/300', 'Active');
+('password54', 'Marina Garcia', 'marina.garcia@example.com', 'https://picsum.photos/id/82/200/300', 'Active');
 
 -- Insert Groups
 INSERT INTO `groups` (`creator_id`, `title`, `description`, `image_url`, `created_on`)
@@ -18,12 +17,7 @@ VALUES
 ((SELECT id FROM `users` WHERE name = 'María López'), 'Grupo de María', 'Grupo creado por María López', NULL, NOW()),
 ((SELECT id FROM `users` WHERE name = 'Carlos García'), 'Grupo de Carlos', 'Grupo creado por Carlos García', NULL, NOW()),
 ((SELECT id FROM `users` WHERE name = 'Ana Fernández'), 'Grupo de Ana', 'Grupo creado por Ana Fernández', NULL, NOW()),
-((SELECT id FROM `users` WHERE name = 'Luis Martínez'), 'Grupo de Luis', 'Grupo creado por Luis Martínez', NULL, NOW()),
-((SELECT id FROM `users` WHERE email = 'admin@gmail.com'), 'Familia', 'Celebramos la abuela cumple 90!', 'https://placehold.co/200x200', NOW()),
-((SELECT id FROM `users` WHERE email = 'admin@gmail.com'), 'Compañeros de EGB', 'Qué bien lo pasamos', '', NOW()),
-((SELECT id FROM `users` WHERE email = 'admin@gmail.com'), 'Padel 2024', 'Padel domingueros 2024', '', NOW()),
-((SELECT id FROM `users` WHERE email = 'admin@gmail.com'), 'Nuevo grupo', 'Descr grupo', '', NOW()),
-((SELECT id FROM `users` WHERE email = 'admin@gmail.com'), 'Otro', 'Otro desc', '', NOW());
+((SELECT id FROM `users` WHERE name = 'Luis Martínez'), 'Grupo de Luis', 'Grupo creado por Luis Martínez', NULL, NOW());
 
 -- Insert Memberships
 INSERT INTO `membership` (`users_id`, `groups_id`, `status`, `balance`)
@@ -42,9 +36,7 @@ VALUES
 ((SELECT id FROM `users` WHERE name = 'Luis Martínez'), (SELECT id FROM `groups` WHERE title = 'Grupo de Ana'), 'Joined', 0),
 -- Members for Grupo de Luis
 ((SELECT id FROM `users` WHERE name = 'Juan Pérez'), (SELECT id FROM `groups` WHERE title = 'Grupo de Luis'), 'Joined', 0),
-((SELECT id FROM `users` WHERE name = 'María López'), (SELECT id FROM `groups` WHERE title = 'Grupo de Luis'), 'Joined', 0),
--- Member for Familia group
-((SELECT id FROM `users` WHERE name = 'Marina Garcia'), (SELECT id FROM `groups` WHERE title = 'Familia'), 'Joined', 0);
+((SELECT id FROM `users` WHERE name = 'María López'), (SELECT id FROM `groups` WHERE title = 'Grupo de Luis'), 'Joined', 0);
 
 -- Insert Expenses
 INSERT INTO `expenses` (`groups_id`, `concept`, `amount`, `date`, `max_date`, `image_url`, `payer_user_id`, `created_on`)

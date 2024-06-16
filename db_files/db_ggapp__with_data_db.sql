@@ -36,7 +36,7 @@ CREATE TABLE `expense_assignments` (
   KEY `fk_users_has_expenses_users1_idx` (`users_id`),
   CONSTRAINT `fk_users_has_expenses_expenses1` FOREIGN KEY (`expenses_id`) REFERENCES `expenses` (`expense_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_expenses_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,6 @@ CREATE TABLE `expense_assignments` (
 
 LOCK TABLES `expense_assignments` WRITE;
 /*!40000 ALTER TABLE `expense_assignments` DISABLE KEYS */;
-INSERT INTO `expense_assignments` VALUES (1,2,1,1,'50.25','Reported'),(2,3,1,1,'50.25','Reported'),(3,2,2,1,'100.375','Reported'),(4,3,2,1,'100.375','Reported'),(5,1,3,2,'75.00','Reported'),(6,4,3,2,'75.00','Reported'),(7,1,4,2,'37.65','Reported'),(8,4,4,2,'37.65','Reported'),(9,5,5,3,'25.00','Reported'),(10,4,5,3,'25.00','Reported'),(11,5,6,3,'150.00','Reported'),(12,4,6,3,'150.00','Reported'),(13,3,7,4,'60.00','Reported'),(14,5,7,4,'60.00','Reported'),(15,3,8,4,'90.00','Reported'),(16,5,8,4,'90.00','Reported'),(17,1,9,5,'125.00','Reported'),(18,2,9,5,'125.00','Reported'),(19,1,10,5,'45.00','Reported'),(20,2,10,5,'45.00','Reported');
 /*!40000 ALTER TABLE `expense_assignments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +70,7 @@ CREATE TABLE `expenses` (
   KEY `fk_expenses_membership1_idx` (`payer_user_id`),
   CONSTRAINT `fk_expenses_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_expenses_membership1` FOREIGN KEY (`payer_user_id`) REFERENCES `membership` (`users_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +79,6 @@ CREATE TABLE `expenses` (
 
 LOCK TABLES `expenses` WRITE;
 /*!40000 ALTER TABLE `expenses` DISABLE KEYS */;
-INSERT INTO `expenses` VALUES (1,1,'Compra de material',100.50,'2024-06-15 00:35:21',NULL,NULL,2,'2024-06-15 00:35:21'),(2,1,'Pago de servicio',200.75,'2024-06-15 00:35:21',NULL,NULL,3,'2024-06-15 00:35:21'),(3,2,'Alquiler de sala',150.00,'2024-06-15 00:35:21',NULL,NULL,1,'2024-06-15 00:35:21'),(4,2,'Compra de comida',75.30,'2024-06-15 00:35:21',NULL,NULL,4,'2024-06-15 00:35:21'),(5,3,'Transporte',50.00,'2024-06-15 00:35:21',NULL,NULL,5,'2024-06-15 00:35:21'),(6,3,'Equipos de sonido',300.00,'2024-06-15 00:35:21',NULL,NULL,4,'2024-06-15 00:35:21'),(7,4,'Decoraciones',120.00,'2024-06-15 00:35:21',NULL,NULL,3,'2024-06-15 00:35:21'),(8,4,'Publicidad',180.00,'2024-06-15 00:35:21',NULL,NULL,5,'2024-06-15 00:35:21'),(9,5,'Servicio de catering',250.00,'2024-06-15 00:35:21',NULL,NULL,1,'2024-06-15 00:35:21'),(10,5,'Artículos promocionales',90.00,'2024-06-15 00:35:21',NULL,NULL,2,'2024-06-15 00:35:21');
 /*!40000 ALTER TABLE `expenses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +126,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`),
   KEY `fk_groups_users_idx` (`creator_id`),
   CONSTRAINT `fk_groups_users` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +135,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,1,'Grupo de Juan','Grupo creado por Juan Pérez',NULL,'2024-06-15 00:35:21'),(2,2,'Grupo de María','Grupo creado por María López',NULL,'2024-06-15 00:35:21'),(3,3,'Grupo de Carlos','Grupo creado por Carlos García',NULL,'2024-06-15 00:35:21'),(4,4,'Grupo de Ana','Grupo creado por Ana Fernández',NULL,'2024-06-15 00:35:21'),(5,5,'Grupo de Luis','Grupo creado por Luis Martínez',NULL,'2024-06-15 00:35:21'),(6,7,'Familia','Celebramos la abuela cumple 90!','https://placehold.co/200x200','2024-06-15 00:35:21'),(7,7,'Compañeros de EGB','Qué bien lo pasamos','','2024-06-15 00:35:21'),(8,7,'Padel 2024','Padel domingueros 2024','','2024-06-15 00:35:21'),(9,7,'Nuevo grupo','Descr grupo','','2024-06-15 00:35:21'),(10,7,'Otro','Otro desc','','2024-06-15 00:35:21');
+INSERT INTO `groups` VALUES (1,1,'Grupo de Juan','Grupo creado por Juan Pére',NULL,'2024-06-16 22:54:59'),(2,2,'Grupo de María','Grupo creado por María López',NULL,'2024-06-16 22:57:43'),(3,5,'Grupo de Luis','Grupo creado por Luis Martínez',NULL,'2024-06-16 23:10:01'),(4,7,'Amantes de la administración','Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.',NULL,'2024-06-16 23:16:11');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +189,7 @@ CREATE TABLE `membership` (
   KEY `fk_users_has_groups_users1_idx` (`users_id`),
   CONSTRAINT `fk_users_has_groups_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_groups_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +198,7 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (1,2,1,'Joined',0),(2,3,1,'Joined',0),(3,1,2,'Joined',0),(4,4,2,'Joined',0),(5,5,3,'Joined',0),(6,4,3,'Joined',0),(7,3,4,'Joined',0),(8,5,4,'Joined',0),(9,1,5,'Joined',0),(10,2,5,'Joined',0),(11,6,6,'Joined',0);
+INSERT INTO `membership` VALUES (1,1,4,'Joined',0),(2,2,4,'Joined',0),(3,3,4,'Joined',0),(4,4,4,'Joined',0),(5,5,4,'Joined',0),(6,6,4,'Joined',0),(7,7,4,'Joined',0);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +219,7 @@ CREATE TABLE `notifications` (
   PRIMARY KEY (`id`),
   KEY `fk_notificaciones_users1_idx` (`users_id`),
   CONSTRAINT `fk_notificaciones_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,6 +228,7 @@ CREATE TABLE `notifications` (
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+INSERT INTO `notifications` VALUES (1,1,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(2,2,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(3,3,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(4,4,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(5,5,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(6,6,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(7,7,'Unread','2024-06-16 23:18:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo');
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,7 +257,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'password1','Juan Pérez','juan.perez@example.com','https://picsum.photos/id/91/200/300','Active'),(2,'password2','María López','maria.lopez@example.com','https://picsum.photos/id/64/200/300','Active'),(3,'password3','Carlos García','carlos.garcia@example.com','https://picsum.photos/id/40/200/300','Active'),(4,'password4','Ana Fernández','ana.fernandez@example.com','https://picsum.photos/id/65/200/300','Active'),(5,'password5','Luis Martínez','luis.martinez@example.com','https://picsum.photos/id/63/200/300','Active'),(6,'password54','Marina Garcia','marina.garcia@example.com','https://picsum.photos/id/82/200/300','Active'),(7,'admin','admin','admin@gmail.com','https://picsum.photos/id//200/300','Active');
+INSERT INTO `users` VALUES (1,'$2a$10$LVUQ3sHdrqbw8uMQ9W6Z3OSuDS/jdGX08NJUwq3MVkBgd0Yg1Sbqa','Juan Pérez','juan.perez@gmail.com',NULL,'Active'),(2,'$2a$10$DYsd3hW4GEX2iYF2IcT9BuRihkgbTWg7m9zedCoui4Iryn.BrwpqO','María López','maria.lopez@example.com',NULL,'Active'),(3,'$2a$10$PGuVIA2WU0QEX80DrIpAUOEu1On4G8S.nrs6lQ/stJa0l6PaRNd3m','Carlos García','carlos.garcia@yahoo.com',NULL,'Active'),(4,'$2a$10$BRgVlOB3ipaMAu14ZQhyGevaXpXvIFfI8NVfm6PWQlo.DoeQPUbqW','Ana Fernández','ana.fernandez@example.com',NULL,'Active'),(5,'$2a$10$utPVEJo4phtnLkEcqjLddOZQ4hUuymK4iOpG/2.VGkMLZsDBm1J3W','Luis Martínez','luis.martinez@gmail.com',NULL,'Active'),(6,'$2a$10$Y7nSEtfqXddvAS1UiJJ6GOaMN9gOOMAKh0TWzHjv0Uw2AcxyYGBki','Marina Garcia','marina.garcia@gmail.com',NULL,'Active'),(7,'$2a$10$2bu2sE9SI4w6dmixjbwSSOJ2GWsMQF7kB8ELpQD0k4AmUmBhqViuW','admin','admin@gmail.com',NULL,'Active');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -271,4 +270,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-15  0:39:00
+-- Dump completed on 2024-06-16 23:34:15

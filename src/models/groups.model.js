@@ -8,7 +8,7 @@ const selectById = (id) => {
 
 const insertGroup = ({ creator_id, title, description, image_url }) => {
     return db.query('INSERT INTO `groups` (creator_id, title, description, image_url) VALUES (?, ?, ?, ?)', [creator_id, title, description, image_url]);
-}
+} // + state Active
 
 const selectByCreatorId = (creator_id) => {
     return db.query('SELECT * FROM `groups` WHERE creator_id = ?', [creator_id]);

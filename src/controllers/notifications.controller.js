@@ -31,6 +31,7 @@ const createNotification = async (req, res, next) => {
     
 };
 
+
 module.exports = {
     getAllNotifications, createNotification
 }
