@@ -36,7 +36,7 @@ CREATE TABLE `expense_assignments` (
   KEY `fk_users_has_expenses_users1_idx` (`users_id`),
   CONSTRAINT `fk_users_has_expenses_expenses1` FOREIGN KEY (`expenses_id`) REFERENCES `expenses` (`expense_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_expenses_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +45,7 @@ CREATE TABLE `expense_assignments` (
 
 LOCK TABLES `expense_assignments` WRITE;
 /*!40000 ALTER TABLE `expense_assignments` DISABLE KEYS */;
+INSERT INTO `expense_assignments` VALUES (1,1,1,4,'42.857142857142854','Paid'),(2,2,1,4,'42.857142857142854','Reported'),(3,3,1,4,'42.857142857142854','Reported'),(4,4,1,4,'42.857142857142854','Reported'),(5,5,1,4,'42.857142857142854','Reported'),(6,6,1,4,'42.857142857142854','Reported'),(7,7,1,4,'42.857142857142854','Reported'),(8,1,2,4,'10','Reported'),(9,2,2,4,'10','Reported'),(10,3,2,4,'10','Reported'),(11,4,2,4,'10','Reported'),(12,5,2,4,'10','Reported'),(13,6,2,4,'10','Reported'),(14,7,2,4,'10','Paid');
 /*!40000 ALTER TABLE `expense_assignments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +71,7 @@ CREATE TABLE `expenses` (
   KEY `fk_expenses_membership1_idx` (`payer_user_id`),
   CONSTRAINT `fk_expenses_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_expenses_membership1` FOREIGN KEY (`payer_user_id`) REFERENCES `membership` (`users_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +80,7 @@ CREATE TABLE `expenses` (
 
 LOCK TABLES `expenses` WRITE;
 /*!40000 ALTER TABLE `expenses` DISABLE KEYS */;
+INSERT INTO `expenses` VALUES (1,4,'Cena en La Trattoria da Luigi',300.00,'2024-06-16 14:00:00','2024-07-05 14:00:00',NULL,1,'2024-06-16 23:45:45'),(2,4,'Taller de Excel',70.00,'2024-06-01 19:30:00','2024-07-01 14:00:00',NULL,7,'2024-06-16 23:48:30');
 /*!40000 ALTER TABLE `expenses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +200,7 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (1,1,4,'Joined',0),(2,2,4,'Joined',0),(3,3,4,'Joined',0),(4,4,4,'Joined',0),(5,5,4,'Joined',0),(6,6,4,'Joined',0),(7,7,4,'Joined',0);
+INSERT INTO `membership` VALUES (1,1,4,'Joined',247),(2,2,4,'Joined',-53),(3,3,4,'Joined',-53),(4,4,4,'Joined',-53),(5,5,4,'Joined',-53),(6,6,4,'Joined',-53),(7,7,4,'Joined',17);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,4 +272,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-16 23:34:15
+-- Dump completed on 2024-06-16 23:50:35
