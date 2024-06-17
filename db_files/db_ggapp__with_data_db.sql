@@ -192,7 +192,7 @@ CREATE TABLE `membership` (
   KEY `fk_users_has_groups_users1_idx` (`users_id`),
   CONSTRAINT `fk_users_has_groups_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_has_groups_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (1,1,4,'Joined',247),(2,2,4,'Joined',-53),(3,3,4,'Joined',-53),(4,4,4,'Joined',-53),(5,5,4,'Joined',-53),(6,6,4,'Joined',-53),(7,7,4,'Joined',17);
+INSERT INTO `membership` VALUES (1,1,4,'Joined',247),(2,2,4,'Joined',-53),(3,3,4,'Joined',-53),(4,4,4,'Joined',-53),(5,5,4,'Joined',-53),(6,6,4,'Joined',-53),(7,7,4,'Joined',17),(8,7,1,'Joined',0),(9,7,2,'Joined',0),(10,7,3,'Joined',0);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-17  7:07:43
+-- Dump completed on 2024-06-17 18:08:34

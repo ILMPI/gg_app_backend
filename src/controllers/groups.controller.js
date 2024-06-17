@@ -126,6 +126,32 @@ const getGroupsByCreatorId = async (req, res, next) => {
         next(error);
     }
 };
+// shows all groups where this user is a member
+const getAllGroupsByUser = async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+
+        // Check if the user exists
+        const [user] = await User.selectById(userId);
+        if (!user.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                data: null
+            });
+        }
+
+        const groups = await Group.selectAllGroupsByUserId(userId);
+
+        res.status(200).json({
+            success: true,
+            message: 'Groups retrieved successfully',
+            data: groups[0]
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 
 const updateGroup = async (req, res, next) => {
@@ -227,5 +253,6 @@ module.exports = {
     updateGroup,
     deleteGroup,
     getGroupStateByGroupId,
-    activateGroup
+    activateGroup,
+    getAllGroupsByUser,
 };

@@ -1,7 +1,8 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODU5NTYwNywiZXhwIjoxNzE4NjgyMDA3fQ.M-q2POjEYk7Xjp4GHDGEIaHvb1plECoz_Epo-Kgnc0k
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NjM4MTQxLCJleHAiOjE3MTg3MjQ1NDF9.-21bUOcxA1_Vhlzv42RVqkAA1iLmPQUoacM6D955EC4
+
 
 ###AUTH
 
@@ -59,11 +60,19 @@ GET {{HOST}}/api/groups
 x-access-token: {{TOKEN}}
 
 ### Get Group by Id
-GET {{HOST}}/api/groups/100
+GET {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/345
+GET {{HOST}}/api/groups/creator/7
+x-access-token: {{TOKEN}}
+
+### Get Groups by User Id
+GET {{HOST}}/api/groups/user/7/groups
+x-access-token: {{TOKEN}}
+
+### Get Groups by User Id (User not found)
+GET {{HOST}}/api/groups/user/999/groups
 x-access-token: {{TOKEN}}
 
 ### Create Group

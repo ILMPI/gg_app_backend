@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createGroup, getGroups, getGroupById, getGroupsByCreatorId, updateGroup, deleteGroup, getGroupStateByGroupId, activateGroup } = require('../../controllers/groups.controller');
+const { createGroup, getGroups, getGroupById, getGroupsByCreatorId, updateGroup, deleteGroup, getGroupStateByGroupId, activateGroup, getAllGroupsByUser } = require('../../controllers/groups.controller');
 const checkAdmin = require('../../middleware/checkAdmin');
 
 /**
@@ -784,6 +784,135 @@ router.get('/:groupId/state', getGroupStateByGroupId);
  */
 router.post('/:id/activate', checkAdmin, activateGroup);
 
+/**
+ * @swagger
+ * /api/groups/user/{userId}/groups:
+ *   get:
+ *     summary: Get groups by user ID
+ *     tags: [Groups]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The JWT token for authentication
+ *     responses:
+ *       200:
+ *         description: Groups retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       creator_id:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       image_url:
+ *                         type: string
+ *                         nullable: true
+ *                       created_on:
+ *                         type: string
+ *                         format: date-time
+ *             example:
+ *               success: true
+ *               message: "Groups retrieved successfully"
+ *               data: [
+ *                 {
+ *                   id: 1,
+ *                   creator_id: 1,
+ *                   title: "Grupo de Juan",
+ *                   description: "Grupo creado por Juan Pérez",
+ *                   image_url: null,
+ *                   created_on: "2024-06-16T20:54:59.000Z"
+ *                 },
+ *                 {
+ *                   id: 2,
+ *                   creator_id: 2,
+ *                   title: "Grupo de María",
+ *                   description: "Grupo creado por María López",
+ *                   image_url: null,
+ *                   created_on: "2024-06-16T20:57:43.000Z"
+ *                 },
+ *                 {
+ *                   id: 3,
+ *                   creator_id: 5,
+ *                   title: "Grupo de Luis",
+ *                   description: "Grupo creado por Luis Martínez",
+ *                   image_url: null,
+ *                   created_on: "2024-06-16T21:10:01.000Z"
+ *                 },
+ *                 {
+ *                   id: 4,
+ *                   creator_id: 7,
+ *                   title: "Amantes de la administración",
+ *                   description: "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
+ *                   image_url: null,
+ *                   created_on: "2024-06-16T21:16:11.000Z"
+ *                 }
+ *               ]
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "User not found"
+ *               data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             examples:
+ *               error:
+ *                 value:
+ *                   success: false
+ *                   message: "Internal Server Error"
+ *                   data: {
+ *                     error: "Error message details here"
+ *                   }
+ */
+router.get('/user/:userId/groups', getAllGroupsByUser);
 
 
 // router.post('/', createGroup);

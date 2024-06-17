@@ -47,5 +47,5 @@ module.exports = {
     insertMemberToGroup,
     updateMembershipStatus,
     selectMember,
-    deleteMember
+    deleteMember,
 }
