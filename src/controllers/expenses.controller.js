@@ -1,5 +1,6 @@
 const Expense = require('../models/expenses.model');
 
+
 const createExpense = async (req, res, next) => {
     try {
         
@@ -7,8 +8,7 @@ const createExpense = async (req, res, next) => {
 
         // Meto en array los datos de los miembros del grupo
         const [listMembersGroup] = await Expense.listMembers(groups_id);
-        console.log(listMembersGroup);
-
+        
         // Inserto el gasto en la tabla de gastos
         const [result] = await Expense.insertExpense(req.body);
 
@@ -18,12 +18,9 @@ const createExpense = async (req, res, next) => {
 
         const [expense] = await Expense.getExpenseByConcept(req.body.concept, groups_id);
         const expenses_id = expense[0].expense_id;
-        console.log(expenses_id);
 
         // reparto guarda el gasto repartido entre los usuarios
         const reparto = Number(req.body.amount) / listMembersGroup.length;
-        
-        
         
         // Asigno el gasto a cada miembro del grupo, hago una query para actualizarlo en la lista de membership
         for (let id = 0; id < listMembersGroup.length; id++) {
@@ -36,6 +33,10 @@ const createExpense = async (req, res, next) => {
                 const balance = Number(listMembersGroup[id].balance) + resultado;
                 // Hacer update en balance de tabla membership
                 const [updateBal1] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
+
+                // Añadir notificacion correspondiente
+
+
             } else {
 
                 // Es usuario que no ha pagado el ticket
@@ -43,6 +44,8 @@ const createExpense = async (req, res, next) => {
                 // A su balance hay que añadir en negativo reparto
                 const balance = Number(listMembersGroup[id].balance) - reparto;
                 const [updateBal2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
+
+                // Añadir notificacion correspondiente
              }
         }
 
@@ -172,6 +175,8 @@ const getExpensesByUserID = async (req, res, next) => {
             message: 'Expenses retrieved successfully',
             data: result
         });
+        
+
     } catch (err) {
         if (!res.headersSent) {
             res.status(500).json({
@@ -184,10 +189,72 @@ const getExpensesByUserID = async (req, res, next) => {
     }
 }
 
+const getExpenseById = async (req, res, next) => {
+    try{
+        const [result] = await Expense.getExpenseById(req.params.expenses_id);
+        res.status(200).json({
+            success: true,
+            message: 'Expense retrieved successfully',
+            data: result
+        });
+    }catch (err) {
+        next(err);
+    }
+}
+
+const payExpense = async (req, res, next) => {
+    try {
+        const { users_id, expenses_id, groups_id, cost, status } = req.body;
+
+        const [response] = await Expense.getBalance(users_id, groups_id);
+        const balanceAnterior = Number(response[0].balance);
+        
+        if (status==='Paid'){
+            const [result] = [];
+            res.status(200).json({
+                success: true,
+                message: 'Expense already payed',
+                data: result
+            });
+        }
+
+        // El deudor paga y se queda el balance en cero
+        const balance = balanceAnterior + Number(cost);
+        const [result] = await Expense.payExpense(users_id, groups_id, expenses_id, balance);
+        
+        // Notificar al deudor que ha pagado
+
+        // El pagador del gasto cobra la parte correspondiente del deudor
+        const [expense] = await Expense.getExpenseById(expenses_id);
+        const payer_user_id = expense[0].payer_user_id;
+        
+        const [response2] = await Expense.getBalance(payer_user_id, groups_id);
+        const balancePayerAnterior = Number(response2[0].balance);
+        console.log(balancePayerAnterior);
+        const balancePayer = balancePayerAnterior - Number(cost);
+        await Expense.updateBalance(payer_user_id, groups_id, balancePayer);
+        // Notificar al pagador inicial del gasto total, que el usuario le ha pagado su parte al gasto referido
+
+        
+        
+
+        res.status(200).json({
+            success: true,
+            message: 'Expense assignment payed successfully',
+            data: result
+        });
+
+    }catch (err) {
+        next(err);
+    }
+}
+
 module.exports = {
     createExpense,
     getAllExpensesByGroup,
     updateExpense,
     deleteExpense,
-    getExpensesByUserID
+    getExpensesByUserID,
+    getExpenseById,
+    payExpense
 }

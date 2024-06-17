@@ -37,10 +37,6 @@ const addMemberToGroup = async (req, res, next) => {
         const [Member] = await Membership.selectMember(users_id, groups_id);
         const [GroupAdded] = await Group.selectById(groups_id);
         
-        console.log(Member[0]);
-
-        console.log('antes de logica');
-        
         if (!Member[0]) {
             
             const [result] = await Membership.insertMemberToGroup(req.body);

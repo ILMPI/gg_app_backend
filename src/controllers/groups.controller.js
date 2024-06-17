@@ -22,6 +22,8 @@ const Dayjs = require('dayjs');
 //         // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
 //         // const [result3] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
     
+
+
 //         res.status(201).json({
 //             success: true,
 //             message: 'Group created successfully',
@@ -36,7 +38,8 @@ const Dayjs = require('dayjs');
 
 const createGroup = async (req, res, next) => {
     try {
-        const { creator_id, title, description } = req.body;
+        const { creator_id, title, description, image_url } = req.body;
+        // const { creator_id, title, description, image_url, [listmembersgroup] } = req.body;
 
         if (!creator_id || !title || !description) {
             return res.status(400).json({
@@ -45,8 +48,24 @@ const createGroup = async (req, res, next) => {
             });
         }
 
-        const result = await Group.insertGroup({ creator_id, title, description, image_url: null });
-        const groupId = result[0].insertId;
+        const result = await Group.insertGroup({ creator_id, title, description, image_url});
+        const groupId = result[0].id;
+        const users_id = Number(creator_id);
+        const [group] = await Group.selectGroupByCretorAndTitle(creator_id, title);
+        const groups_id = group[0].id;
+        const status = 'Joined';
+        const balance=0;
+        const [result2] = await Membership.insertMemberToGroup({users_id, groups_id, status, balance});
+        
+        const notifTitle = `Grupo ${title} creado`;
+        const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
+        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+        const [result3] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
+    
+        //hacer un for en listmembersgroup
+            // añadir miembro al grupo con addMemberToGroup, en el modelo memberships
+            // notificar que le se ha añadido, con el modelo notificaciones
+
 
         res.status(201).json({
             success: true,

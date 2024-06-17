@@ -22,16 +22,23 @@ Content-Type: application/json
     "password": "password"
 }
 
+### Login User
+POST {{HOST}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "ellaria@gmail.com",
+    "password": "12345"
+}
+
 ### USERS
 
 ### Get Users
 GET {{HOST}}/api/users
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM3MzM1OSwiZXhwIjoxNzE4NDU5NzU5fQ.NHEqRVeY4ev2OqqoF8sCCyPzuA7sA1hjDujMq-Qsz3w
-
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 ### Get User by Id
 GET {{HOST}}/api/users/27
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksImlhdCI6MTcxODQwMTQ0NCwiZXhwIjoxNzE4NDg3ODQ0fQ.KKAyezm5oHb8n4c_4NIjf5FSKbvqc9_S_tYvgUu7heU
-
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 ### Update User Profile
 PUT {{HOST}}/api/users/29
@@ -54,7 +61,7 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImlhdCI6MTcxODM
 
 ### Get Groups
 GET {{HOST}}/api/groups
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 ### Get Group by Id
 GET {{HOST}}/api/groups/2
@@ -67,12 +74,12 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzE
 ### Create Group
 POST {{HOST}}/api/groups
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE4NDE2NDQxLCJleHAiOjE3MTg1MDI4NDF9.ysmuiOfLWLzhg0cSW30CMnOeLos40k4WxL_jOmCrcME
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY1ODExLCJleHAiOjE3MTg2NTIyMTF9.OPwVTSXPpFj59dJG1wii9tcQX2ZIcsVzz1SEse_P1UA
 
 {
-    "creator_id": "8",
-    "title": "Viaje fin de curso",
-    "description": "creado desde peticiones para ver si se crea notificacion",
+    "creator_id": "10",
+    "title": "Creado por EduardoPrueba",
+    "description": "para seguir con pruebas",
     "image_url": "/images/grupo1_pruebas"
 }
 
@@ -111,11 +118,11 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzE
 ### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json
 POST {{HOST}}/api/membership
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODYxMzA1NywiZXhwIjoxNzE4Njk5NDU3fQ.9-4nQ4qsoGBYVTujlptTsG5Q_Su5kUn6aaLXNisyYYw
 
 {
-    "users_id": "6",
-    "groups_id": "37",
+    "users_id": "8",
+    "groups_id": "38",
     "status": "Invited",
     "balance": "0"
 }
@@ -136,27 +143,30 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 ### Create Expense
 POST {{HOST}}/api/expenses
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4MzEwMzYwLCJleHAiOjE3MTgzOTY3NjB9.R-NQy7jqckbMI_k-3zEThVChMsc9APP4FNZGBZWRnRE
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 {
-    "groups_id": "37",
-    "concept": "Tirolina",
-    "amount": "300",
+    "groups_id": "38",
+    "concept": "Gasto prueba2 grupo 38",
+    "amount": "350",
     "date": "2024-07-03 14:00:00",
     "max_date": "2024-07-05 14:00:00",
     "image_url": "/tickets/003.jpg",
-    "payer_user_id": "6"
+    "payer_user_id": "8"
 }
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/10
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NzMxOCwiZXhwIjoxNzE4MzMzNzE4fQ.qkb77bgu3hVkjadyw2s9xRgC3fuPowfbnFkQ1H37rPs
+GET {{HOST}}/api/expenses/group/37
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 
 ### Get All Expenses by users_id GET {{HOST}}/api/expenses/users/2
-GET {{HOST}}/api/expenses/users/2
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NDIxMywiZXhwIjoxNzE4MzMwNjEzfQ.-0Or8pl6CTUd6n1AMqs401w-rbJPEpKJZr2ywRQ3IOw
+GET {{HOST}}/api/expenses/users/6
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
+### Get Expense by expenses_id
+GET {{HOST}}/api/expenses/27
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 ### Update Expense PUT {{HOST}}/api/expenses/47 Content-Type: application/json
 PUT {{HOST}}/api/expenses/1
@@ -177,23 +187,17 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI
 DELETE {{HOST}}/api/expenses/10
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImlhdCI6MTcxODI0NDIxMywiZXhwIjoxNzE4MzMwNjEzfQ.-0Or8pl6CTUd6n1AMqs401w-rbJPEpKJZr2ywRQ3IOw
 
-### NOTIFICATIONS
-
-### Get All Notifications
-GET {{HOST}}/api/notifications
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
-
-### Create a Notification
-POST {{HOST}}/api/notifications
+### Pay expense_assingment
+POST {{HOST}}/api/expenses/payment
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk5NTE2LCJleHAiOjE3MTgzODU5MTZ9.weaj3wg3lSG4zOzhYdKlsuPWR31pDO1H1Z-tFnI0CBY
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
 {
-    "users_id": "6",
-    "status": "Unread",
-    "date": "2024-06-25 19:00",
-    "title": "Notificacion prueba",
-    "description": "Desde peticiones.rest, no generada automaticamente"
+   "users_id" : "10",
+   "expenses_id" : "33",
+   "groups_id" : "38",
+   "cost" : "50",
+   "status": "Reported"
 }
 
 ### NOTIFICATIONS
@@ -214,3 +218,51 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNzE4Mjk
     "title": "Notificacion prueba",
     "description": "Desde peticiones.rest, no generada automaticamente"
 }
+
+### NOTIFICATIONS
+
+### Get All Notifications
+GET {{HOST}}/api/notifications
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+### Get Notifications by Users_id
+GET {{HOST}}/api/notifications/6
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+
+### Create a Notification
+POST {{HOST}}/api/notifications
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+{
+    "users_id": "6",
+    "status": "Unread",
+    "date": "2024-06-25 19:00",
+    "title": "Notificacion prueba",
+    "description": "Desde peticiones.rest, no generada automaticamente"
+}
+
+### Update a Notification 
+PUT {{HOST}}/api/notifications/1
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+{
+    "users_id": "6",
+    "status": "Read",
+    "date": "2024-06-25 19:00",
+    "title": "Notificacion prueba",
+    "description": "Desde peticiones.rest, no generada automaticamente"
+}
+
+### Delete Notification
+DELETE {{HOST}}/api/notifications/1
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+### Delete Notifications by group and users_id
+// añadir a tabla notifications groups_id, este metodo es para borrar las notificaciones
+// a un usuario referidas a un grupo, para cuando se borre el grupo (se haya acabado su finalidad)
+// y ya no aparezcan en su vista de notificaciones 
+
+

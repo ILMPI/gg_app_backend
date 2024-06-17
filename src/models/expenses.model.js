@@ -3,7 +3,6 @@ const insertExpense = ({groups_id, concept, amount, date, max_date, image_url, p
 }
 
 const asignExpense = (users_id, expenses_id, group_id, cost, status)=>{
-    console.log('estoy asignando un gasto a un usuario');
     return db.query('insert into expense_assignments (users_id, expenses_id, group_id, cost, status) values (?,?,?,?,?)',[users_id, expenses_id, group_id, cost, status]);    
 }
 
@@ -27,8 +26,6 @@ const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
 }
 
-
-
 const updateExpenseById = (expense_id, concept, amount, date, max_date, image_url, payer_user_id)=>{
  
     return db.query(`UPDATE expenses 
@@ -50,12 +47,29 @@ const deleteExpenseById = (expense_id) => {
     return db.query('DELETE FROM expenses WHERE expense_id=?',[expense_id]);
 }
 
-const getExpensesByUsers = (users_id) =>{
+const getExpensesByUsers = (users_id) => {
     return db.query('SELECT * FROM expense_assignments where users_id =?',[users_id]);
 }
+
+
+const payExpense = (users_id, groups_id, expenses_id, balance) => {
+    const result = db.query('UPDATE membership SET balance = ? WHERE users_id = ? AND groups_id = ?', [balance, users_id, groups_id]);
+    return db.query(`UPDATE expense_assignments SET status = 'Paid'  WHERE users_id = ? AND expenses_id = ?`,[users_id, expenses_id]);
+}
+
+const getBalance = (users_id, groups_id) => {
+    const balance = db.query('SELECT balance FROM membership WHERE users_id = ? AND groups_id = ?', [users_id, groups_id]);
+    return balance;
+}
+
+
+
+
+
+
 
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
-    getExpensesByUsers
+    getExpensesByUsers, payExpense, getBalance
 }
