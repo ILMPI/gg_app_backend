@@ -1,5 +1,5 @@
 {
-  "name": "tfm_backend",
+  "name": "gg_app_backend",
   "version": "1.0.0",
   "description": "Proyecto final - App Web para Compartir Gastos con amigos BACKEND",
   "main": "index.js",
