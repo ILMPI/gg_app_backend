@@ -2,7 +2,15 @@
 Proyecto final - App Web para Compartir Gastos con amigos
 BACKEND
 
-## Configuración de Variables de Entorno
+### Instrucciones de Instalación y Ejecución
+1. Clonar el repositorio.
+2. Crear o copiar el archivo .env.
+3. Instalar dependencias:
+`npm install`
+4. Actualizar dependencias:
+`npm update`
+
+5. Configuración de Variables de Entorno
 
 ### Paso 1: Crear el archivo `.env`
 
@@ -12,7 +20,7 @@ BACKEND
 
 **Ejemplo de archivo `.env`:**
 
-```plaintext
+```json
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
@@ -21,17 +29,35 @@ DB_NAME=ggapp
 PORT=3000
 JWT_SECRET=your_generated_secret_key
 ```
-Reemplaza yourpassword, your_generated_secret_key y otros valores de marcador de posición con tu configuración de base de datos real.
+Reemplaza yourpassword y otros valores de marcador de posición con tu configuración de base de datos real.
 
-### Paso 2. Generar el JWT_SECRET
+6. Iniciar la aplicación:
+`npm start`
+# o
+`npm run dev`
 
-Utilizando Node.js
+### Troubleshooting:
+### Si no funciona:
+1. Eliminar `node_modules/`
+2. Eliminar `package-lock.json`
+3. Eliminar `package.json`
+4. Reiniciar el proyecto:
+`npm init -y`
+`npm install bcryptjs cors dotenv express express-validator jsonwebtoken mysql2 nodemon dayjs swagger-jsdoc swagger-ui-express --save`
+`npm start`
+5. Para iniciar con npm run dev:
 
-Ejecuta el siguiente comando en tu terminal para generar una clave secreta:
+En el archivo `package.json`, asegurate de tener los scripts configurados así:
+```json
+"scripts": {
+    //...//
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+}
+```
 
-`node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
 
-### Paso 3: Añadir `.env` a `.gitignore`
+### Como ñadir `.env` a `.gitignore`
 
 Para asegurarte de que el archivo .env no se comparta en tu repositorio de Git (por razones de seguridad), añádelo a tu archivo .gitignore.
 
@@ -57,52 +83,3 @@ Desde tu terminal:
 
 `git rm --cached FILENAME`
 
-```plaintext
-API Endpoints:
-
-    User Endpoints:
-        Register: POST /api/auth/register
-        Login: POST /api/auth/login
-        Get All Users /api/auth/users
-        Get User by ID: GET /api/users/:id
-        Update User: PUT /api/users/:id
-        Delete User: DELETE /api/users/:id
-        Search User by Email: GET /api/users/search/:email
-
-    Group Endpoints:
-        Get All Groups: GET /api/groups
-        Get Group by ID: GET /api/groups/:id
-        Get Groups by Creator ID: GET /api/groups/creator/:creator_id
-        Create Group: POST /api/groups
-
-    Membership Endpoints:
-        Get All Members of a Group: GET /api/membership/group/:group_id
-        Add Member to Group: POST /api/membership
-        Update Membership Status: PUT /api/membership/:user_id/:group_id
-        Delete Membership: DELETE /api/membership/:user_id/:group_id
-
-    Expense Endpoints:
-        Get All Expenses for a Group: GET /api/expenses/group/:group_id
-        Create Expense: POST /api/expenses
-        Update Expense: PUT /api/expenses/:id
-        Delete Expense: DELETE /api/expenses/:id
-
-    Expense Assignment Endpoints:
-        Get All Expense Assignments: GET /api/expense-assignments/expense/:expense_id
-        Create Expense Assignment: POST /api/expense-assignments
-        Update Expense Assignment: PUT /api/expense-assignments/:user_id/:expense_id
-        Delete Expense Assignment: DELETE /api/expense-assignments/:user_id/:expense_id
-
-    Invitation Endpoints:
-        Get All Invitations: GET /api/invitations
-        Create Invitation: POST /api/invitations
-        Update Invitation: PUT /api/invitations/:id
-        Delete Invitation: DELETE /api/invitations/:id
-
-    Notification Endpoints:
-        Get All Notifications for a User: GET /api/notifications/user/:user_id
-        Create Notification: POST /api/notifications
-        Update Notification: PUT /api/notifications/:id
-        Delete Notification: DELETE /api/notifications/:id
-
-I
