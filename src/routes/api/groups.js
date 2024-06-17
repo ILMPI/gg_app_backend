@@ -95,7 +95,6 @@ const checkAdmin = require('../../middleware/checkAdmin');
  *                     error: "Error message details here"
  */
 router.post('/', createGroup);
-
 /**
  * @swagger
  * /api/groups:
@@ -164,7 +163,6 @@ router.post('/', createGroup);
  *               ]
  */
 router.get('/', getGroups);
-
 /**
  * @swagger
  * /api/groups/{id}:
@@ -242,7 +240,6 @@ router.get('/', getGroups);
  *               data: null
  */
 router.get('/:id', getGroupById);
-
 /**
  * @swagger
  * /api/groups/creator/{creator_id}:
@@ -333,7 +330,6 @@ router.get('/:id', getGroupById);
  *                   data: null
  */
 router.get('/creator/:creator_id', getGroupsByCreatorId);
-
 /**
  * @swagger
  * /api/groups/{id}:
@@ -463,7 +459,6 @@ router.get('/creator/:creator_id', getGroupsByCreatorId);
  *               data: null
  */
 router.put('/:id', checkAdmin, updateGroup);
-
 /**
  * @swagger
  * /api/groups/{id}:
@@ -576,8 +571,6 @@ router.put('/:id', checkAdmin, updateGroup);
  *               data: null
  */
 router.delete('/:id', checkAdmin, deleteGroup);
-
-
 /**
  * @swagger
  * /api/groups/{groupId}/state:
@@ -674,7 +667,6 @@ router.delete('/:id', checkAdmin, deleteGroup);
  *               data: null
  */
 router.get('/:groupId/state', getGroupStateByGroupId);
-
 /**
  * @swagger
  * /api/groups/{id}/activate:

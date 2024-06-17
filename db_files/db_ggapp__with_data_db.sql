@@ -99,7 +99,7 @@ CREATE TABLE `group_states` (
   PRIMARY KEY (`id`,`groups_id`),
   KEY `fk_group_states_groups1_idx` (`groups_id`),
   CONSTRAINT `fk_group_states_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,6 +108,7 @@ CREATE TABLE `group_states` (
 
 LOCK TABLES `group_states` WRITE;
 /*!40000 ALTER TABLE `group_states` DISABLE KEYS */;
+INSERT INTO `group_states` VALUES (1,'Active','2024-06-17 07:06:31',1),(2,'Active','2024-06-17 07:06:35',2),(3,'Active','2024-06-17 07:06:37',3),(4,'Active','2024-06-17 07:06:40',4);
 /*!40000 ALTER TABLE `group_states` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-16 23:50:35
+-- Dump completed on 2024-06-17  7:07:43
