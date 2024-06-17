@@ -1,3 +1,5 @@
+const { swaggerDocs: V1SwaggerDocs } = require('./src/routes/swagger');
+
 // Creación y configuración del SERVER
 const http = require('http');
 const app = require('./src/app');
@@ -11,6 +13,7 @@ server.listen(PORT);
 // Listeners
 server.on('listening', () => {
     console.log(`Servidor escuchando sobre el puerto ${PORT}`);
+    V1SwaggerDocs (app, PORT);
 });
 
 server.on('error', (error) => {

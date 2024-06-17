@@ -13,8 +13,12 @@ const insertUser = ({ password, name, email, image_url = null, state = 'Active' 
 const deleteById = (id) => {
     return db.query('DELETE FROM users WHERE id=?', [id]);
 };
-
+// for front
 const selectByEmail = (email) => {
+    return db.query(`SELECT id, name, email FROM users WHERE email=? AND state = 'Active'`, [email]);
+};
+//only for login
+const auth_selectByEmail = (email) => {
     return db.query('SELECT * FROM users WHERE email=?', [email]);
 };
 
@@ -62,6 +66,7 @@ module.exports = {
     selectById,
     insertUser,
     deleteById,
+    auth_selectByEmail,
     selectByEmail,
     updateUserById,
     checkActiveConnections

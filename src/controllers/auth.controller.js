@@ -44,7 +44,7 @@ const login = async (req, res, next) => {
 
     const { email, password } = req.body;
     try {
-        const [users] = await User.selectByEmail(email);
+        const [users] = await User.auth_selectByEmail(email);
         if (users.length === 0) {
             return res.status(401).json({
                 success: false,

@@ -94,6 +94,7 @@ const searchUserByEmail = async (req, res, next) => {
     }
 };
 
+
 const deleteUserById = async (req, res, next) => {
     try {
         const { id } = req.params;

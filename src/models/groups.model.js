@@ -8,7 +8,7 @@ const selectById = (id) => {
 
 const insertGroup = ({ creator_id, title, description, image_url }) => {
     return db.query('INSERT INTO `groups` (creator_id, title, description, image_url) VALUES (?, ?, ?, ?)', [creator_id, title, description, image_url]);
-} // + state Active
+}
 
 const selectByCreatorId = (creator_id) => {
     return db.query('SELECT * FROM `groups` WHERE creator_id = ?', [creator_id]);
@@ -26,22 +26,22 @@ const updateGroup = (id, { title, description, image_url }) => {
 
 const deleteGroup = (id) => {
     return db.query(`
-        INSERT INTO \`mydb\`.\`group_states\` (\`id\`, \`status\`, \`changed_on\`, \`groups_id\`)
-        SELECT NULL, 'Archived', NOW(), g.id
-        FROM \`mydb\`.\`groups\` g
+        INSERT INTO \`ggapp\`.\`group_states\` (\`status\`, \`changed_on\`, \`groups_id\`)
+        SELECT 'Archived', NOW(), g.id
+        FROM \`ggapp\`.\`groups\` g
         WHERE g.id = ?
-          AND NOT EXISTS (
-              SELECT 1
-              FROM \`mydb\`.\`expenses\` e
-              JOIN \`mydb\`.\`expense_assignments\` ea ON e.id = ea.expenses_id
-              WHERE e.groups_id = g.id
-                AND ea.status != 'Paid'
-          );
-    `, [id]);
+        AND NOT EXISTS (
+        SELECT 1
+        FROM \`ggapp\`.\`expenses\` e
+        JOIN \`ggapp\`.\`expense_assignments\` ea ON e.expense_id = ea.expenses_id
+        WHERE e.groups_id = g.id
+        AND ea.status != 'Paid'
+  );`
+, [id]);
 }
 
 //group_state
-// to change the status of archived group to active
+// to change the status of group to active
 const activateGroup = (groupId) => {
     return db.query('INSERT INTO `group_states` (status, changed_on, groups_id) VALUES ("Active", NOW(), ?)', [groupId]);
 }

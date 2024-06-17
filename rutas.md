@@ -1,3 +1,16 @@
+Format of the answers 
+"{
+  "success": true,
+  "message": "",
+  "data": {
+    "id": 1,
+    "name": "Name Surname",
+    "email": "noname@gmail.com",
+    "image_url": "/images/user.png",
+    "state": "Active"
+  }
+}"
+
 #API auth/users
 
     GET /api/auth/users Authorization : TOKEN Devuelve los usuarios
@@ -40,3 +53,4 @@
 
     DELETE /api/membership/users_id/groups_id Borra el miembro users_id del grupo groups_id. Solo se puede borrar si su balance es cero, no le debe a ningun miembro, ni ningun miembro le debe a él
 
+#API NOTIFICATIONS

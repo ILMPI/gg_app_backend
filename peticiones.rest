@@ -1,8 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NTcyMzIxLCJleHAiOjE3MTg2NTg3MjF9.IaFftukFWbl8R1XwvjvOdO50kU1asf_7DPoVaZIXX6g
-
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODU5NTYwNywiZXhwIjoxNzE4NjgyMDA3fQ.M-q2POjEYk7Xjp4GHDGEIaHvb1plECoz_Epo-Kgnc0k
 
 ###AUTH
 
@@ -12,8 +11,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "admin",
-    "email": "admin@gmail.com"
+    "name": "Alex",
+    "email": "alex@gmail.com"
 }
 
 ### Login User
@@ -21,7 +20,7 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
+    "email": "alex@gmail.com",
     "password": "password"
 }
 
@@ -32,25 +31,25 @@ GET {{HOST}}/api/users
 x-access-token: {{TOKEN}}
 
 ### Get User by Id
-GET {{HOST}}/api/users/27
+GET {{HOST}}/api/users/7
 x-access-token: {{TOKEN}}
 
 
 ### Update User Profile
-PUT {{HOST}}/api/users/29
+PUT {{HOST}}/api/users/10
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "name": "Veronica"
+    "name": "Alexander"
 }
 
 ### Search User by Email
-GET {{HOST}}/api/users/email/ellaria@hotmail.com
+GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
 ### Delete User Profile (if no active connections)
-DELETE {{HOST}}/api/users/28
+DELETE {{HOST}}/api/users/8
 x-access-token: {{TOKEN}}
 
 ###GROUPS
@@ -60,11 +59,11 @@ GET {{HOST}}/api/groups
 x-access-token: {{TOKEN}}
 
 ### Get Group by Id
-GET {{HOST}}/api/groups/2
+GET {{HOST}}/api/groups/100
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/7
+GET {{HOST}}/api/groups/creator/345
 x-access-token: {{TOKEN}}
 
 ### Create Group
@@ -73,14 +72,13 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "creator_id": "7",
-    "title": "Amantes de la administración",
-    "description": "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
+    "title": "Group Name1",
+    "description": "Description",
     "image_url": "https://picsum.photos/id/26/200/200"
 }
 
 ### Update Group
-PUT {{HOST}}/api/groups/10
+PUT {{HOST}}/api/groups/44
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -89,15 +87,15 @@ x-access-token: {{TOKEN}}
 }
 
 ### Delete Group
-DELETE {{HOST}}/api/groups/10
+DELETE {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Group State by Group ID
-GET {{HOST}}/api/groups/10/state
+GET {{HOST}}/api/groups/18/state
 x-access-token: {{TOKEN}}
 
 ### Activate Group
-POST {{HOST}}/api/groups/10/activate
+POST {{HOST}}/api/groups/44/activate
 x-access-token: {{TOKEN}}
 
 
@@ -119,7 +117,7 @@ x-access-token: {{TOKEN}}
 {
     "users_id": "7",
     "groups_id": "4",
-    "status": "Joined",
+    "status": "Invited",
     "balance": "0"
 }
 
@@ -136,19 +134,20 @@ x-access-token: {{TOKEN}}
 
 ### EXPENSE
 
-### Create Expense
+### Create Expense 
+### 'YYYY-MM-DD HH:MM'
 POST {{HOST}}/api/expenses
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
     "groups_id": "4",
-    "concept": "Cena en La Trattoria da Luigi",
-    "amount": "300",
-    "date": "2024-16-06 14:00:00",
-    "max_date": "2024-07-05 14:00:00",
+    "concept": "Taller de Excel",
+    "amount": "70",
+    "date": "2024-06-01 19:30:00",
+    "max_date": "2024-07-01 14:00:00",
     "image_url": null,
-    "payer_user_id": "1"
+    "payer_user_id": "7"
 }
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
