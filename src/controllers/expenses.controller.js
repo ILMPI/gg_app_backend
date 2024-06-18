@@ -189,6 +189,68 @@ const getExpensesByUserID = async (req, res, next) => {
     }
 }
 
+const getExpensesByUserGroup = async (req, res, next) => {
+    // devuelve los gastos asignados a un usuario en un grupo, los campos a visualizar en el front
+    // concepto, usuario_id, group_id, amount, cost, status 
+    try {
+        const [result] = await Expense.getExpensesByUserGroup(req.params.users_id, req.params.groups_id);
+        res.status(200).json({
+            success: true,
+            message: 'Expenses retrieved successfully',
+            data: result
+        });
+        
+
+    } catch (err) {
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to retrieve expenses',
+                data: null
+            });
+        }
+        next(err);
+    }
+}
+
+const getExpenseBalanceByUserGroup = async (req, res, next) => {
+    // devuelve los datos para poder representar el balance que tiene en un grupo
+    // la suma de los gastos que debe y la suma de los gastos que ha pagado, frente al total de los gastos del grupo
+    
+    try{
+        const [expenses] = await Expense.getExpensesByUserGroup(req.params.users_id, req.params.groups_id);
+        let cantDebida=0;
+        let cantPagada=0;
+    
+        for (let id = 0; id < expenses.length; id++) {
+            if (expenses[id].status ==='Paid'){
+                cantPagada = cantPagada + Number(expenses[id].cost);
+            }else{
+                cantDebida = cantDebida + Number(expenses[id].cost);
+            }
+        }
+        const amountTotal = cantDebida + cantPagada;
+        console.log(cantDebida, cantPagada, amountTotal);
+        
+        
+        return res.json({
+            success: true,
+            message: 'Balance of user on a group',
+            data: {
+                cantDebida : cantDebida,
+                cantPagada : cantPagada,
+                amountTotal : amountTotal 
+            }
+            
+        });
+    
+    }catch(err){
+        next(err);
+    }
+
+}
+
+
 const getExpenseById = async (req, res, next) => {
     try{
         const [result] = await Expense.getExpenseById(req.params.expenses_id);
@@ -255,6 +317,8 @@ module.exports = {
     updateExpense,
     deleteExpense,
     getExpensesByUserID,
+    getExpensesByUserGroup,
+    getExpenseBalanceByUserGroup,
     getExpenseById,
     payExpense
 }

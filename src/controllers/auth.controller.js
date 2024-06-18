@@ -42,10 +42,8 @@ const register = async (req, res, next) => {
             console.log(invitator_id, 'Unread', currentDate, title, description)
             await Notification.insertNotification(invitator_id, 'Unread', currentDate, title, description)
             
-            console.log(users_id, 'Unread', currentDate, title, description, invitatorName);
             title = 'Se te ha añadido a grupo';
             description = `Te has añadido al grupo ${groupTitle} al que estabas invitado por ${invitatorName}`;
-        
             await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
 
         }

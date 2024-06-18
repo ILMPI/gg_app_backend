@@ -22,8 +22,16 @@ const selectExpensesByGroup = (groups_id) => {
     return db.query('SELECT * FROM expenses where groups_id = ?',[groups_id]);
 }
 
+const getExpensesByUserGroup = (users_id, groups_id) => {
+    return db.query('SELECT expe.concept, expa.users_id, expa.group_id, expe.amount, expa.cost, expa.status FROM expense_assignments expa inner join expenses expe ON expa.expenses_id = expe.expense_id WHERE expa.users_id= ? and expa.group_id= ?',[users_id, groups_id]);
+}
+
 const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
+}
+
+const getAmountTotalGroup = (groups_id) => {
+    return db.query('select SUM(amount) as amountTotal from expenses where groups_id=?',[groups_id]);
 }
 
 const updateExpenseById = (expense_id, concept, amount, date, max_date, image_url, payer_user_id)=>{
@@ -71,5 +79,6 @@ const getBalance = (users_id, groups_id) => {
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
-    getExpensesByUsers, payExpense, getBalance
+    getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
+    getAmountTotalGroup
 }

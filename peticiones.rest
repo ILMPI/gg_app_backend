@@ -165,6 +165,15 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY
 GET {{HOST}}/api/expenses/users/6
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
 
+
+### Get All Expenses by users_id and by group_id GET {{HOST}}/api/expenses/usersgroup/users_id/groups_id
+GET {{HOST}}/api/expenses/usersgroup/6/37
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODcyMTgzMiwiZXhwIjoxNzE4ODA4MjMyfQ.EDXpmaF3hkb2XwlhvmYigVVW8_SatppPPf3uHcvJgBY
+
+### Get the user's balance of all expenses on a group GET {{HOST}}/api/expenses/balance/users_id/groups_id
+GET {{HOST}}/api/expenses/balance/6/37
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODcyMTgzMiwiZXhwIjoxNzE4ODA4MjMyfQ.EDXpmaF3hkb2XwlhvmYigVVW8_SatppPPf3uHcvJgBY
+
 ### Get Expense by expenses_id
 GET {{HOST}}/api/expenses/27
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c

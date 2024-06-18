@@ -20,7 +20,11 @@
 
     GET /api/expenses/group/:groups_id Devuelve los gastos de un grupo con id: groups_id
 
-    GET api/expenses/users/:users_id Devuelve los gastos de un usuario con id_ users_id
+    GET api/expenses/users/:users_id Devuelve los gastos de un usuario con id: users_id
+
+    GET /api/expenses/usersgroup/users_id/groups_id. Devuelve los gastos de un usuario con id:users_id en un grupo con un id:groups_id, los campos a visualizar en el front: concept, users_id, groups_id, amount, cost, status 
+
+    GET 
 
     POST /api/expenses Crea un nuevo gasto. Se asigna la parte correspondiente en expenses_asignaments a cada miembro del grupo, y se actualizan sus balances BODY: {groups_id, concept", amount, date, max_date, image_url, payer_user_id}
 
