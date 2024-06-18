@@ -34,7 +34,6 @@ const handleInvitation = async (email, userId, userName) => {
     throw new Error('Invitation handling failed');
 };
 
-
 const createNotification = async (invitatorId, userName, groupTitle) => {
     const title = 'Usuario recien registrado añadido a un grupo tuyo';
     const description = `El usuario ${userName} se ha añadido al grupo: ${groupTitle}, gestionado por ti`;
