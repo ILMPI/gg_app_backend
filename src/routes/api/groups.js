@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createGroup, getGroups, getGroupById, getGroupsByCreatorId, updateGroup, deleteGroup, getGroupStateByGroupId, activateGroup, getAllGroupsByUser } = require('../../controllers/groups.controller');
+const groups = require('../../controllers/groups.controller');
 const checkAdmin = require('../../middleware/checkAdmin');
 
 /**
@@ -94,7 +94,7 @@ const checkAdmin = require('../../middleware/checkAdmin');
  *                   data:
  *                     error: "Error message details here"
  */
-router.post('/', createGroup);
+router.post('/', groups.createGroup);
 /**
  * @swagger
  * /api/groups:
@@ -120,49 +120,91 @@ router.post('/', createGroup);
  *                     properties:
  *                       id:
  *                         type: integer
- *                       creator_id:
- *                         type: integer
- *                       title:
+ *                       name:
  *                         type: string
  *                       description:
  *                         type: string
- *                       image_url:
+ *                       createdBy:
+ *                         type: integer
+ *                       image:
  *                         type: string
  *                         nullable: true
- *                       created_on:
+ *                       createdOn:
  *                         type: string
  *                         format: date-time
+ *                       participants:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             id:
+ *                               type: integer
+ *                             name:
+ *                               type: string
+ *                             email:
+ *                               type: string
+ *                             image:
+ *                               type: string
+ *                               nullable: true
  *             example:
  *               success: true
  *               message: "Groups retrieved successfully"
  *               data: [
  *                 {
  *                   "id": 1,
- *                   "creator_id": 1,
- *                   "title": "Grupo de Juan",
+ *                   "name": "Grupo de Juan",
  *                   "description": "Grupo creado por Juan Pérez",
- *                   "image_url": null,
- *                   "created_on": "2024-06-16T20:54:59.000Z"
+ *                   "createdBy": 1,
+ *                   "image": null,
+ *                   "createdOn": "2024-06-16T20:54:59.000Z",
+ *                   "participants": [
+ *                     {
+ *                       "id": 7,
+ *                       "name": "admin",
+ *                       "email": "admin@gmail.com",
+ *                       "image": null
+ *                     }
+ *                   ]
  *                 },
  *                 {
  *                   "id": 2,
- *                   "creator_id": 2,
- *                   "title": "Grupo de María",
+ *                   "name": "Grupo de María",
  *                   "description": "Grupo creado por María López",
- *                   "image_url": null,
- *                   "created_on": "2024-06-16T20:57:43.000Z"
- *                 },
- *                 {
- *                   "id": 3,
- *                   "creator_id": 5,
- *                   "title": "Grupo de Luis",
- *                   "description": "Grupo creado por Luis Martínez",
- *                   "image_url": null,
- *                   "created_on": "2024-06-16T21:10:01.000Z"
+ *                   "createdBy": 2,
+ *                   "image": null,
+ *                   "createdOn": "2024-06-16T20:57:43.000Z",
+ *                   "participants": [
+ *                     {
+ *                       "id": 7,
+ *                       "name": "admin",
+ *                       "email": "admin@gmail.com",
+ *                       "image": null
+ *                     }
+ *                   ]
  *                 }
  *               ]
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "Internal Server Error"
+ *               data: {
+ *                 error: "Error message details here"
+ *               }
  */
-router.get('/', getGroups);
+router.get('/', groups.getGroups);
 /**
  * @swagger
  * /api/groups/{id}:
@@ -199,27 +241,57 @@ router.get('/', getGroups);
  *                   properties:
  *                     id:
  *                       type: integer
- *                     creator_id:
- *                       type: integer
- *                     title:
+ *                     name:
  *                       type: string
  *                     description:
  *                       type: string
- *                     image_url:
+ *                     createdBy:
+ *                       type: integer
+ *                     image:
  *                       type: string
- *                     created_on:
+ *                       nullable: true
+ *                     createdOn:
  *                       type: string
  *                       format: date-time
+ *                     participants:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                           name:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           image:
+ *                             type: string
+ *                             nullable: true
  *             example:
  *               success: true
  *               message: "Group retrieved successfully"
- *               data: 
- *                 id: 10
- *                 creator_id: 1
- *                 title: "Amantes de la administración"
- *                 description: "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo."
- *                 image_url: "https://picsum.photos/id/26/200/200"
- *                 created_on: "2024-06-17T00:49:25.000Z"
+ *               data: {
+ *                 "id": 10,
+ *                 "name": "Amantes de la administración",
+ *                 "description": "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
+ *                 "createdBy": 1,
+ *                 "image": "https://picsum.photos/id/26/200/200",
+ *                 "createdOn": "2024-06-17T00:49:25.000Z",
+ *                 "participants": [
+ *                   {
+ *                     "id": 1,
+ *                     "name": "Juan Pérez",
+ *                     "email": "juan.perez@gmail.com",
+ *                     "image": null
+ *                   },
+ *                   {
+ *                     "id": 2,
+ *                     "name": "María López",
+ *                     "email": "maria.lopez@example.com",
+ *                     "image": null
+ *                   }
+ *                 ]
+ *               }
  *       404:
  *         description: Group not found
  *         content:
@@ -238,8 +310,28 @@ router.get('/', getGroups);
  *               success: false
  *               message: "Group not found"
  *               data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "Internal Server Error"
+ *               data: {
+ *                 error: "Error message details here"
+ *               }
  */
-router.get('/:id', getGroupById);
+router.get('/:id', groups.getGroupById);
 /**
  * @swagger
  * /api/groups/creator/{creator_id}:
@@ -278,29 +370,87 @@ router.get('/:id', getGroupById);
  *                     properties:
  *                       id:
  *                         type: integer
- *                       creator_id:
- *                         type: integer
- *                       title:
+ *                       name:
  *                         type: string
  *                       description:
  *                         type: string
- *                       image_url:
+ *                       createdBy:
+ *                         type: integer
+ *                       image:
  *                         type: string
  *                         nullable: true
- *                       created_on:
+ *                       createdOn:
  *                         type: string
  *                         format: date-time
+ *                       participants:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             id:
+ *                               type: integer
+ *                             name:
+ *                               type: string
+ *                             email:
+ *                               type: string
+ *                             image:
+ *                               type: string
+ *                               nullable: true
  *             example:
  *               success: true
  *               message: "Groups retrieved successfully"
  *               data: [
  *                 {
- *                   id: 4,
- *                   creator_id: 7,
- *                   title: "Amantes de la administración",
- *                   description: "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
- *                   image_url: null,
- *                   created_on: "2024-06-16T21:16:11.000Z"
+ *                   "id": 4,
+ *                   "name": "Amantes de la administración",
+ *                   "description": "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
+ *                   "createdBy": 7,
+ *                   "image": null,
+ *                   "createdOn": "2024-06-16T21:16:11.000Z",
+ *                   "participants": [
+ *                     {
+ *                       "id": 1,
+ *                       "name": "Juan Pérez",
+ *                       "email": "juan.perez@gmail.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 2,
+ *                       "name": "María López",
+ *                       "email": "maria.lopez@example.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 3,
+ *                       "name": "Carlos García",
+ *                       "email": "carlos.garcia@yahoo.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 4,
+ *                       "name": "Ana Fernández",
+ *                       "email": "ana.fernandez@example.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 5,
+ *                       "name": "Luis Martínez",
+ *                       "email": "luis.martinez@gmail.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 6,
+ *                       "name": "Marina Garcia",
+ *                       "email": "marina.garcia@gmail.com",
+ *                       "image": null
+ *                     },
+ *                     {
+ *                       "id": 7,
+ *                       "name": "admin",
+ *                       "email": "admin@gmail.com",
+ *                       "image": null
+ *                     }
+ *                   ]
  *                 }
  *               ]
  *       404:
@@ -328,8 +478,172 @@ router.get('/:id', getGroupById);
  *                   success: false
  *                   message: "Creator not found"
  *                   data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "Internal Server Error"
+ *               data: {
+ *                 error: "Error message details here"
+ *               }
  */
-router.get('/creator/:creator_id', getGroupsByCreatorId);
+router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
+/**
+ * @swagger
+ * /api/groups/user/{userId}/groups:
+ *   get:
+ *     summary: Get groups by user ID
+ *     tags: [Groups]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The JWT token for authentication
+ *     responses:
+ *       200:
+ *         description: Groups retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       createdBy:
+ *                         type: integer
+ *                       image:
+ *                         type: string
+ *                         nullable: true
+ *                       createdOn:
+ *                         type: string
+ *                         format: date-time
+ *                       participants:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             id:
+ *                               type: integer
+ *                             name:
+ *                               type: string
+ *                             email:
+ *                               type: string
+ *                             image:
+ *                               type: string
+ *                               nullable: true
+ *             example:
+ *               success: true
+ *               message: "Groups retrieved successfully"
+ *               data: [
+ *                 {
+ *                   "id": 1,
+ *                   "name": "Grupo de Juan",
+ *                   "description": "Grupo creado por Juan Pérez",
+ *                   "createdBy": 1,
+ *                   "image": null,
+ *                   "createdOn": "2024-06-16T20:54:59.000Z",
+ *                   "participants": [
+ *                     {
+ *                       "id": 7,
+ *                       "name": "admin",
+ *                       "email": "admin@gmail.com",
+ *                       "image": null
+ *                     }
+ *                   ]
+ *                 },
+ *                 {
+ *                   "id": 2,
+ *                   "name": "Grupo de María",
+ *                   "description": "Grupo creado por María López",
+ *                   "createdBy": 2,
+ *                   "image": null,
+ *                   "createdOn": "2024-06-16T20:57:43.000Z",
+ *                   "participants": [
+ *                     {
+ *                       "id": 7,
+ *                       "name": "admin",
+ *                       "email": "admin@gmail.com",
+ *                       "image": null
+ *                     }
+ *                   ]
+ *                 }
+ *               ]
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "User not found"
+ *               data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             examples:
+ *               error:
+ *                 value:
+ *                   success: false
+ *                   message: "Internal Server Error"
+ *                   data: {
+ *                     error: "Error message details here"
+ *                   }
+ */
+router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
+
 /**
  * @swagger
  * /api/groups/{id}:
@@ -458,7 +772,7 @@ router.get('/creator/:creator_id', getGroupsByCreatorId);
  *               message: "Failed to verify admin status"
  *               data: null
  */
-router.put('/:id', checkAdmin, updateGroup);
+router.put('/:id', checkAdmin, groups.updateGroup);
 /**
  * @swagger
  * /api/groups/{id}:
@@ -570,7 +884,7 @@ router.put('/:id', checkAdmin, updateGroup);
  *               message: "Failed to verify admin status"
  *               data: null
  */
-router.delete('/:id', checkAdmin, deleteGroup);
+router.delete('/:id', checkAdmin, groups.deleteGroup);
 /**
  * @swagger
  * /api/groups/{groupId}/state:
@@ -666,7 +980,7 @@ router.delete('/:id', checkAdmin, deleteGroup);
  *               message: "Internal Server Error"
  *               data: null
  */
-router.get('/:groupId/state', getGroupStateByGroupId);
+router.get('/:groupId/state', groups.getGroupStateByGroupId);
 /**
  * @swagger
  * /api/groups/{id}/activate:
@@ -782,137 +1096,8 @@ router.get('/:groupId/state', getGroupStateByGroupId);
  *               message: "Failed to verify admin status"
  *               data: null
  */
-router.post('/:id/activate', checkAdmin, activateGroup);
+router.post('/:id/activate', checkAdmin, groups.activateGroup);
 
-/**
- * @swagger
- * /api/groups/user/{userId}/groups:
- *   get:
- *     summary: Get groups by user ID
- *     tags: [Groups]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *         description: The user ID
- *       - in: header
- *         name: x-access-token
- *         required: true
- *         schema:
- *           type: string
- *         description: The JWT token for authentication
- *     responses:
- *       200:
- *         description: Groups retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       creator_id:
- *                         type: integer
- *                       title:
- *                         type: string
- *                       description:
- *                         type: string
- *                       image_url:
- *                         type: string
- *                         nullable: true
- *                       created_on:
- *                         type: string
- *                         format: date-time
- *             example:
- *               success: true
- *               message: "Groups retrieved successfully"
- *               data: [
- *                 {
- *                   id: 1,
- *                   creator_id: 1,
- *                   title: "Grupo de Juan",
- *                   description: "Grupo creado por Juan Pérez",
- *                   image_url: null,
- *                   created_on: "2024-06-16T20:54:59.000Z"
- *                 },
- *                 {
- *                   id: 2,
- *                   creator_id: 2,
- *                   title: "Grupo de María",
- *                   description: "Grupo creado por María López",
- *                   image_url: null,
- *                   created_on: "2024-06-16T20:57:43.000Z"
- *                 },
- *                 {
- *                   id: 3,
- *                   creator_id: 5,
- *                   title: "Grupo de Luis",
- *                   description: "Grupo creado por Luis Martínez",
- *                   image_url: null,
- *                   created_on: "2024-06-16T21:10:01.000Z"
- *                 },
- *                 {
- *                   id: 4,
- *                   creator_id: 7,
- *                   title: "Amantes de la administración",
- *                   description: "Para todos los que les gusta administrar todo lo que está vivo y lo que no está realmente vivo.",
- *                   image_url: null,
- *                   created_on: "2024-06-16T21:16:11.000Z"
- *                 }
- *               ]
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   nullable: true
- *             example:
- *               success: false
- *               message: "User not found"
- *               data: null
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   nullable: true
- *             examples:
- *               error:
- *                 value:
- *                   success: false
- *                   message: "Internal Server Error"
- *                   data: {
- *                     error: "Error message details here"
- *                   }
- */
-router.get('/user/:userId/groups', getAllGroupsByUser);
 
 
 // router.post('/', createGroup);

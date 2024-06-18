@@ -307,6 +307,145 @@ router.get('/email/:email', userController.searchUserByEmail);
  *               data: null
  */
 router.put('/:id', userController.updateUserById);
+
+/**
+ * @swagger
+ * /api/users/{userId}/common-groups:
+ *   get:
+ *     summary: Get users with common groups
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The JWT token for authentication
+ *     responses:
+ *       200:
+ *         description: Users with common groups retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *             example:
+ *               success: true
+ *               message: "Users with common groups retrieved successfully"
+ *               data: [
+ *                 {
+ *                   "id": 1,
+ *                   "name": "Juan Pérez",
+ *                   "email": "juan.perez@gmail.com"
+ *                 },
+ *                 {
+ *                   "id": 2,
+ *                   "name": "María López",
+ *                   "email": "maria.lopez@example.com"
+ *                 },
+ *                 {
+ *                   "id": 3,
+ *                   "name": "Carlos García",
+ *                   "email": "carlos.garcia@yahoo.com"
+ *                 },
+ *                 {
+ *                   "id": 4,
+ *                   "name": "Ana Fernández",
+ *                   "email": "ana.fernandez@example.com"
+ *                 },
+ *                 {
+ *                   "id": 5,
+ *                   "name": "Luis Martínez",
+ *                   "email": "luis.martinez@gmail.com"
+ *                 },
+ *                 {
+ *                   "id": 6,
+ *                   "name": "Marina Garcia",
+ *                   "email": "marina.garcia@gmail.com"
+ *                 }
+ *               ]
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "Forbidden: You can only retrieve the list of users with common groups for your own profile"
+ *               data: null
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "User not found"
+ *               data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             examples:
+ *               error:
+ *                 value:
+ *                   success: false
+ *                   message: "Internal Server Error"
+ *                   data: {
+ *                     error: "Error message details here"
+ *                   }
+ */
+router.get('/:userId/common-groups', userController.getUsersWithCommonGroups);
+
 /**
  * @swagger
  * /api/users/{id}:

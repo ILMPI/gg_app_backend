@@ -5,9 +5,23 @@ const selectAll = () => {
 
 const selectByGroupId = (groups_id) => {
     
-    return db.query('select * from membership where groups_id= ?',[groups_id]);
+    return db.query(`select * from membership where groups_id= ?`,[groups_id]);
     
 }
+//select * from membership where groups_id= ? and status = 'Joined'
+
+// to get the data of users from the exact group
+const selectMembersDataByGroupId = (groups_id)=>{
+    
+    return db.query(`
+        SELECT u.id as users_id, u.name, u.email, u.image_url
+        FROM membership m
+        JOIN users u ON m.users_id = u.id
+        WHERE m.groups_id = ?
+    `, [groups_id]);
+
+};
+
 
 const insertMemberToGroup = ({users_id, groups_id, status, balance})=> {
     
@@ -36,11 +50,6 @@ const deleteMember = (users_id, groups_id) => {
 }
 
 
-// version of Eduardo
-// const deleteMember = (users_id, groups_id) => {
-//     return db.query('delete from membership where (users_id =? and groups_id= ?)',[users_id, groups_id]);
-// }
-
 module.exports = {
     selectAll,
     selectByGroupId,
@@ -48,4 +57,5 @@ module.exports = {
     updateMembershipStatus,
     selectMember,
     deleteMember,
+    selectMembersDataByGroupId
 }

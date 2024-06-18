@@ -2,9 +2,15 @@ const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Membership = require('../models/memberships.model');
 const Notification = require('../models/notifications.model');
+const Dayjs = require('dayjs');
+const { transformGroupData } = require('../utils/groupUtils'); 
 
-const Dayjs = require('dayjs'); 
-
+const sendGroupCreationNotification = async (users_id, title) => {
+    const notifTitle = `Grupo ${title} creado`;
+    const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
+};
 const createGroup = async (req, res, next) => {
     try {
         const { title, description, image_url } = req.body;
@@ -42,10 +48,8 @@ const createGroup = async (req, res, next) => {
         await Group.activateGroup(groupId);
 
         //notification
-        const notifTitle = `Grupo ${title} creado`;
-        const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
-        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(creator_id, 'Unread', currentDate, notifTitle, notifDescription);
+        await sendGroupCreationNotification(creator_id, title);
+
 
         res.status(201).json({
             success: true,
@@ -57,15 +61,15 @@ const createGroup = async (req, res, next) => {
         next(error);
     }
 };
-
-
 const getGroups = async (req, res, next) => {
     try {
         const groups = await Group.selectAll();
+        const transformedGroups = await Promise.all(groups[0].map(transformGroupData));
         res.status(200).json({
             success: true,
             message: 'Groups retrieved successfully',
-            data: groups[0]
+            //data: groups[0]
+            data: transformedGroups
         });
     } catch (error) {
         next(error);
@@ -77,10 +81,12 @@ const getGroupById = async (req, res, next) => {
         const { id } = req.params;
         const group = await Group.selectById(id);
         if (group[0].length !== 0) {
+            const transformedGroup = await transformGroupData(group[0][0]);
             res.status(200).json({
                 success: true,
                 message: 'Group retrieved successfully',
-                data: group[0]
+                //data: group[0]
+                data: transformedGroup
             });
         } else {
             res.status(404).json({
@@ -93,7 +99,6 @@ const getGroupById = async (req, res, next) => {
         next(error);
     }
 };
-
 const getGroupsByCreatorId = async (req, res, next) => {
     try {
         const { creator_id } = req.params;
@@ -110,10 +115,11 @@ const getGroupsByCreatorId = async (req, res, next) => {
         //grups by creator
         const groups = await Group.selectByCreatorId(creator_id);
         if (groups[0].length !== 0) {
+            const transformedGroups = await Promise.all(groups[0].map(transformGroupData));
             res.status(200).json({
                 success: true,
                 message: 'Groups retrieved successfully',
-                data: groups[0]
+                data: transformedGroups
             });
         } else {
             res.status(404).json({
@@ -126,8 +132,8 @@ const getGroupsByCreatorId = async (req, res, next) => {
         next(error);
     }
 };
-// shows all groups where this user is a member
-const getAllGroupsByUser = async (req, res, next) => {
+//shows all groups where this user is a member/including where he is creator
+const getAllGroupsByUserId = async (req, res, next) => {
     try {
         const userId = req.params.userId;
 
@@ -142,18 +148,16 @@ const getAllGroupsByUser = async (req, res, next) => {
         }
 
         const groups = await Group.selectAllGroupsByUserId(userId);
-
+        const transformedGroups = await Promise.all(groups[0].map(transformGroupData));
         res.status(200).json({
             success: true,
             message: 'Groups retrieved successfully',
-            data: groups[0]
+            data: transformedGroups
         });
     } catch (error) {
         next(error);
     }
 }
-
-
 const updateGroup = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -168,7 +172,6 @@ const updateGroup = async (req, res, next) => {
         next(error);
     }
 };
-
 const deleteGroup = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -182,7 +185,6 @@ const deleteGroup = async (req, res, next) => {
         next(error);
     }
 };
-
 const getGroupStateByGroupId = async (req, res, next) => {
     try {
         const { groupId } = req.params;
@@ -254,5 +256,5 @@ module.exports = {
     deleteGroup,
     getGroupStateByGroupId,
     activateGroup,
-    getAllGroupsByUser,
+    getAllGroupsByUserId,
 };

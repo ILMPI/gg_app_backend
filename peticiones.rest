@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NjM4MTQxLCJleHAiOjE3MTg3MjQ1NDF9.-21bUOcxA1_Vhlzv42RVqkAA1iLmPQUoacM6D955EC4
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NzM1MTMwLCJleHAiOjE3MTg4MjE1MzB9.cWiC364UNHX2uPwJs0O3eMoSGSm_zRMsiwVUmJih-OE
 
 
 ###AUTH
@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Alex",
-    "email": "alex@gmail.com"
+    "name": "Usuario1",
+    "email": "usuario1@gmail.com"
 }
 
 ### Login User
@@ -49,6 +49,11 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
+### Search User by Email
+GET {{HOST}}/api/users/7/common-groups
+x-access-token: {{TOKEN}}
+
+
 ### Delete User Profile (if no active connections)
 DELETE {{HOST}}/api/users/8
 x-access-token: {{TOKEN}}
@@ -68,11 +73,11 @@ GET {{HOST}}/api/groups/creator/7
 x-access-token: {{TOKEN}}
 
 ### Get Groups by User Id
-GET {{HOST}}/api/groups/user/7/groups
+GET {{HOST}}/api/groups/user/7
 x-access-token: {{TOKEN}}
 
 ### Get Groups by User Id (User not found)
-GET {{HOST}}/api/groups/user/999/groups
+GET {{HOST}}/api/groups/user/999
 x-access-token: {{TOKEN}}
 
 ### Create Group
@@ -188,16 +193,35 @@ x-access-token: {{TOKEN}}
 DELETE {{HOST}}/api/expenses/10
 x-access-token: {{TOKEN}}
 
+### Pay expense_assingment
+POST {{HOST}}/api/expenses/payment
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
+
+{
+   "users_id" : "10",
+   "expenses_id" : "33",
+   "groups_id" : "38",
+   "cost" : "50",
+   "status": "Reported"
+}
+
+
 ### NOTIFICATIONS
 
 ### Get All Notifications
 GET {{HOST}}/api/notifications
-x-access-token: {{TOKEN}}
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+### Get Notifications by Users_id
+GET {{HOST}}/api/notifications/6
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
 
 ### Create a Notification
 POST {{HOST}}/api/notifications
 Content-Type: application/json
-x-access-token: {{TOKEN}}
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
 
 {
     "users_id": "6",
@@ -207,21 +231,30 @@ x-access-token: {{TOKEN}}
     "description": "Desde peticiones.rest, no generada automaticamente"
 }
 
-### NOTIFICATIONS
-
-### Get All Notifications
-GET {{HOST}}/api/notifications
-x-access-token: {{TOKEN}}
-
-### Create a Notification
-POST {{HOST}}/api/notifications
+### Update a Notification 
+PUT {{HOST}}/api/notifications/1
 Content-Type: application/json
-x-access-token: {{TOKEN}}
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
 
 {
     "users_id": "6",
-    "status": "Unread",
+    "status": "Read",
     "date": "2024-06-25 19:00",
     "title": "Notificacion prueba",
     "description": "Desde peticiones.rest, no generada automaticamente"
 }
+
+### Delete Notification
+DELETE {{HOST}}/api/notifications/1
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+
+### Delete Notifications by group and users_id
+// añadir a tabla notifications groups_id, este metodo es para borrar las notificaciones
+// a un usuario referidas a un grupo, para cuando se borre el grupo (se haya acabado su finalidad)
+// y ya no aparezcan en su vista de notificaciones 
+
+
+### INVITATIONS
+
+### Get Invitation by email
+GET {{HOST}}/api/invitations/email/ellaria2@hotmail.com
