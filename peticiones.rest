@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NjM4MTQxLCJleHAiOjE3MTg3MjQ1NDF9.-21bUOcxA1_Vhlzv42RVqkAA1iLmPQUoacM6D955EC4
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NzM1MTMwLCJleHAiOjE3MTg4MjE1MzB9.cWiC364UNHX2uPwJs0O3eMoSGSm_zRMsiwVUmJih-OE
 
 
 ###AUTH
@@ -49,6 +49,11 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
+### Search User by Email
+GET {{HOST}}/api/users/7/common-groups
+x-access-token: {{TOKEN}}
+
+
 ### Delete User Profile (if no active connections)
 DELETE {{HOST}}/api/users/8
 x-access-token: {{TOKEN}}
@@ -68,11 +73,11 @@ GET {{HOST}}/api/groups/creator/7
 x-access-token: {{TOKEN}}
 
 ### Get Groups by User Id
-GET {{HOST}}/api/groups/user/7/groups
+GET {{HOST}}/api/groups/user/7
 x-access-token: {{TOKEN}}
 
 ### Get Groups by User Id (User not found)
-GET {{HOST}}/api/groups/user/999/groups
+GET {{HOST}}/api/groups/user/999
 x-access-token: {{TOKEN}}
 
 ### Create Group

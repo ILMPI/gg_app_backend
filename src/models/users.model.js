@@ -61,6 +61,17 @@ SELECT
     return db.query(query, [id, id]);
 };
 
+const selectUsersWithCommonGroups = (userId) => {
+    return db.query(`
+        SELECT DISTINCT u.id, u.name, u.email
+        FROM users u
+        JOIN membership m1 ON u.id = m1.users_id
+        JOIN membership m2 ON m1.groups_id = m2.groups_id
+        WHERE m2.users_id = ? AND u.id != ?
+    `, [userId, userId]);
+};
+
+
 module.exports = {
     selectAll,
     selectById,
@@ -69,5 +80,6 @@ module.exports = {
     auth_selectByEmail,
     selectByEmail,
     updateUserById,
-    checkActiveConnections
+    checkActiveConnections,
+    selectUsersWithCommonGroups
 };

@@ -94,6 +94,32 @@ const searchUserByEmail = async (req, res, next) => {
     }
 };
 
+const getUsersWithCommonGroups = async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+
+        //Check if the user doesnt have a moro and is requesting their own common groups
+        if (req.userId !== parseInt(userId, 10)) {
+            return res.status(403).json({
+                success: false,
+                message: 'Forbidden: You can only retrieve the list of users with common groups for your own profile',
+                data: null
+            });
+        }
+
+        const [users] = await User.selectUsersWithCommonGroups(userId);
+        
+        res.status(200).json({
+            success: true,
+            message: 'Users with common groups retrieved successfully',
+            data: users
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 
 const deleteUserById = async (req, res, next) => {
     try {
@@ -141,5 +167,6 @@ module.exports = {
     getUserById,
     deleteUserById,
     updateUserById,
-    searchUserByEmail
+    searchUserByEmail,
+    getUsersWithCommonGroups
 };
