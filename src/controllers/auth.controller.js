@@ -2,6 +2,45 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users.model');
+const Notification = require('../models/notifications.model');
+const Group = require('../models/groups.model');
+const Dayjs = require('dayjs');
+const Invitation = require('../models/invitations.model'); // Add this line
+
+const handleInvitation = async (email, userId, userName) => {
+    const [findEmail] = await Invitation.selectByEmail(email);
+
+    if (!findEmail || findEmail.length === 0) {
+        return null;
+    }
+
+    const groups_id = findEmail[0].groups_id;
+    const invitator_id = findEmail[0].users_id;
+    const [invitator] = await User.selectById(invitator_id);
+    const invitatorName = invitator[0].name;
+
+    if ((findEmail[0].email) === (email)) {
+        await Membership.insertMemberFromInvitation(userId, groups_id, 'Joined', 0);
+        const [group] = await Group.selectById(groups_id);
+        const groupTitle = group[0].title;
+
+        return {
+            invitatorId: invitator_id,
+            groupTitle: groupTitle,
+            invitatorName: invitatorName
+        };
+    }
+
+    throw new Error('Invitation handling failed');
+};
+
+
+const createNotification = async (invitatorId, userName, groupTitle) => {
+    const title = 'Usuario recien registrado añadido a un grupo tuyo';
+    const description = `El usuario ${userName} se ha añadido al grupo: ${groupTitle}, gestionado por ti`;
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(invitatorId, 'Unread', currentDate, title, description);
+};
 
 const register = async (req, res, next) => {
     try {
@@ -13,6 +52,19 @@ const register = async (req, res, next) => {
             state: req.body.state || 'Active'
         };
         const [result] = await User.insertUser(userData);
+
+      // Handle invitation
+      try {
+        const invitationData = await handleInvitation(req.body.email, result.insertId, req.body.name);
+        if (invitationData) {
+            const { invitatorId, groupTitle, invitatorName } = invitationData;
+            // Create notification
+            await createNotification(invitatorId, req.body.name, groupTitle);
+        }
+    } catch (err) {
+        // Log the error but proceed with the registration
+        console.error(err.message);
+    }
 
         if (result.affectedRows === 1) {
             return res.json({
@@ -31,6 +83,8 @@ const register = async (req, res, next) => {
         next(err);
     }
 };
+
+
 
 const login = async (req, res, next) => {
     const errors = validationResult(req);

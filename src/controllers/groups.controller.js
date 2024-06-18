@@ -2,8 +2,14 @@ const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Membership = require('../models/memberships.model');
 const Notification = require('../models/notifications.model');
-
 const Dayjs = require('dayjs'); 
+
+const sendGroupCreationNotification = async (users_id, title) => {
+    const notifTitle = `Grupo ${title} creado`;
+    const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
+};
 
 const createGroup = async (req, res, next) => {
     try {
@@ -42,10 +48,8 @@ const createGroup = async (req, res, next) => {
         await Group.activateGroup(groupId);
 
         //notification
-        const notifTitle = `Grupo ${title} creado`;
-        const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
-        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(creator_id, 'Unread', currentDate, notifTitle, notifDescription);
+        await sendGroupCreationNotification(creator_id, title);
+
 
         res.status(201).json({
             success: true,
