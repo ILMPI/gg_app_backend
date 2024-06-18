@@ -2,6 +2,11 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users.model');
+const Invitation = require('../models/invitations.model');
+const Membership = require('../models/memberships.model');
+const Notification = require('../models/notifications.model');
+const Group = require('../models/groups.model');
+const Dayjs = require('dayjs');
 
 const register = async (req, res, next) => {
     try {
@@ -12,9 +17,41 @@ const register = async (req, res, next) => {
             image_url: req.body.image_url || null,
             state: req.body.state || 'Active'
         };
+        
         const [result] = await User.insertUser(userData);
+        
+        //comprobar si tiene invitaciones
+        const [findEmail] = await Invitation.selectByEmail(req.body.email);
+        const groups_id = findEmail[0].groups_id;
+        const invitator_id = findEmail[0].users_id;
+        const [invitator] = await User.selectById(invitator_id);
+        const invitatorName = invitator[0].name;
+        
+        if ((findEmail[0].email)===(req.body.email)) {
+            
+            const [users] = await User.selectByEmail(req.body.email);
+            const users_id = users[0].id;
+            const [result2] = await Membership.insertMemberFromInvitation(users_id, groups_id, 'Joined', 0);
+            
+            //Crear notificaciones a interesados
+            var title = 'Usuario recien registrado añadido a un grupo tuyo';
+            const [group] =await  Group.selectById(groups_id);
+            const groupTitle = group[0].title;
+            var description = `El usuario ${req.body.name} se ha añadido al grupo: ${groupTitle}, gestionado por ti`;
+            const currentDate = await Dayjs().format('YYYY-MM-DD HH:mm');
+            console.log(invitator_id, 'Unread', currentDate, title, description)
+            await Notification.insertNotification(invitator_id, 'Unread', currentDate, title, description)
+            
+            console.log(users_id, 'Unread', currentDate, title, description, invitatorName);
+            title = 'Se te ha añadido a grupo';
+            description = `Te has añadido al grupo ${groupTitle} al que estabas invitado por ${invitatorName}`;
+        
+            await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+
+        }
 
         if (result.affectedRows === 1) {
+       
             return res.json({
                 success: true,
                 message: 'User registered successfully',
@@ -27,6 +64,7 @@ const register = async (req, res, next) => {
                 }
             });
         }
+        
     } catch (err) {
         next(err);
     }

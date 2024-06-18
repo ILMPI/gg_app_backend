@@ -40,3 +40,5 @@
 
     DELETE /api/membership/users_id/groups_id Borra el miembro users_id del grupo groups_id. Solo se puede borrar si su balance es cero, no le debe a ningun miembro, ni ningun miembro le debe a él
 
+
+

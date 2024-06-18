@@ -60,9 +60,9 @@ SELECT
 module.exports = {
     selectAll,
     selectById,
+    selectByEmail,
     insertUser,
     deleteById,
-    selectByEmail,
     updateUserById,
     checkActiveConnections
 };

@@ -34,6 +34,27 @@ const getUserById = async (req, res, next) => {
     }
 };
 
+const getUserByEmail = async (req, res, next) => {
+    try {
+        const [result] = await User.selectByEmail(req.params.email);
+        if (result.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                data: null
+            });
+        }
+        res.json({
+            success: true,
+            message: 'User retrieved successfully',
+            data: result[0]
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+
 const updateUserById = async (req, res, next) => {
     console.log('updateUserById function called');
     try {
@@ -137,6 +158,7 @@ const deleteUserById = async (req, res, next) => {
 
 module.exports = {
     getAllUsers,
+    getUserByEmail,
     getUserById,
     deleteUserById,
     updateUserById,

@@ -8,9 +8,9 @@ POST {{HOST}}/api/auth/register
 Content-Type: application/json
 
 {
-    "password": "password",
-    "name": "Angie",
-    "email": "eguzkia6@gmail.com"
+    "password": "12345",
+    "name": "EDU2",
+    "email": "ellaria2@hotmail.com"
 }
 
 ### Login User
@@ -35,7 +35,8 @@ Content-Type: application/json
 
 ### Get Users
 GET {{HOST}}/api/users
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4Njg4MjYxLCJleHAiOjE3MTg3NzQ2NjF9.u1RIpcr8X6jDC7qM3e9Hpz6D3890At5IM0TCiY8Ac-Y
+
 ### Get User by Id
 GET {{HOST}}/api/users/27
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
@@ -266,3 +267,7 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDM
 // y ya no aparezcan en su vista de notificaciones 
 
 
+### INVITATIONS
+
+### Get Invitation by email
+GET {{HOST}}/api/invitations/email/ellaria2@hotmail.com
