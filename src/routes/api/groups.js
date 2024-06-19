@@ -20,6 +20,8 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *           schema:
  *             type: object
  *             properties:
+ *               name:
+ *                 type: string
  *               title:
  *                 type: string
  *               description:
@@ -27,7 +29,7 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               image_url:
  *                 type: string
  *             example:
- *               title: "Group Name"
+ *               name: "Group Alias"
  *               description: "Description"
  *               image_url: "https://picsum.photos/id/26/200/200"
  *     responses:
@@ -51,7 +53,7 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               success: true
  *               message: "Group created successfully"
  *               data:
- *                 id: 46
+ *                 id: 7
  *       400:
  *         description: Bad request
  *         content:
@@ -70,7 +72,7 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               missing-fields:
  *                 value:
  *                   success: false
- *                   message: "All fields are required: title, description"
+ *                   message: "All fields are required: title/name, description"
  *               duplicate-group:
  *                 value:
  *                   success: false
@@ -99,6 +101,7 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *                     error: "Error message details here"
  */
 router.post('/', groups.createGroup);
+
 /**
  * @swagger
  * /api/groups:
@@ -1128,6 +1131,20 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
  *           schema:
  *             type: object
  *             properties:
+ *               participants:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       example: "john.doe@gmail.com"
+ *                     id:
+ *                       type: integer
+ *                       example: 10
+ *                     name:
+ *                       type: string
+ *                       example: "John Doe"
  *               users:
  *                 type: array
  *                 items:
@@ -1143,58 +1160,21 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
  *                       type: string
  *                       example: "John Doe"
  *             required:
- *               - users
+ *               - participants
  *             example:
- *               users: [
+ *               participants: [
  *                 {
  *                   id: 1,
- *                   name: "John Doe",
- *                   email: "john.doe@gmail.com"
+ *                   name: "John D",
+ *                   email: "johnd@gmail.com"
  *                 },
  *                 {
- *                   id: 2,
- *                   name: "Jane Smith",
- *                   email: "jane.smith@example.com"
+ *                   email: "janes@gmail.com"
  *                 },
  *                 {
  *                   id: 3,
  *                   name: "Emily Davis",
- *                   email: "emily.davis@yahoo.com"
- *                 },
- *                 {
- *                   id: 4,
- *                   name: "Michael Johnson",
- *                   email: "michael.johnson@example.com"
- *                 },
- *                 {
- *                   id: 5,
- *                   name: "Olivia Brown",
- *                   email: "olivia.brown@gmail.com"
- *                 },
- *                 {
- *                   id: 6,
- *                   name: "William Wilson",
- *                   email: "william.wilson@yahoo.com"
- *                 },
- *                 {
- *                   id: 7,
- *                   name: "Sophia Martinez",
- *                   email: "sophia.martinez@example.com"
- *                 },
- *                 {
- *                   id: 8,
- *                   name: "James Anderson",
- *                   email: "james.anderson@gmail.com"
- *                 },
- *                 {
- *                   id: 9,
- *                   name: "Ava Taylor",
- *                   email: "ava.taylor@yahoo.com"
- *                 },
- *                 {
- *                   id: 10,
- *                   name: "Logan Harris",
- *                   email: "logan.harris@example.com"
+ *                   email: "emily1dadavis@yahoo.com"
  *                 }
  *               ]
  *     responses:
@@ -1230,30 +1210,19 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
  *                   message: "Batch invitation process completed"
  *                   data: [
  *                     {
- *                       email: "john.doe@gmail.com",
- *                       success: true,
- *                       message: "User added to the group"
- *                     },
- *                     {
- *                       email: "jane.smith@example.com",
+ *                       email: "johnd@gmail.com",
  *                       success: true,
  *                       message: "Invitation sent to the email"
- *                     }
- *                   ]
- *               all-failures:
- *                 value:
- *                   success: false
- *                   message: "All invitations failed"
- *                   data: [
- *                     {
- *                       email: "john.doe@gmail.com",
- *                       success: false,
- *                       message: "The user is already a member of the group"
  *                     },
  *                     {
- *                       email: "jane.smith@example.com",
- *                       success: false,
- *                       message: "An invitation has already been sent to this email for this group in the last 24 hours"
+ *                       email: "janes@gmail.com",
+ *                       success: true,
+ *                       message: "Invitation sent to the email"
+ *                     },
+ *                     {
+ *                       email: "emily1dadavis@yahoo.com",
+ *                       success: true,
+ *                       message: "Invitation sent to the email"
  *                     }
  *                   ]
  *       400:
@@ -1274,7 +1243,7 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
  *               invalid-format:
  *                 value:
  *                   success: false
- *                   message: "Invalid input format: expected an array of users"
+ *                   message: "Invalid input format: expected an array of participants or users"
  *                   data: null
  *               limit-exceeded:
  *                 value:
