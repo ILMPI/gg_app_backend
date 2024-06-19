@@ -85,18 +85,18 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "title": "Group Name1",
+    "name": "Group Alias",
     "description": "Description",
     "image_url": "https://picsum.photos/id/26/200/200"
 }
 
 ### Update Group
-PUT {{HOST}}/api/groups/44
+PUT {{HOST}}/api/groups/7
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "title": "Familia"
+    "name": "Lalaland"
 }
 
 ### Delete Group
@@ -117,21 +117,19 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users": [
+    "participants": [
         {
             "id": 1,
-            "name": "John Doe",
-            "email": "1"
+            "name": "John D",
+            "email": "johnd@gmail.com"
         },
         {
-            "id": 2,
-            "name": "Jane Smith",
-            "email": "jane.smith@example.com"
+            "email": "janes@gmail.com"
         },
         {
             "id": 3,
             "name": "Emily Davis",
-            "email": "emily1davis@yahoo.com"
+            "email": "emily1dadavis@yahoo.com"
         }
     ]
 
