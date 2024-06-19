@@ -17,10 +17,11 @@ const sendGroupCreationNotification = async (users_id, title) => {
 };
 const createGroup = async (req, res, next) => {
     try {
-        const { title, description, image_url } = req.body;
+        const { title, name, description, image_url } = req.body;
+        const groupName = title || name;
         const creator_id = req.userId;// id from TOKEN
 
-        if (!title || !description) {
+        if (!groupName  || !description) {
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required: title, description'
@@ -29,7 +30,7 @@ const createGroup = async (req, res, next) => {
 
         // if user created such group before
         const existingGroups = await Group.selectByCreatorId(creator_id);
-        const duplicateGroup = existingGroups[0].find(group => group.title === title);
+        const duplicateGroup = existingGroups[0].find(group => group.title === groupName);
 
         if (duplicateGroup) {
             return res.status(400).json({
@@ -40,7 +41,7 @@ const createGroup = async (req, res, next) => {
         }
 
         //add group
-        const result = await Group.insertGroup({ creator_id, title, description, image_url });
+        const result = await Group.insertGroup({ creator_id, title: groupName, description, image_url });
         const groupId = result[0].insertId;
 
         //add creator to grrup
@@ -52,7 +53,7 @@ const createGroup = async (req, res, next) => {
         await Group.activateGroup(groupId);
 
         //notification
-        await sendGroupCreationNotification(creator_id, title);
+        await sendGroupCreationNotification(creator_id, groupName);
 
 
         res.status(201).json({
@@ -165,8 +166,9 @@ const getAllGroupsByUserId = async (req, res, next) => {
 const updateGroup = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, description, image_url } = req.body;
-        await Group.updateGroup(id, { title, description, image_url });
+        const { title, name, description, image_url } = req.body;
+        const groupName = title || name;
+        await Group.updateGroup(id, { title: groupName, description, image_url });
         res.status(200).json({
             success: true,
             message: 'Group updated successfully',
@@ -250,14 +252,15 @@ const activateGroup = async (req, res, next) => {
 
 const inviteUserToGroup = async (req, res, next) => {
     try {
-        const { users } = req.body; // Expecting an array of users
+        const { participants, users } = req.body;
+        const invitees = participants || users;
         const groupId = req.params.id;
         const inviterId = req.userId;
         const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
 
         let results = [];
 
-        for (let user of users) {
+        for (let user of invitees) {
             const { email, name } = user;
             let success = true;
             let message = '';
