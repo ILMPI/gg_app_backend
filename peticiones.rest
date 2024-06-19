@@ -1,8 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NzY2ODYzLCJleHAiOjE3MTg4NTMyNjN9.Nw0L5pPUXSrWoiyVf3QaaQ-lRkaTEJN2D9s4xaTTCJw
-
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NzcwOTg1LCJleHAiOjE3MTg4NTczODV9.yFYdVV4qlRHjyUadGuOz068E9a3xTAoZ1XFdwFBrqy4
 
 ###AUTH
 
@@ -196,7 +195,7 @@ GET {{HOST}}/api/membership
 x-access-token: {{TOKEN}}
 
 ### Get All Membership of a group GET {{HOST}}/api/membership/group/1
-GET {{HOST}}/api/membership/group/15
+GET {{HOST}}/api/membership/group/4
 x-access-token: {{TOKEN}}
 
 ### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json
