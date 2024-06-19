@@ -1,10 +1,16 @@
+const Nodemailer = require('nodemailer');
+const Dayjs = require('dayjs');
 const Notification = require('../models/notifications.model');
 const User = require('../models/users.model');
-const Nodemailer = require('nodemailer');
+const { transformNotificationDescription } = require('../utils/notificationUtils');
+const { sendMail } = require('../utils/emailUtils');  
 
 const getAllNotifications = async (req, res, next) => { 
     try {
         const [result] = await Notification.selectAll();
+
+        this.saludar();
+
         res.json({
             success: true,
             message: 'Notifications retrieved successfully',
@@ -33,38 +39,11 @@ const createNotification = async (req, res, next) => {
     try {
         const {users_id, status, date, title, description} = req.body;
         await Notification.insertNotification(users_id, status, date, title, description );
+        
         const [user] = await User.selectById(users_id);
         const email = user[0].email;
-
-        var message = {
-            from: 'ellaria@hotmail.com',
-            to: 'edllaor77@gmail.com',
-            subject: `Notificacion de gg_app ${title}`,
-            text: description
-        };
-
-        var transporter = Nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                type: 'OAuth2',
-                user: process.env.MAIL_USERNAME,
-                pass: process.env.MAIL_PASSWORD,
-                clientId: process.env.OAUTH_CLIENTID,
-                clientSecret: process.env.OAUTH_CLIENT_SECRET,
-                refreshToken: process.env.OAUTH_REFRESH_TOKEN
-            }
-        });
-
-        transporter.sendMail(message, (error, info) => {
-            if (error) {
-                console.log("Error enviando email")
-                console.log(error.message)
-            } else {
-                console.log("Email enviado")
-            }
-        })
-        
-        
+        const textSubject = `Notificacion de gg_app ${title}`;
+        await sendmail(email,textSubject,description);
 
         res.status(201).json({
             success: true,
@@ -105,6 +84,32 @@ const deleteNotification = async (req, res, next) => {
     }
 }
 
+const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
+    try {
+        const notifTitle = `Has sido añadido a un nuevo grupo`;
+
+        let notifDescription = `Has sido añadido al grupo ${groupId} por ${inviterId}`;
+
+        notifDescription = await transformNotificationDescription(notifDescription, inviterId, groupId);
+
+        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId);
+        console.log('Notification inserted successfully');
+        
+        const email = User.selectById(userId).email;
+        await sendMail(email, notifTitle, notifDescription);
+
+    } catch (error) {
+        console.error('Error inserting notification:', error);
+        throw error;
+    }
+};
+
 module.exports = {
-    getAllNotifications, getNotificationsByUsersID, createNotification, updateNotification, deleteNotification
+    getAllNotifications,
+    getNotificationsByUsersID,
+    createNotification,
+    updateNotification,
+    deleteNotification,
+    sendInviteUserToGroupNotification,
 }

@@ -1,5 +1,6 @@
 const Expense = require('../models/expenses.model');
-
+const Notification = require('../models/notifications.model');
+const User = require('../models/users.model');
 
 const createExpense = async (req, res, next) => {
     try {
@@ -18,6 +19,7 @@ const createExpense = async (req, res, next) => {
 
         const [expense] = await Expense.getExpenseByConcept(req.body.concept, groups_id);
         const expenses_id = expense[0].expense_id;
+        const expense_name = expense[0].concept;
 
         // reparto guarda el gasto repartido entre los usuarios
         const reparto = Number(req.body.amount) / listMembersGroup.length;
@@ -34,9 +36,12 @@ const createExpense = async (req, res, next) => {
                 // Hacer update en balance de tabla membership
                 const [updateBal1] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
 
-                // Añadir notificacion correspondiente
-
-
+                // Notificacion correspondiente al pagador
+                const title = 'Se ha asignado tu parte del gasto';
+                const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
+                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                
             } else {
 
                 // Es usuario que no ha pagado el ticket
@@ -44,8 +49,12 @@ const createExpense = async (req, res, next) => {
                 // A su balance hay que añadir en negativo reparto
                 const balance = Number(listMembersGroup[id].balance) - reparto;
                 const [updateBal2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
-
-                // Añadir notificacion correspondiente
+                // Notificacion correspondiente
+                const title = 'Se ha asignado tu parte del gasto';
+                const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
+                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                
              }
         }
 
@@ -283,19 +292,27 @@ const payExpense = async (req, res, next) => {
         // El deudor paga y se queda el balance en cero
         const balance = balanceAnterior + Number(cost);
         const [result] = await Expense.payExpense(users_id, groups_id, expenses_id, balance);
-        
         // Notificar al deudor que ha pagado
+        const [expense] = await Expense.getExpenseById(expenses_id);
+        const expenseName = expense[0].concept;
+        var title = 'Has pagado tu parte de un gasto';
+        var description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
+        var currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+        await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
 
         // El pagador del gasto cobra la parte correspondiente del deudor
-        const [expense] = await Expense.getExpenseById(expenses_id);
         const payer_user_id = expense[0].payer_user_id;
-        
+        const [payer] = await User.selectById(payer_user_id);
+        const payerName = payer[0].name;
         const [response2] = await Expense.getBalance(payer_user_id, groups_id);
         const balancePayerAnterior = Number(response2[0].balance);
-        console.log(balancePayerAnterior);
         const balancePayer = balancePayerAnterior - Number(cost);
         await Expense.updateBalance(payer_user_id, groups_id, balancePayer);
         // Notificar al pagador inicial del gasto total, que el usuario le ha pagado su parte al gasto referido
+        title = 'Has cobrado una parte de un gasto';
+        description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
+        currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+        await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
 
         
         

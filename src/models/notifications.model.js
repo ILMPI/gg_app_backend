@@ -6,8 +6,11 @@ const selectByUsersId = (users_id) => {
     return db.query('select * from notifications where users_id=?', [users_id]);
 }
 
-const insertNotification = (users_id, status, date, title, description) => {
-    return db.query('INSERT INTO notifications (users_id, status, date, title, description) VALUES (?, ?, ?, ?, ?)', [users_id, status, date, title, description]);
+const insertNotification = (users_id, status, date, title, description, group_id = null, expense_id = null) => {
+    return db.query(
+        'INSERT INTO notifications (users_id, status, date, title, description, group_id, expense_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [users_id, status, date, title, description, group_id, expense_id]
+    );
 }
 
 const updateNotification = (id, {users_id, status, date, title, description}) => {
@@ -18,6 +21,11 @@ const deleteNotification = (id) => {
     return db.query('DELETE FROM notifications WHERE id = ?', [id])
 }
 
+
 module.exports = {
-    selectAll, selectByUsersId, insertNotification, updateNotification, deleteNotification
+    selectAll,
+    selectByUsersId,
+    insertNotification,
+    updateNotification,
+    deleteNotification,
 }

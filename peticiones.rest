@@ -3,7 +3,6 @@
 
 @TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODc2OTI2NywiZXhwIjoxNzE4ODU1NjY3fQ.6TuDCaumXqOnfiS1fE3shLG_MkLnoxMRSC-z1vlOwyE
 
-
 ###AUTH
 
 ### Register User
@@ -12,8 +11,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Usuario1",
-    "email": "usuario1@gmail.com"
+    "name": "Vanessa Brown",
+    "email": "vanda_brown@gmail.com"
 }
 
 ### Login User
@@ -115,12 +114,88 @@ DELETE {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Group State by Group ID
-GET {{HOST}}/api/groups/18/state
+GET {{HOST}}/api/groups/4/state
 x-access-token: {{TOKEN}}
 
 ### Activate Group
-POST {{HOST}}/api/groups/44/activate
+POST {{HOST}}/api/groups/4/activate
 x-access-token: {{TOKEN}}
+
+### Invite User to Group
+POST {{HOST}}/api/groups/4/invite
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "email": "1"
+        },
+        {
+            "id": 2,
+            "name": "Jane Smith",
+            "email": "jane.smith@example.com"
+        },
+        {
+            "id": 3,
+            "name": "Emily Davis",
+            "email": "emily1davis@yahoo.com"
+        }
+    ]
+
+}
+
+
+### Invite Users to Group
+POST {{HOST}}/api/groups/4/invite
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+{
+    "users": [
+        {
+            "email": "user1@example.com"
+        },
+        {
+            "email": "user2@example.com",
+            "name": "User Two"
+        },
+        {
+            "email": "user3@example.com"
+        },
+        {
+            "email": "user4@example.com",
+            "name": "User Four"
+        },
+        {
+            "email": "user5@example.com"
+        },
+        {
+            "email": "user6@example.com",
+            "name": "User Six"
+        },
+        {
+            "email": "user7@example.com"
+        },
+        {
+            "email": "user8@example.com",
+            "name": "User Eight"
+        },
+        {
+            "email": "user9@example.com"
+        },
+        {
+            "email": "user10@example.com",
+            "name": "User Ten"
+        },
+        {
+            "email": "user11@example.com"
+        }
+    ]
+}
+
 
 
 ### MEMEMBERSHIP
@@ -130,7 +205,7 @@ GET {{HOST}}/api/membership
 x-access-token: {{TOKEN}}
 
 ### Get All Membership of a group GET {{HOST}}/api/membership/group/1
-GET {{HOST}}/api/membership/group/15
+GET {{HOST}}/api/membership/group/4
 x-access-token: {{TOKEN}}
 
 ### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json

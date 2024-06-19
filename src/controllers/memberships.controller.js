@@ -30,39 +30,43 @@ const getAllMembershipByGroup = async (req, res, next) => {
     }
 }
 
-const addMemberToGroup = async (req, res, next) => {
-    try {
-        const {users_id, groups_id} = req.body;
+// const addMemberToGroup = async (req, res, next) => {
+//     try {
+//         const {users_id, groups_id} = req.body;
 
-        const [Member] = await Membership.selectMember(users_id, groups_id);
-        const [GroupAdded] = await Group.selectById(groups_id);
+//         const [Member] = await Membership.selectMember(users_id, groups_id);
+//         const [GroupAdded] = await Group.selectById(groups_id);
         
-        if (!Member[0]) {
-            
-            const [result] = await Membership.insertMemberToGroup(req.body);
-            const nameGroup = GroupAdded[0].title;
-            const notifTitle = `Añadido al grupo ${nameGroup}`;
-            const notifDescription = 'Ahora debes confirmar que aceptas estar en el grupo';
-            const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-            const [result2] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
-            
-            res.json({
-                success: true,
-                message: 'Member added successfully',
-                data: result
-            }) 
-        }else{ 
-            res.json({
-                success: false,
-                message: 'USER EXISTS',
-                data: null
-            });
+//         console.log(Member[0]);
 
-        }
-    } catch (err) {
-        next(err);
-    }
-}
+//         console.log('antes de logica');
+        
+//         if (!Member[0]) {
+            
+//             const [result] = await Membership.insertMemberToGroup(req.body);
+//             const nameGroup = GroupAdded[0].title;
+//             const notifTitle = `Añadido al grupo ${nameGroup}`;
+//             const notifDescription = 'Ahora debes confirmar que aceptas estar en el grupo';
+//             const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+//             const [result2] = await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
+            
+//             res.json({
+//                 success: true,
+//                 message: 'Member added successfully',
+//                 data: result
+//             }) 
+//         }else{ 
+//             res.json({
+//                 success: false,
+//                 message: 'USER EXISTS',
+//                 data: null
+//             });
+
+//         }
+//     } catch (err) {
+//         next(err);
+//     }
+// }
 
 const updateMembership = async (req, res, next) => {
     try {
@@ -105,7 +109,7 @@ const deleteMembership = async (req, res, next) => {
 module.exports = {
     getAllMembership,
     getAllMembershipByGroup,
-    addMemberToGroup,
+   // addMemberToGroup,
     updateMembership,
     deleteMembership
 }

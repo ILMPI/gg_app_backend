@@ -2,8 +2,12 @@ const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Membership = require('../models/memberships.model');
 const Notification = require('../models/notifications.model');
+const {sendInviteUserToGroupNotification} = require('../controllers/notifications.controller')
+const Invitation = require('../models/invitations.model');
 const Dayjs = require('dayjs');
-const { transformGroupData } = require('../utils/groupUtils'); 
+const { transformGroupData } = require('../utils/groupUtils');
+
+
 
 const sendGroupCreationNotification = async (users_id, title) => {
     const notifTitle = `Grupo ${title} creado`;
@@ -244,8 +248,168 @@ const activateGroup = async (req, res, next) => {
     }
 };
 
+const inviteUserToGroup = async (req, res, next) => {
+    try {
+        const { users } = req.body; // Expecting an array of users
+        const groupId = req.params.id;
+        const inviterId = req.userId;
+        const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
+
+        let results = [];
+
+        for (let user of users) {
+            const { email, name } = user;
+            let success = true;
+            let message = '';
+
+            try {
+                const [existingUsers] = await User.selectByEmail(email);
+                const userId = existingUsers.length > 0 ? existingUsers[0].id : null;
+
+                if (userId) {
+                    const [existingMembership] = await Membership.selectMember(userId, groupId);
+                    if (existingMembership.length > 0) {
+                        message = 'The user is already a member of the group';
+                        success = false;
+                    }
+                }
+
+                const [recentInvitations] = await Invitation.selectRecentInvitation(inviterId, groupId, email);
+                if (recentInvitations.length > 0) {
+                    message = 'An invitation has already been sent to this email for this group in the last 24 hours';
+                    success = false;
+                }
+
+                if (success) {
+                    if (userId) {
+                        await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
+                        await sendInviteUserToGroupNotification(userId, inviterId, groupId);
+                        await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+                        message = 'User added to the group';
+                    } else {
+                        await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+                        message = 'Invitation sent to the email';
+                    }
+                }
+            } catch (error) {
+                success = false;
+                message = error.message;
+            }
+
+            results.push({
+                email,
+                success,
+                message
+            });
+        }
+
+        const allFailures = results.every(result => !result.success);
+
+        return res.status(200).json({
+            success: !allFailures,
+            message: allFailures ? 'All invitations failed' : 'Batch invitation process completed',
+            data: results
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+//previous version
+// const inviteUserToGroup = async (req, res, next) => {
+//     try {
+//         const { users } = req.body; //array of users
+//         const groupId = req.params.id;
+//         const inviterId = req.userId;
+//         const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
+
+//         let results = [];
+//         let membershipErrors = req.membershipErrors || [];
+//         let invitationErrors = req.invitationErrors || [];
+
+//         for (let user of users) {
+//             const { email, name } = user;
+
+//             if (membershipErrors.some(err => err.email === email) || invitationErrors.some(err => err.email === email)) {
+//                 results.push({
+//                     email,
+//                     success: false,
+//                     message: membershipErrors.find(err => err.email === email)?.message || invitationErrors.find(err => err.email === email)?.message
+//                 });
+//                 continue;
+//             }
+
+//             const [existingUsers] = await User.selectByEmail(email);
+
+//             if (existingUsers.length > 0) {
+//                 const userId = existingUsers[0].id;
+//                 await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
+//                 await sendInviteUserToGroupNotification(userId, inviterId, groupId);
+//                 await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+//                 results.push({
+//                     email,
+//                     success: true,
+//                     message: 'User added to the group'
+//                 });
+//             } else {
+//                 await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+//                 results.push({
+//                     email,
+//                     success: true,
+//                     message: 'Invitation sent to the email'
+//                 });
+//             }
+//         }
+
+//         return res.status(200).json({
+//             success: true,
+//             message: 'Batch invitation process completed',
+//             data: results
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 
 
+// for one by one user
+// const inviteUserToGroup = async (req, res, next) => {
+//     try {
+//         const { email } = req.body;
+//         const groupId = req.params.id; // :id from route
+//         const inviterId = req.userId; //the current user, who is inviting
+//         const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
+
+//         // Check if the user is already registered
+//         const [existingUsers] = await User.selectByEmail(email);
+
+//         if (existingUsers.length > 0) {
+//             const userId = existingUsers[0].id;
+
+//             // User is registered and not a member -> add to the group
+//             await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
+//             await sendInviteUserToGroupNotification(userId,inviterId, groupId);
+//             //send invitation to registered user
+//             await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+//             return res.status(200).json({
+//                 success: true,
+//                 message: 'User added to the group',
+//                 data: null
+//             });
+//         } else {
+//             // User doesn't exist, send an invitation
+//             await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+
+//             return res.status(200).json({
+//                 success: true,
+//                 message: 'Invitation sent to the email',
+//                 data: null
+//             });
+//         }
+//     } catch (error) {
+//         next(error);
+//     }
+// };
 
 module.exports = {
     createGroup,
@@ -257,4 +421,5 @@ module.exports = {
     getGroupStateByGroupId,
     activateGroup,
     getAllGroupsByUserId,
+    inviteUserToGroup,
 };
