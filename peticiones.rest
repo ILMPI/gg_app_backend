@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4NzM1MTMwLCJleHAiOjE3MTg4MjE1MzB9.cWiC364UNHX2uPwJs0O3eMoSGSm_zRMsiwVUmJih-OE
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODc2OTI2NywiZXhwIjoxNzE4ODU1NjY3fQ.6TuDCaumXqOnfiS1fE3shLG_MkLnoxMRSC-z1vlOwyE
 
 
 ###AUTH
@@ -15,6 +15,16 @@ Content-Type: application/json
     "name": "Usuario1",
     "email": "usuario1@gmail.com"
 }
+
+### Login User
+POST {{HOST}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "ellaria@gmail.com",
+    "password": "12345"
+}
+
 
 ### Login User
 POST {{HOST}}/api/auth/login
@@ -196,7 +206,7 @@ x-access-token: {{TOKEN}}
 ### Pay expense_assingment
 POST {{HOST}}/api/expenses/payment
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY0ODU3LCJleHAiOjE3MTg2NTEyNTd9.G-sPJ2AqDGBVf8x6kCo3dsmwJzmQjgDuOi8582C8X9c
+x-access-token: {{TOKEN}}
 
 {
    "users_id" : "10",
@@ -211,7 +221,7 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NTY
 
 ### Get All Notifications
 GET {{HOST}}/api/notifications
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+x-access-token: {{TOKEN}}
 
 ### Get Notifications by Users_id
 GET {{HOST}}/api/notifications/6
@@ -221,7 +231,7 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDM
 ### Create a Notification
 POST {{HOST}}/api/notifications
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+x-access-token: {{TOKEN}}
 
 {
     "users_id": "6",
@@ -258,3 +268,16 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDM
 
 ### Get Invitation by email
 GET {{HOST}}/api/invitations/email/ellaria2@hotmail.com
+
+### Create Invitation
+POST {{HOST}}/api/invitations
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+{
+    "users_id": "10", 
+    "groups_id": "38",
+     "sent_on": "2024-06-01 00:00",
+     "responded_on": "2024-06-02 00:00",
+     "email": "eduardo.llaria@bi-bat.com"
+}

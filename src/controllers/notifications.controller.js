@@ -1,5 +1,6 @@
-const Notification = require('../models/notifications.model')
-
+const Notification = require('../models/notifications.model');
+const User = require('../models/users.model');
+const Nodemailer = require('nodemailer');
 
 const getAllNotifications = async (req, res, next) => { 
     try {
@@ -32,6 +33,39 @@ const createNotification = async (req, res, next) => {
     try {
         const {users_id, status, date, title, description} = req.body;
         await Notification.insertNotification(users_id, status, date, title, description );
+        const [user] = await User.selectById(users_id);
+        const email = user[0].email;
+
+        var message = {
+            from: 'ellaria@hotmail.com',
+            to: 'edllaor77@gmail.com',
+            subject: `Notificacion de gg_app ${title}`,
+            text: description
+        };
+
+        var transporter = Nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                type: 'OAuth2',
+                user: process.env.MAIL_USERNAME,
+                pass: process.env.MAIL_PASSWORD,
+                clientId: process.env.OAUTH_CLIENTID,
+                clientSecret: process.env.OAUTH_CLIENT_SECRET,
+                refreshToken: process.env.OAUTH_REFRESH_TOKEN
+            }
+        });
+
+        transporter.sendMail(message, (error, info) => {
+            if (error) {
+                console.log("Error enviando email")
+                console.log(error.message)
+            } else {
+                console.log("Email enviado")
+            }
+        })
+        
+        
+
         res.status(201).json({
             success: true,
             message: 'Notification created successfully',
