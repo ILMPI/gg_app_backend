@@ -219,9 +219,15 @@ CREATE TABLE `notifications` (
   `date` datetime DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  `expense_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_notificaciones_users1_idx` (`users_id`),
-  CONSTRAINT `fk_notificaciones_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
+  KEY `fk_notifications_groups` (`group_id`),
+  KEY `fk_notifications_expenses` (`expense_id`),
+  CONSTRAINT `fk_notificaciones_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_notifications_expenses` FOREIGN KEY (`expense_id`) REFERENCES `expenses` (`expense_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_notifications_groups` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -231,7 +237,7 @@ CREATE TABLE `notifications` (
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-INSERT INTO `notifications` VALUES (1,1,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(2,2,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(3,3,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(4,4,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(5,5,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(6,6,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo'),(7,7,'Unread','2024-06-16 23:18:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo');
+INSERT INTO `notifications` VALUES (1,1,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(2,2,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(3,3,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(4,4,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(5,5,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(6,6,'Unread','2024-06-16 23:17:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL),(7,7,'Unread','2024-06-16 23:18:00','Añadido al grupo Amantes de la administración','Ahora debes confirmar que aceptas estar en el grupo',NULL,NULL);
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-17 18:08:34
+-- Dump completed on 2024-06-19  4:29:16

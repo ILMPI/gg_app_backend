@@ -64,6 +64,10 @@ const selectCreatorByGroupId = (groupId) => {
     return db.query('SELECT creator_id FROM `groups` WHERE id = ?', [groupId]);
 }
 
+const selectGroupTitleById = (groupId) => {
+    return db.query('SELECT title FROM `groups` WHERE id = ?', [groupId]);
+};
+
 module.exports = {
     selectAll,
     selectById,
@@ -75,5 +79,6 @@ module.exports = {
     selectGroupStateByGroupId,
     selectCreatorByGroupId,
     selectGroupByCretorAndTitle,
-    selectAllGroupsByUserId
+    selectAllGroupsByUserId,
+    selectGroupTitleById
 }
