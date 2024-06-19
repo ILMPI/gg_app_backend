@@ -43,7 +43,7 @@ Reemplaza yourpassword y otros valores de marcador de posición con tu configura
 3. Eliminar `package.json`
 4. Reiniciar el proyecto:
 `npm init -y`
-`npm install bcryptjs cors dotenv express express-validator jsonwebtoken mysql2 nodemon dayjs swagger-jsdoc swagger-ui-express --save`
+`npm install bcryptjs cors dotenv express express-validator jsonwebtoken mysql2 nodemon dayjs swagger-jsdoc swagger-ui-express express-rate-limit --save`
 `npm start`
 5. Para iniciar con npm run dev:
 
