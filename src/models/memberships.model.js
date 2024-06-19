@@ -29,6 +29,12 @@ const insertMemberToGroup = ({users_id, groups_id, status, balance})=> {
 
 }
 
+const insertMemberFromInvitation = (users_id, groups_id, status, balance) =>{
+
+    return db.query('insert into membership (users_id, groups_id, status, balance) values (?,?,?,?)',[users_id, groups_id, status, balance]);
+
+}
+
 const updateMembershipStatus = (users_id, groups_id) => {
     
     return db.query('update membership set status="Joined" where (users_id=? and groups_id=?)',[users_id, groups_id])
@@ -57,5 +63,5 @@ module.exports = {
     updateMembershipStatus,
     selectMember,
     deleteMember,
-    selectMembersDataByGroupId
+    selectMembersDataByGroupId,
 }

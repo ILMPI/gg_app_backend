@@ -45,5 +45,5 @@ const createInvitation = async (req, res, next) => {
 module.exports = {
     getInvitationsByUsers,
     getInvitationsByMail,
-    createInvitation
+    createInvitation,
 }

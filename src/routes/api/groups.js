@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const groups = require('../../controllers/groups.controller');
 const checkAdmin = require('../../middleware/checkAdmin');
+const { checkIfAlreadyMember, checkIfRecentlyInvited } = require('../../middleware/invitationToGroup.middleware');
+const { inviteRateLimiter } = require('../../middleware/inviteRateLimiter.middleware');
+const { validateUserArray } = require('../../middleware/validateUserArray.middleware');
+
 
 /**
  * @swagger
@@ -1098,15 +1102,237 @@ router.get('/:groupId/state', groups.getGroupStateByGroupId);
  */
 router.post('/:id/activate', checkAdmin, groups.activateGroup);
 
+/**
+ * @swagger
+ * /api/groups/{id}/invite:
+ *   post:
+ *     summary: Invite users to a group
+ *     tags: [Groups]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The group ID
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The JWT token for authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               users:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       example: "john.doe@gmail.com"
+ *                     id:
+ *                       type: integer
+ *                       example: 10
+ *                     name:
+ *                       type: string
+ *                       example: "John Doe"
+ *             required:
+ *               - users
+ *             example:
+ *               users: [
+ *                 {
+ *                   id: 1,
+ *                   name: "John Doe",
+ *                   email: "john.doe@gmail.com"
+ *                 },
+ *                 {
+ *                   id: 2,
+ *                   name: "Jane Smith",
+ *                   email: "jane.smith@example.com"
+ *                 },
+ *                 {
+ *                   id: 3,
+ *                   name: "Emily Davis",
+ *                   email: "emily.davis@yahoo.com"
+ *                 },
+ *                 {
+ *                   id: 4,
+ *                   name: "Michael Johnson",
+ *                   email: "michael.johnson@example.com"
+ *                 },
+ *                 {
+ *                   id: 5,
+ *                   name: "Olivia Brown",
+ *                   email: "olivia.brown@gmail.com"
+ *                 },
+ *                 {
+ *                   id: 6,
+ *                   name: "William Wilson",
+ *                   email: "william.wilson@yahoo.com"
+ *                 },
+ *                 {
+ *                   id: 7,
+ *                   name: "Sophia Martinez",
+ *                   email: "sophia.martinez@example.com"
+ *                 },
+ *                 {
+ *                   id: 8,
+ *                   name: "James Anderson",
+ *                   email: "james.anderson@gmail.com"
+ *                 },
+ *                 {
+ *                   id: 9,
+ *                   name: "Ava Taylor",
+ *                   email: "ava.taylor@yahoo.com"
+ *                 },
+ *                 {
+ *                   id: 10,
+ *                   name: "Logan Harris",
+ *                   email: "logan.harris@example.com"
+ *                 }
+ *               ]
+ *     responses:
+ *       200:
+ *         description: Batch invitation process completed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       email:
+ *                         type: string
+ *                       success:
+ *                         type: boolean
+ *                       message:
+ *                         type: string
+ *                       error:
+ *                         type: string
+ *                         nullable: true
+ *             examples:
+ *               partial-success:
+ *                 value:
+ *                   success: true
+ *                   message: "Batch invitation process completed"
+ *                   data: [
+ *                     {
+ *                       email: "john.doe@gmail.com",
+ *                       success: true,
+ *                       message: "User added to the group"
+ *                     },
+ *                     {
+ *                       email: "jane.smith@example.com",
+ *                       success: true,
+ *                       message: "Invitation sent to the email"
+ *                     }
+ *                   ]
+ *               all-failures:
+ *                 value:
+ *                   success: false
+ *                   message: "All invitations failed"
+ *                   data: [
+ *                     {
+ *                       email: "john.doe@gmail.com",
+ *                       success: false,
+ *                       message: "The user is already a member of the group"
+ *                     },
+ *                     {
+ *                       email: "jane.smith@example.com",
+ *                       success: false,
+ *                       message: "An invitation has already been sent to this email for this group in the last 24 hours"
+ *                     }
+ *                   ]
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             examples:
+ *               invalid-format:
+ *                 value:
+ *                   success: false
+ *                   message: "Invalid input format: expected an array of users"
+ *                   data: null
+ *               limit-exceeded:
+ *                 value:
+ *                   success: false
+ *                   message: "Cannot invite more than 10 users at a time"
+ *                   data: null
+ *               already-member:
+ *                 value:
+ *                   success: false
+ *                   message: "The user is already a member of the group"
+ *                   data: null
+ *               recently-invited:
+ *                 value:
+ *                   success: false
+ *                   message: "An invitation has already been sent to this email for this group in the last 24 hours"
+ *                   data: null
+ *       429:
+ *         description: Too Many Requests
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             example:
+ *               success: false
+ *               message: "Too many requests, please try again later"
+ *               data: null
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *             examples:
+ *               error:
+ *                 value:
+ *                   success: false
+ *                   message: "Internal Server Error"
+ *                   data: {
+ *                     error: "Error message details here"
+ *                   }
+ */
+router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfRecentlyInvited, checkIfAlreadyMember,groups.inviteUserToGroup);
 
-
-// router.post('/', createGroup);
-//router.get('/',getGroups);
-// router.get('/:id',getGroupById);
-// router.get('/creator/:creator_id',getGroupsByCreatorId);
-//router.put('/:id',checkAdmin, updateGroup);
-//router.delete('/:id',checkAdmin, deleteGroup);
-//router.get('/:groupId/state',getGroupStateByGroupId);
-//router.post('/:id/activate',checkAdmin, activateGroup);
 
 module.exports = router;

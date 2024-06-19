@@ -1,4 +1,6 @@
-const Notification = require('../models/notifications.model')
+const Notification = require('../models/notifications.model');
+const Dayjs = require('dayjs');
+const { transformNotificationDescription } = require('../utils/notificationUtils');
 
 
 const getAllNotifications = async (req, res, next) => { 
@@ -71,6 +73,28 @@ const deleteNotification = async (req, res, next) => {
     }
 }
 
+const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
+    try {
+        const notifTitle = `Has sido añadido a un nuevo grupo`;
+        let notifDescription = `Has sido añadido al grupo ${groupId} por ${inviterId}`;
+
+        notifDescription = await transformNotificationDescription(notifDescription, inviterId, groupId);
+
+        const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId);
+
+        console.log('Notification inserted successfully');
+    } catch (error) {
+        console.error('Error inserting notification:', error);
+        throw error;
+    }
+};
+
 module.exports = {
-    getAllNotifications, getNotificationsByUsersID, createNotification, updateNotification, deleteNotification
+    getAllNotifications,
+    getNotificationsByUsersID,
+    createNotification,
+    updateNotification,
+    deleteNotification,
+    sendInviteUserToGroupNotification,
 }
