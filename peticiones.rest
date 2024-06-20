@@ -95,7 +95,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Super Group1",
+  "name": "Super Group2",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
