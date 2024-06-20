@@ -95,18 +95,19 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "name": "Group Alias1",
-    "description": "Description",
-    "image_url": "https://picsum.photos/id/26/200/200"
+  "name": "Super Group1",
+  "description": "Description",
+  "image": "https://picsum.photos/id/26/200/200"
 }
 
 ### Update Group
-PUT {{HOST}}/api/groups/7
+PUT {{HOST}}/api/groups/10
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "name": "Lalaland"
+  "name": "New Group Name",
+  "image": "https://picsum.photos/id/26/200/200"
 }
 
 ### Delete Group

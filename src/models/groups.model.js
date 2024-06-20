@@ -31,8 +31,17 @@ const selectGroupByCretorAndTitle = (creator_id, title) => {
 //SELECT id, title, description, image_url,created_on FROM  `groups` WHERE creator_id = ?;
 
 const updateGroup = (id, { title, description, image_url }) => {
-    return db.query('UPDATE `groups` SET title = ?, description = ?, image_url = ? WHERE id = ?', [title, description, image_url, id]);
-}
+    return db.query(
+        `UPDATE \`groups\` 
+         SET 
+             title = COALESCE(?, title), 
+             description = COALESCE(?, description), 
+             image_url = COALESCE(?, image_url) 
+         WHERE id = ?`,
+        [title, description, image_url, id]
+    );
+};
+
 
 const deleteGroup = (id) => {
     return db.query(`
