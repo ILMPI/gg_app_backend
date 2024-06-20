@@ -1,4 +1,7 @@
 const Invitation = require('../models/invitations.model');
+const { selectById } = require('../models/users.model');
+const Group = require('../models/groups.model');
+const emailUtil = require('../utils/emailUtils');
 
 const getInvitationsByUsers = async (req, res, next) => {
     try{
@@ -31,11 +34,13 @@ const createInvitation = async (req, res, next) => {
     try {
         const {users_id, groups_id, sent_on, responded_on, email} = req.body;
         await Invitation.insertInvitation(users_id, groups_id, sent_on, responded_on, email);
-        res.status(201).json({
-            success: true,
-            message: 'Invitation created successfully',
-            data: null
-        });
+        const [group] = await Group.selectById(groups_id);
+        const textMail = `Se te quiere añadir al grupo ${group[0].title}. Registrate en GG-APP y en cuanto lo hagas, se te añadira al grupo automaticamente`;
+        const [author] = await selectById(users_id);
+        const textSubject = `Invitacion a la gg_app de ${author[0].name}`
+        await emailUtil.sendEmail(email, textSubject, textMail);
+
+        
     } catch (err) {
         next(err);
     }

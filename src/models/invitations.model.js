@@ -7,6 +7,7 @@ const selectByEmail = (email) => {
 }
 
 const insertInvitation = (users_id, groups_id, sent_on, responded_on, email) => {
+    
     return db.query('INSERT INTO invitations (users_id, groups_id, sent_on, responded_on, email) VALUES (?, ?, ?, ?, ?)', [users_id, groups_id, sent_on, responded_on, email]);
 }
 const selectRecentInvitation = (users_id, groups_id, email) => {
