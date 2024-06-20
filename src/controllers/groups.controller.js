@@ -17,8 +17,9 @@ const sendGroupCreationNotification = async (users_id, title) => {
 };
 const createGroup = async (req, res, next) => {
     try {
-        const { title, name, description, image_url } = req.body;
+        const { title, name, description, image, image_url } = req.body;
         const groupName = title || name;
+        const imageUrl = image || image_url;
         const creator_id = req.userId;// id from TOKEN
 
         if (!groupName  || !description) {
@@ -41,7 +42,7 @@ const createGroup = async (req, res, next) => {
         }
 
         //add group
-        const result = await Group.insertGroup({ creator_id, title: groupName, description, image_url });
+        const result = await Group.insertGroup({ creator_id, title: groupName, description, imageUrl });
         const groupId = result[0].insertId;
 
         //add creator to grrup
@@ -166,9 +167,11 @@ const getAllGroupsByUserId = async (req, res, next) => {
 const updateGroup = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { title, name, description, image_url } = req.body;
-        const groupName = title || name;
-        await Group.updateGroup(id, { title: groupName, description, image_url });
+        const { name, description, image} = req.body;
+        //const groupName = title || name;
+        //const imageUrl = image || image_url;
+
+        await Group.updateGroup(id, {title: name, description, image_url: imageUrl});
         res.status(200).json({
             success: true,
             message: 'Group updated successfully',

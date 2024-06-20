@@ -6,13 +6,19 @@ const { checkIfAlreadyMember, checkIfRecentlyInvited } = require('../../middlewa
 const { inviteRateLimiter } = require('../../middleware/inviteRateLimiter.middleware');
 const { validateUserArray } = require('../../middleware/validateUserArray.middleware');
 
-
 /**
  * @swagger
  * /api/groups:
  *   post:
  *     summary: Create a new group
  *     tags: [Groups]
+ *     parameters:
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Access token for authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -22,16 +28,17 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *             properties:
  *               name:
  *                 type: string
- *               title:
- *                 type: string
+ *                 example: "Super Group"
  *               description:
  *                 type: string
- *               image_url:
+ *                 example: "Description"
+ *               image:
  *                 type: string
- *             example:
- *               name: "Group Alias"
- *               description: "Description"
- *               image_url: "https://picsum.photos/id/26/200/200"
+ *                 format: url
+ *                 example: "https://picsum.photos/id/26/200/200"
+ *             required:
+ *               - name
+ *               - description
  *     responses:
  *       201:
  *         description: Group created successfully
@@ -42,20 +49,23 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: "Group created successfully"
  *                 data:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
+ *                       example: 14
  *             example:
  *               success: true
  *               message: "Group created successfully"
  *               data:
- *                 id: 7
+ *                 id: 14
  *       400:
- *         description: Bad request
+ *         description: Bad Request
  *         content:
  *           application/json:
  *             schema:
@@ -63,8 +73,10 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "All fields are required: title, description"
  *                 data:
  *                   type: object
  *                   nullable: true
@@ -72,14 +84,15 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               missing-fields:
  *                 value:
  *                   success: false
- *                   message: "All fields are required: title/name, description"
+ *                   message: "All fields are required: title, description"
+ *                   data: null
  *               duplicate-group:
  *                 value:
  *                   success: false
  *                   message: "A group with this name already exists for this user"
  *                   data: null
  *       500:
- *         description: Internal server error
+ *         description: Internal Server Error
  *         content:
  *           application/json:
  *             schema:
@@ -87,19 +100,19 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "Internal Server Error"
  *                 data:
  *                   type: object
  *                   nullable: true
- *             examples:
- *               error:
- *                 value:
- *                   success: false
- *                   message: "Internal Server Error"
- *                   data:
- *                     error: "Error message details here"
+ *             example:
+ *               success: false
+ *               message: "Internal Server Error"
+ *               data: null
  */
+
 router.post('/', groups.createGroup);
 
 /**
@@ -650,12 +663,11 @@ router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
  *                   }
  */
 router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
-
 /**
  * @swagger
  * /api/groups/{id}:
  *   put:
- *     summary: Update group
+ *     summary: Update group details
  *     tags: [Groups]
  *     parameters:
  *       - in: path
@@ -663,13 +675,13 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *         required: true
  *         schema:
  *           type: integer
- *         description: The group ID
+ *         description: The ID of the group to update
  *       - in: header
  *         name: x-access-token
  *         required: true
  *         schema:
  *           type: string
- *         description: The JWT token for authentication
+ *         description: Access token for authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -677,16 +689,13 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               name:
  *                 type: string
- *               description:
+ *                 example: "New Group Name"
+ *               image:
  *                 type: string
- *               image_url:
- *                 type: string
- *             example:
- *               title: "Familia"
- *               description: "Grupo familiar"
- *               image_url: "https://example.com/image.jpg"
+ *                 format: url
+ *                 example: "https://picsum.photos/id/26/200/200"
  *     responses:
  *       200:
  *         description: Group updated successfully
@@ -697,8 +706,10 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: "Group updated successfully"
  *                 data:
  *                   type: object
  *                   nullable: true
@@ -707,7 +718,7 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               message: "Group updated successfully"
  *               data: null
  *       400:
- *         description: Bad Request
+ *         description: Invalid request
  *         content:
  *           application/json:
  *             schema:
@@ -715,17 +726,19 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "Invalid request data"
  *                 data:
  *                   type: object
  *                   nullable: true
  *             example:
  *               success: false
- *               message: "Group ID is required"
+ *               message: "Invalid request data"
  *               data: null
- *       403:
- *         description: Forbidden
+ *       401:
+ *         description: Unauthorized
  *         content:
  *           application/json:
  *             schema:
@@ -733,8 +746,10 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "You are not the admin of this group"
  *                 data:
  *                   type: object
  *                   nullable: true
@@ -751,8 +766,10 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "Group not found"
  *                 data:
  *                   type: object
  *                   nullable: true
@@ -769,8 +786,10 @@ router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: false
  *                 message:
  *                   type: string
+ *                   example: "Failed to verify admin status"
  *                 data:
  *                   type: object
  *                   nullable: true
