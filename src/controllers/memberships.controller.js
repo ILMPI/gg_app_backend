@@ -19,16 +19,38 @@ const getAllMembership = async (req, res, next) => {
 
 const getAllMembershipByGroup = async (req, res, next) => {
     try {
-        const [result] = await Membership.selectByGroupId(req.params.groups_id);
-        res.json({
-            success: true,
-            message: 'Operation successful',
-            data: result
-        });
+        const groupId = req.params.groups_id;
+        const group = await Group.selectById(groupId);
+
+        if (group[0].length !== 0) {
+            const [result] = await Membership.selectMembersDataByGroupId(groupId);
+
+            // Transform result to replace image_url with image
+            const transformedResult = result.map(member => {
+                return {
+                    ...member,
+                    image: member.image_url,
+                    image_url: undefined  // Optionally, you can delete this property if you don't want to send it at all
+                };
+            });
+
+            res.json({
+                success: true,
+                message: 'Operation successful',
+                data: transformedResult
+            });
+        } else {
+            res.json({
+                success: false,
+                message: 'This group does not exist!',
+                data: null
+            });
+        }
     } catch (err) {
         next(err);
     }
-}
+};
+
 
 // const addMemberToGroup = async (req, res, next) => {
 //     try {
