@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTcxODc2OTI2NywiZXhwIjoxNzE4ODU1NjY3fQ.6TuDCaumXqOnfiS1fE3shLG_MkLnoxMRSC-z1vlOwyE
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4ODk5ODM3LCJleHAiOjE3MTg5ODYyMzd9.TJp_SXB6zwyGfVAzdhU7hlIOgzMiSzbay580Cs1jjZQ
 
 ###AUTH
 
@@ -20,8 +20,8 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "ellaria@gmail.com",
-    "password": "12345"
+    "email": "admin@gmail.com",
+    "password": "password"
 }
 
 
@@ -95,7 +95,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "name": "Group Alias",
+    "name": "Group Alias1",
     "description": "Description",
     "image_url": "https://picsum.photos/id/26/200/200"
 }
@@ -248,12 +248,12 @@ x-access-token: {{TOKEN}}
 }
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/10
+GET {{HOST}}/api/expenses/group/7
 x-access-token: {{TOKEN}}
 
 
 ### Get All Expenses by users_id GET {{HOST}}/api/expenses/users/2
-GET {{HOST}}/api/expenses/users/2
+GET {{HOST}}/api/expenses/users/7
 x-access-token: {{TOKEN}}
 
 
