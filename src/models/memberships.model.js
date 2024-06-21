@@ -13,12 +13,16 @@ const selectByGroupId = (groups_id) => {
 // to get the data of users from the exact group
 const selectMembersDataByGroupId = (groups_id)=>{
     
-    return db.query(`
-        SELECT u.id as users_id, u.name, u.email, u.image_url
-        FROM membership m
-        JOIN users u ON m.users_id = u.id
-        WHERE m.groups_id = ?
-    `, [groups_id]);
+    return db.query(`SELECT 
+            u.id as users_id, 
+            u.name, 
+            u.email, 
+            u.image_url,
+            m.status
+         FROM membership m
+         JOIN users u ON m.users_id = u.id
+         WHERE m.groups_id = ?`,
+        [groups_id]);
 
 };
 
