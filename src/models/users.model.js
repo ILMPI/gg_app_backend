@@ -75,6 +75,11 @@ const selectUserNameById = (userId) => {
     return db.query('SELECT name FROM users WHERE id = ?', [userId]);
 };
 
+const selectAdminByGroupId = (groupId) => {
+    return db.query('SELECT u.id, u.name, u.email FROM users u JOIN groups g ON u.id = g.creator_id WHERE g.id = ?', [groupId]);
+}
+
+
 
 module.exports = {
     selectAll,
@@ -86,5 +91,6 @@ module.exports = {
     updateUserById,
     checkActiveConnections,
     selectUsersWithCommonGroups,
-    selectUserNameById
+    selectUserNameById,
+    selectAdminByGroupId
 };

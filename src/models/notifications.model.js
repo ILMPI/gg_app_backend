@@ -6,6 +6,10 @@ const selectByUsersId = (users_id) => {
     return db.query('select * from notifications where users_id=?', [users_id]);
 }
 
+const selectInvitesForUserAndGroup = (users_id, groups_id) => {
+    return db.query('SELECT * FROM notifications WHERE users_id = ? AND group_id = ? AND title = ?', [users_id, groups_id, 'Has sido invitado a un nuevo grupo']);
+};
+
 const insertNotification = (users_id, status, date, title, description, group_id = null, expense_id = null) => {
     return db.query(
         'INSERT INTO notifications (users_id, status, date, title, description, group_id, expense_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -28,4 +32,5 @@ module.exports = {
     insertNotification,
     updateNotification,
     deleteNotification,
+    selectInvitesForUserAndGroup,
 }

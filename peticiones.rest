@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4ODk5ODM3LCJleHAiOjE3MTg5ODYyMzd9.TJp_SXB6zwyGfVAzdhU7hlIOgzMiSzbay580Cs1jjZQ
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4OTcyNDEzLCJleHAiOjE3MTkwNTg4MTN9.cs0X1J4gsTGG1A92q13-6AmxGo5DVqVFSxi6PAmdaaE
 
 ###AUTH
 
@@ -86,7 +86,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Super Group3",
+  "name": "Group de Vanessa M",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
@@ -115,24 +115,14 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/4/invite
+POST {{HOST}}/api/groups/23/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
     "participants": [
         {
-            "id": 1,
-            "name": "John D",
-            "email": "vanda_brown@gmail.com"
-        },
-        {
-            "email": "janes@gmail.com"
-        },
-        {
-            "id": 3,
-            "name": "Emily Davis",
-            "email": "emily1dadavis@yahoo.com"
+            "email": "admin@gmail.com"
         }
     ]
 
@@ -212,8 +202,8 @@ x-access-token: {{TOKEN}}
 #     "balance": "0"
 # }
 
-### Update membership status, only put Joined status PUT {{HOST}}/api/membership/4/1
-PUT {{HOST}}/api/membership/5/11
+### Update membership status, only put Joined status PUT {{HOST}}/api/membership/userid/groupid
+PUT {{HOST}}/api/membership/7/23
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 

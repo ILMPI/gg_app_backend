@@ -86,9 +86,9 @@ const deleteNotification = async (req, res, next) => {
 
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
     try {
-        const notifTitle = `Has sido añadido a un nuevo grupo`;
+        const notifTitle = `Has sido invitado a un nuevo grupo`;
 
-        let notifDescription = `Has sido añadido al grupo ${groupId} por ${inviterId}`;
+        let notifDescription = `Has sido invitado al grupo ${groupId} por ${inviterId}`;
 
         notifDescription = await transformNotificationDescription(notifDescription, inviterId, groupId);
 
@@ -105,6 +105,57 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
     }
 };
 
+//notification on update user status
+const sendUserJoinedNotification = async (users_id, groups_id) => {
+    try {
+        // Get the group admin and the user details
+        const [groupAdmin] = await User.selectAdminByGroupId(groups_id);
+        const [user] = await User.selectById(users_id);
+        const [group] = await Group.selectById(groups_id);
+
+        if (groupAdmin.length === 0 || user.length === 0) {
+            throw new Error('Group admin or user not found');
+        }
+
+        // Send a notification to the group admin
+        const notificationTitle = 'Nuevo miembro se unió al grupo';
+        const notificationDescription = `${user[0].name} se ha unido al grupo`;
+
+        await Notification.insertNotification({
+            users_id: groupAdmin[0].id,
+            status: 'Unread',
+            date: Dayjs().format('YYYY-MM-DD HH:mm'),
+            title: notificationTitle,
+            description: notificationDescription,
+            group_id: groups_id
+        });
+
+        // Find all existing notifications for the user about the invite to this group and delete them
+        const [existingInvites] = await Notification.selectInvitesForUserAndGroup(users_id, groups_id);
+
+        for (const invite of existingInvites) {
+            await Notification.deleteNotification(invite.id);
+        }
+
+        // Add a new notification for the user indicating they successfully joined the group
+        const userNotificationTitle = 'Te has unido al grupo exitosamente';
+        const userNotificationDescription = `Te has unido al grupo ${group[0].title} exitosamente`;
+
+        await Notification.insertNotification({
+            users_id,
+            status: 'Unread',
+            date: Dayjs().format('YYYY-MM-DD HH:mm'),
+            title: userNotificationTitle,
+            description: userNotificationDescription,
+            group_id: groups_id
+        });
+
+    } catch (error) {
+        console.error('Error creating notification:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     getAllNotifications,
     getNotificationsByUsersID,
@@ -112,4 +163,5 @@ module.exports = {
     updateNotification,
     deleteNotification,
     sendInviteUserToGroupNotification,
+    sendUserJoinedNotification,
 }
