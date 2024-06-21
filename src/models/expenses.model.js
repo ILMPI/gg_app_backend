@@ -30,9 +30,7 @@ const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
 }
 
-const getExpenseDetails = () => {
-    
-}
+
 
 const getAmountTotalGroup = (groups_id) => {
     return db.query('select SUM(amount) as amountTotal from expenses where groups_id=?',[groups_id]);
@@ -73,8 +71,22 @@ const getBalance = (users_id, groups_id) => {
     const balance = db.query('SELECT balance FROM membership WHERE users_id = ? AND groups_id = ?', [users_id, groups_id]);
     return balance;
 }
-
-
+//ea = expense_assignment
+const getExpenseParticipants = (expense_id) => {
+    return db.query( `
+     SELECT 
+            ea.users_id AS participant_id,
+            u.name AS participant_name,
+            ea.cost AS participant_amount,
+            ea.status AS participant_expense_status
+        FROM 
+            expense_assignments ea
+        JOIN 
+            users u ON ea.users_id = u.id
+        WHERE 
+            ea.expenses_id = ?
+            `, [expense_id])
+}
 
 
 
@@ -84,5 +96,5 @@ module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
-    getAmountTotalGroup
+    getAmountTotalGroup, getExpenseParticipants
 }
