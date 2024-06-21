@@ -847,7 +847,120 @@ router.get('/usersgroup/:users_id/:groups_id', expensesController.getExpensesByU
  *               data: null
  */
 router.post('/', checkAdmin, expensesController.createExpense);
-
+/**
+ * @swagger
+ * /api/expenses/update/{expenses_id}:
+ *   put:
+ *     summary: Update an expense
+ *     tags: [Expenses]
+ *     parameters:
+ *       - in: path
+ *         name: expenses_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the expense to update
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Access token for authorization
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               groups_id:
+ *                 type: string
+ *                 example: "2"
+ *               concept:
+ *                 type: string
+ *                 example: "Cambio de concepto"
+ *               amount:
+ *                 type: string
+ *                 example: "100"
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2024-06-21 19:00"
+ *               max_date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2024-06-30 19:00"
+ *               image_url:
+ *                 type: string
+ *                 example: "/tickets/051.jpg"
+ *               payer_user_id:
+ *                 type: string
+ *                 example: "4"
+ *     responses:
+ *       200:
+ *         description: Expense updated successfully without changing balances
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Expense updated successfully without changing balances"
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *       400:
+ *         description: Update not allowed if the cost or payer is changed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Update not allowed: cost or payer changed"
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *       404:
+ *         description: Expense not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   example: []
+ *       500:
+ *         description: Failed to update expense due to an internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to update expense"
+ *                 data:
+ *                   type: null
+ *                   example: null
+ */
 router.put('/update/:expenses_id',checkAdmin, expensesController.updateExpense);
 router.delete('/:expenses_id',checkAdmin, expensesController.deleteExpense);
 

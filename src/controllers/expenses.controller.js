@@ -120,30 +120,9 @@ const getAllExpensesByGroup = async (req, res, next) => {
 };
 
 
-
-// const getAllExpensesByGroup = async (req, res, next) => {
-//     try {
-//         const [result] = await Expense.selectExpensesByGroup(req.params.groups_id);
-//         res.status(200).json({
-//             success: true,
-//             message: 'Expenses retrieved successfully',
-//             data: result
-//         });
-//     } catch (err) {
-//         if (!res.headersSent) {
-//             res.status(500).json({
-//                 success: false,
-//                 message: 'Failed to retrieve expenses',
-//                 data: null
-//             });
-//         }
-//         next(err);
-//     }
-// }
-
 const updateExpense = async (req, res, next) => {
     try {
-        const expense_id = req.params.expense_id;
+        const expense_id = req.params.expenses_id;
         const [expenseAnterior] = await Expense.getExpenseById(expense_id);
 
         const amountAnterior = Number(expenseAnterior[0].amount);
@@ -157,7 +136,7 @@ const updateExpense = async (req, res, next) => {
             res.status(200).json({
                 success: true,
                 message: 'Expense updated successfully without changing balances',
-                data: resultado
+                data: null
             });
         } else {
             res.status(400).json({
@@ -177,6 +156,8 @@ const updateExpense = async (req, res, next) => {
         next(err);
     }
 }
+
+
 
 const deleteExpense = async (req, res, next) => {
     try {
@@ -361,87 +342,6 @@ const getExpenseById = async (req, res, next) => {
         next(err);
     }
 };
-
-
-
-// const getExpenseById = async (req, res, next) => {
-//     try {
-//         const expense_id = req.params.expenses_id;
-//         console.log(`Fetching details for expense_id: ${expense_id}`);
-
-//         //expense
-//         const [expenseResult] = await Expense.getExpenseById(expense_id);
-//         console.log(`Expense details fetched: ${JSON.stringify(expenseResult)}`);
-
-//         if (expenseResult.length === 0) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: 'Expense not found',
-//                 data: []
-//             });
-//         }
-
-//         const expense = expenseResult[0];
-
-//         //group
-//         const [groupResult] = await Group.selectById(expense.groups_id);
-//         console.log(`Group details fetched: ${JSON.stringify(groupResult)}`);
-
-//         if (groupResult.length === 0) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: 'Group not found',
-//                 data: []
-//             });
-//         }
-
-//         const group = groupResult[0];
-
-//         //group with participants
-//         const transformedGroup = await transformGroupData(group);
-
-//         //expense participants
-//         const [expenseParticipantsResult] = await Expense.getExpenseParticipants(expense_id);
-//         console.log(`Expense participants fetched: ${JSON.stringify(expenseParticipantsResult)}`);
-
-//         const expenseParticipants = expenseParticipantsResult.map(participant => ({
-//             idParticipant: participant.participant_id,
-//             participantName: participant.participant_name,
-//             participantImage: participant.participant_image || '', 
-//             percentage: (Number(participant.participant_amount) / Number(expense.amount)),
-//             amount: Number(participant.participant_amount),
-//             expenseStatus: participant.participant_expense_status
-//         }));
-
-// //expense overall status
-// const [expenseStatusResult] = await Expense.getExpenseOverallStatus(expense_id);
-//         const expenseStatus = expenseStatusResult[0].overallStatus;
-// console.log(`Expense overall status retrieved: ${expenseStatus}`);
-
-//         //response contructor
-//         const detailedExpense = {
-//             id: expense.expense_id,
-//             group: transformedGroup,
-//             concept: expense.concept,
-//             amount: Number(expense.amount),
-//             paidBy: expense.payer_user_id,
-//             createdOn: new Date(expense.created_on),
-//             expenseDate: new Date(expense.date),
-//             maxDate: new Date(expense.max_date),
-//             image: expense.image_url,
-//             expenseStatus: expenseStatus,
-//             participants: expenseParticipants
-//         };
-
-//         res.status(200).json({
-//             success: true,
-//             message: 'Expense retrieved successfully',
-//             data: detailedExpense
-//         });
-//     } catch (err) {
-//         next(err);
-//     }
-// };
 
 
 const payExpense = async (req, res, next) => {
