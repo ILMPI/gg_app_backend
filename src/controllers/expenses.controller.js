@@ -2,8 +2,9 @@ const Expense = require('../models/expenses.model');
 const Notification = require('../models/notifications.model');
 const notificationController = require('../controllers/notifications.controller')
 const User = require('../models/users.model');
-const Group = require('../models/groups.model');
-const { transformGroupData } = require('../utils/groupUtils');
+const { constructDetailedExpense, getExpenseParticipants } = require('../utils/expenseUtils');
+
+
 
 
 
@@ -185,9 +186,10 @@ const deleteExpense = async (req, res, next) => {
     }
 }
 
+
 const getExpensesByUserID = async (req, res, next) => {
     try {
-        const [result] = await Expense.getExpensesByUsers(req.params.users_id);
+        const [result] = await Expense.getOnlyExpensesByUser(req.params.users_id);
         res.status(200).json({
             success: true,
             message: 'Expenses retrieved successfully',
@@ -268,75 +270,17 @@ const getExpenseBalanceByUserGroup = async (req, res, next) => {
 
 }
 
-
 const getExpenseById = async (req, res, next) => {
     try {
         const expense_id = req.params.expenses_id;
         console.log(`Fetching details for expense_id: ${expense_id}`);
 
-        //expense
-        const [expenseResult] = await Expense.getExpenseById(expense_id);
-        console.log(`Expense details fetched: ${JSON.stringify(expenseResult)}`);
+        //constructor
+        const detailedExpense = await constructDetailedExpense(expense_id);
 
-        if (expenseResult.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Expense not found',
-                data: []
-            });
-        }
-
-        const expense = expenseResult[0];
-
-        //group
-        const [groupResult] = await Group.selectById(expense.groups_id);
-        console.log(`Group details fetched: ${JSON.stringify(groupResult)}`);
-
-        if (groupResult.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Group not found',
-                data: []
-            });
-        }
-
-        const group = groupResult[0];
-
-        //group with participants
-        const transformedGroup = await transformGroupData(group);
-
-        //expense participants
-        const [expenseParticipantsResult] = await Expense.getExpenseParticipants(expense_id);
-        console.log(`Expense participants fetched: ${JSON.stringify(expenseParticipantsResult)}`);
-
-        const expenseParticipants = expenseParticipantsResult.map(participant => ({
-            idParticipant: participant.participant_id,
-            participantName: participant.participant_name,
-            participantImage: participant.participant_image || '', 
-            percentage: (Number(participant.participant_amount) / Number(expense.amount)),
-            amount: Number(participant.participant_amount),
-            expenseStatus: participant.participant_expense_status
-        }));
-
-//expense overall status
-const [expenseStatusResult] = await Expense.getExpenseOverallStatus(expense_id);
-        const expenseStatus = expenseStatusResult[0].overallStatus;
-console.log(`Expense overall status retrieved: ${expenseStatus}`);
-
-        //response contructor
-        const detailedExpense = {
-            id: expense.expense_id,
-            group: transformedGroup,
-            concept: expense.concept,
-            amount: Number(expense.amount),
-            paidBy: expense.payer_user_id,
-            createdOn: new Date(expense.created_on),
-            expenseDate: new Date(expense.date),
-            maxDate: new Date(expense.max_date),
-            image: expense.image_url,
-            expenseStatus: expenseStatus,
-            participants: expenseParticipants
-        };
+        // Fetch and add expense participants
+        const expenseParticipants = await getExpenseParticipants(expense_id, detailedExpense.amount);
+        detailedExpense.participants = expenseParticipants;
 
         res.status(200).json({
             success: true,
@@ -347,6 +291,87 @@ console.log(`Expense overall status retrieved: ${expenseStatus}`);
         next(err);
     }
 };
+
+
+
+// const getExpenseById = async (req, res, next) => {
+//     try {
+//         const expense_id = req.params.expenses_id;
+//         console.log(`Fetching details for expense_id: ${expense_id}`);
+
+//         //expense
+//         const [expenseResult] = await Expense.getExpenseById(expense_id);
+//         console.log(`Expense details fetched: ${JSON.stringify(expenseResult)}`);
+
+//         if (expenseResult.length === 0) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Expense not found',
+//                 data: []
+//             });
+//         }
+
+//         const expense = expenseResult[0];
+
+//         //group
+//         const [groupResult] = await Group.selectById(expense.groups_id);
+//         console.log(`Group details fetched: ${JSON.stringify(groupResult)}`);
+
+//         if (groupResult.length === 0) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Group not found',
+//                 data: []
+//             });
+//         }
+
+//         const group = groupResult[0];
+
+//         //group with participants
+//         const transformedGroup = await transformGroupData(group);
+
+//         //expense participants
+//         const [expenseParticipantsResult] = await Expense.getExpenseParticipants(expense_id);
+//         console.log(`Expense participants fetched: ${JSON.stringify(expenseParticipantsResult)}`);
+
+//         const expenseParticipants = expenseParticipantsResult.map(participant => ({
+//             idParticipant: participant.participant_id,
+//             participantName: participant.participant_name,
+//             participantImage: participant.participant_image || '', 
+//             percentage: (Number(participant.participant_amount) / Number(expense.amount)),
+//             amount: Number(participant.participant_amount),
+//             expenseStatus: participant.participant_expense_status
+//         }));
+
+// //expense overall status
+// const [expenseStatusResult] = await Expense.getExpenseOverallStatus(expense_id);
+//         const expenseStatus = expenseStatusResult[0].overallStatus;
+// console.log(`Expense overall status retrieved: ${expenseStatus}`);
+
+//         //response contructor
+//         const detailedExpense = {
+//             id: expense.expense_id,
+//             group: transformedGroup,
+//             concept: expense.concept,
+//             amount: Number(expense.amount),
+//             paidBy: expense.payer_user_id,
+//             createdOn: new Date(expense.created_on),
+//             expenseDate: new Date(expense.date),
+//             maxDate: new Date(expense.max_date),
+//             image: expense.image_url,
+//             expenseStatus: expenseStatus,
+//             participants: expenseParticipants
+//         };
+
+//         res.status(200).json({
+//             success: true,
+//             message: 'Expense retrieved successfully',
+//             data: detailedExpense
+//         });
+//     } catch (err) {
+//         next(err);
+//     }
+// };
 
 
 const payExpense = async (req, res, next) => {
