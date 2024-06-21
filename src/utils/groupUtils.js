@@ -13,7 +13,8 @@ const transformGroupData = async (group) => {
             id: participant.users_id,
             name: participant.name,  //name
             email: participant.email,  //email
-            image: participant.image_url //image_url
+            image: participant.image_url, //image_url,
+            status: participant.status
         }))
     };
 };

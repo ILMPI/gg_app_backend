@@ -105,6 +105,8 @@ const getGroupById = async (req, res, next) => {
         next(error);
     }
 };
+
+
 const getGroupsByCreatorId = async (req, res, next) => {
     try {
         const { creator_id } = req.params;
@@ -171,7 +173,7 @@ const updateGroup = async (req, res, next) => {
         //const groupName = title || name;
         //const imageUrl = image || image_url;
 
-        await Group.updateGroup(id, {title: name, description, image_url: imageUrl});
+        await Group.updateGroup(id, {title: name, description, image_url: image});
         res.status(200).json({
             success: true,
             message: 'Group updated successfully',

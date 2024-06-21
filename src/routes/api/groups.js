@@ -112,7 +112,6 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               message: "Internal Server Error"
  *               data: null
  */
-
 router.post('/', groups.createGroup);
 
 /**
@@ -166,6 +165,8 @@ router.post('/', groups.createGroup);
  *                             image:
  *                               type: string
  *                               nullable: true
+ *                             status:
+ *                               type: string
  *             example:
  *               success: true
  *               message: "Groups retrieved successfully"
@@ -182,7 +183,8 @@ router.post('/', groups.createGroup);
  *                       "id": 7,
  *                       "name": "admin",
  *                       "email": "admin@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/8/200",
+ *                       "status": "Joined"
  *                     }
  *                   ]
  *                 },
@@ -198,7 +200,8 @@ router.post('/', groups.createGroup);
  *                       "id": 7,
  *                       "name": "admin",
  *                       "email": "admin@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/8/200",
+ *                       "status": "Joined"
  *                     }
  *                   ]
  *                 }
@@ -225,6 +228,8 @@ router.post('/', groups.createGroup);
  *               }
  */
 router.get('/', groups.getGroups);
+
+
 /**
  * @swagger
  * /api/groups/{id}:
@@ -287,6 +292,8 @@ router.get('/', groups.getGroups);
  *                           image:
  *                             type: string
  *                             nullable: true
+ *                           status:
+ *                             type: string
  *             example:
  *               success: true
  *               message: "Group retrieved successfully"
@@ -302,13 +309,15 @@ router.get('/', groups.getGroups);
  *                     "id": 1,
  *                     "name": "Juan Pérez",
  *                     "email": "juan.perez@gmail.com",
- *                     "image": null
+ *                     "image": "https://picsum.photos/id/237/200",
+ *                     "status": "Joined"
  *                   },
  *                   {
  *                     "id": 2,
  *                     "name": "María López",
  *                     "email": "maria.lopez@example.com",
- *                     "image": null
+ *                     "image": "https://picsum.photos/seed/picsum/200",
+ *                     "status": "Joined"
  *                   }
  *                 ]
  *               }
@@ -352,6 +361,7 @@ router.get('/', groups.getGroups);
  *               }
  */
 router.get('/:id', groups.getGroupById);
+
 /**
  * @swagger
  * /api/groups/creator/{creator_id}:
@@ -416,6 +426,8 @@ router.get('/:id', groups.getGroupById);
  *                             image:
  *                               type: string
  *                               nullable: true
+ *                             status:
+ *                               type: string
  *             example:
  *               success: true
  *               message: "Groups retrieved successfully"
@@ -432,43 +444,64 @@ router.get('/:id', groups.getGroupById);
  *                       "id": 1,
  *                       "name": "Juan Pérez",
  *                       "email": "juan.perez@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/237/200",
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 2,
  *                       "name": "María López",
  *                       "email": "maria.lopez@example.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/seed/picsum/200",
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 3,
  *                       "name": "Carlos García",
  *                       "email": "carlos.garcia@yahoo.com",
- *                       "image": null
+ *                       "image": null,
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 4,
  *                       "name": "Ana Fernández",
  *                       "email": "ana.fernandez@example.com",
- *                       "image": null
+ *                       "image": null,
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 5,
  *                       "name": "Luis Martínez",
  *                       "email": "luis.martinez@gmail.com",
- *                       "image": null
+ *                       "image": null,
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 6,
  *                       "name": "Marina Garcia",
  *                       "email": "marina.garcia@gmail.com",
- *                       "image": null
+ *                       "image": null,
+ *                       "status": "Joined"
  *                     },
  *                     {
  *                       "id": 7,
  *                       "name": "admin",
  *                       "email": "admin@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/8/200",
+ *                       "status": "Joined"
+ *                     },
+ *                     {
+ *                       "id": 9,
+ *                       "name": "Vanessa Brown",
+ *                       "email": "van_brown@gmail.com",
+ *                       "image": null,
+ *                       "status": "Invited"
+ *                     },
+ *                     {
+ *                       "id": 10,
+ *                       "name": "Vanessa Brown",
+ *                       "email": "vanda_brown@gmail.com",
+ *                       "image": null,
+ *                       "status": "Invited"
  *                     }
  *                   ]
  *                 }
@@ -520,9 +553,10 @@ router.get('/:id', groups.getGroupById);
  *               }
  */
 router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
+
 /**
  * @swagger
- * /api/groups/user/{userId}/groups:
+ * /api/groups/user/{userId}:
  *   get:
  *     summary: Get groups by user ID
  *     tags: [Groups]
@@ -584,6 +618,8 @@ router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
  *                             image:
  *                               type: string
  *                               nullable: true
+ *                             status:
+ *                               type: string
  *             example:
  *               success: true
  *               message: "Groups retrieved successfully"
@@ -600,7 +636,8 @@ router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
  *                       "id": 7,
  *                       "name": "admin",
  *                       "email": "admin@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/8/200",
+ *                       "status": "Joined"
  *                     }
  *                   ]
  *                 },
@@ -616,7 +653,8 @@ router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
  *                       "id": 7,
  *                       "name": "admin",
  *                       "email": "admin@gmail.com",
- *                       "image": null
+ *                       "image": "https://picsum.photos/id/8/200",
+ *                       "status": "Joined"
  *                     }
  *                   ]
  *                 }
@@ -662,7 +700,7 @@ router.get('/creator/:creator_id', groups.getGroupsByCreatorId);
  *                     error: "Error message details here"
  *                   }
  */
-router.get('/user/:userId/groups', groups.getAllGroupsByUserId);
+router.get('/user/:userId', groups.getAllGroupsByUserId);
 /**
  * @swagger
  * /api/groups/{id}:
@@ -1123,7 +1161,6 @@ router.get('/:groupId/state', groups.getGroupStateByGroupId);
  *               data: null
  */
 router.post('/:id/activate', checkAdmin, groups.activateGroup);
-
 /**
  * @swagger
  * /api/groups/{id}/invite:
