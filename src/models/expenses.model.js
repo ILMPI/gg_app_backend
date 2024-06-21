@@ -70,13 +70,14 @@ const getOnlyExpensesByUser = (users_id) => {
             e.created_on AS createdBy,
             e.date AS expenseDate,
             e.max_date AS maxDate,
-            e.image_url AS image
+            e.image_url AS image,
+            ea.cost AS myAmount
         FROM 
             expenses e
         JOIN 
             expense_assignments ea ON e.expense_id = ea.expenses_id
         WHERE 
-            ea.users_id = 1;`,[users_id]);
+            ea.users_id = ?;`,[users_id]);
 }
 
 const payExpense = (users_id, groups_id, expenses_id, balance) => {
