@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNzE4OTcyNDEzLCJleHAiOjE3MTkwNTg4MTN9.cs0X1J4gsTGG1A92q13-6AmxGo5DVqVFSxi6PAmdaaE
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4OTk4MzUzLCJleHAiOjE3MTkwODQ3NTN9.lx6-tOUap_2gTakKIo0DnLiOqil7S9xEXvowyg39yE0
 
 ###AUTH
 
@@ -20,8 +20,8 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "password"
+    "email": "maria.lopez@example.com",
+    "password": "password2"
 }
 
 
@@ -73,7 +73,7 @@ GET {{HOST}}/api/groups/creator/7
 x-access-token: {{TOKEN}}
 
 ### Get All Groups by User Id
-GET {{HOST}}/api/groups/user/1
+GET {{HOST}}/api/groups/user/7
 x-access-token: {{TOKEN}}
 
 ### Get ALL Groups by User Id (User not found)
@@ -222,13 +222,13 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "groups_id": "4",
+    "groups_id": "2",
     "concept": "Taller de Cocina",
     "amount": "300",
     "date": "2024-06-21 10:00:00",
     "max_date": "2024-07-01 14:00:00",
     "image_url": null,
-    "payer_user_id": "1"
+    "payer_user_id": "2"
 }
 
 ### Get Expense Data by expense_id GET {{HOST}}/api/expenses/:expenses_id
@@ -237,12 +237,12 @@ x-access-token: {{TOKEN}}
 
 
 ### Get All Expenses by users_id GET {{HOST}}/api/expenses/users/2
-GET {{HOST}}/api/expenses/users/4
+GET {{HOST}}/api/expenses/users/7
 x-access-token: {{TOKEN}}
 
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/4
+GET {{HOST}}/api/expenses/group/2
 x-access-token: {{TOKEN}}
 
 

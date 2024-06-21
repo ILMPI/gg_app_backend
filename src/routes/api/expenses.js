@@ -359,6 +359,9 @@ router.get('/:expenses_id', expensesController.getExpenseById);
  *                       myAmount:
  *                         type: string
  *                         example: "42.857142857142854"
+ *                       myStatus:
+ *                         type: string
+ *                         example: Reported
  *                       group:
  *                         type: object
  *                         properties:
@@ -420,6 +423,7 @@ router.get('/:expenses_id', expensesController.getExpenseById);
  *                   maxDate: 2024-07-05T12:00:00.000Z
  *                   image: null
  *                   myAmount: "42.857142857142854"
+ *                   myStatus: Reported
  *                   group:
  *                     id: 4
  *                     name: Amantes de la administración
@@ -474,7 +478,33 @@ router.get('/:expenses_id', expensesController.getExpenseById);
  *                   maxDate: 2024-07-01T12:00:00.000Z
  *                   image: null
  *                   myAmount: "10"
+ *                   myStatus: Paid
  *                   group:
+ *                   expenseStatus: Reported
+ *                 - id: 3
+ *                   group_id: 2
+ *                   concept: Taller de Cocina
+ *                   amount: "300.00"
+ *                   paidBy: 2
+ *                   createdBy: 2024-06-21T19:33:01.000Z
+ *                   expenseDate: 2024-06-21T08:00:00.000Z
+ *                   maxDate: 2024-07-01T12:00:00.000Z
+ *                   image: null
+ *                   myAmount: "300"
+ *                   myStatus: Reported
+ *                   group:
+ *                     id: 2
+ *                     name: Grupo de María
+ *                     description: Grupo creado por María López
+ *                     createdBy: 2
+ *                     image: null
+ *                     createdOn: 2024-06-16T20:57:43.000Z
+ *                     participants:
+ *                       - id: 7
+ *                         name: admin
+ *                         email: admin@gmail.com
+ *                         image: null
+ *                         status: Joined
  *                   expenseStatus: Reported
  *       404:
  *         description: No expenses found for this user.
@@ -518,7 +548,198 @@ router.get('/:expenses_id', expensesController.getExpenseById);
  *               data: null
  */
 router.get('/users/:users_id', expensesController.getExpensesByUserID);
-
+/**
+ * @swagger
+ * /api/expenses/group/{groups_id}:
+ *   get:
+ *     summary: Get All Expenses by Group ID
+ *     tags: [Expenses]
+ *     parameters:
+ *       - in: path
+ *         name: groups_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the group
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Access token for authorization
+ *     responses:
+ *       200:
+ *         description: Expenses retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Expenses retrieved successfully
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 3
+ *                       group_id:
+ *                         type: integer
+ *                         example: 2
+ *                       concept:
+ *                         type: string
+ *                         example: Taller de Cocina
+ *                       amount:
+ *                         type: string
+ *                         example: "300.00"
+ *                       paidBy:
+ *                         type: integer
+ *                         example: 2
+ *                       createdBy:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2024-06-21T19:33:01.000Z
+ *                       expenseDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2024-06-21T08:00:00.000Z
+ *                       maxDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2024-07-01T12:00:00.000Z
+ *                       image:
+ *                         type: string
+ *                         nullable: true
+ *                         example: null
+ *                       myAmount:
+ *                         type: string
+ *                         example: "300"
+ *                       myStatus:
+ *                         type: string
+ *                         example: Reported
+ *                       group:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             example: 2
+ *                           name:
+ *                             type: string
+ *                             example: Grupo de María
+ *                           description:
+ *                             type: string
+ *                             example: Grupo creado por María López
+ *                           createdBy:
+ *                             type: integer
+ *                             example: 2
+ *                           image:
+ *                             type: string
+ *                             nullable: true
+ *                             example: null
+ *                           createdOn:
+ *                             type: string
+ *                             format: date-time
+ *                             example: 2024-06-16T20:57:43.000Z
+ *                           participants:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 id:
+ *                                   type: integer
+ *                                   example: 7
+ *                                 name:
+ *                                   type: string
+ *                                   example: admin
+ *                                 email:
+ *                                   type: string
+ *                                   example: admin@gmail.com
+ *                                 image:
+ *                                   type: string
+ *                                   nullable: true
+ *                                   example: null
+ *                                 status:
+ *                                   type: string
+ *                                   example: Joined
+ *                       expenseStatus:
+ *                         type: string
+ *                         example: Reported
+ *             example:
+ *               success: true
+ *               message: Expenses retrieved successfully
+ *               data:
+ *                 - id: 3
+ *                   group_id: 2
+ *                   concept: Taller de Cocina
+ *                   amount: "300.00"
+ *                   paidBy: 2
+ *                   createdBy: 2024-06-21T19:33:01.000Z
+ *                   expenseDate: 2024-06-21T08:00:00.000Z
+ *                   maxDate: 2024-07-01T12:00:00.000Z
+ *                   image: null
+ *                   myAmount: "300"
+ *                   myStatus: Reported
+ *                   group:
+ *                     id: 2
+ *                     name: Grupo de María
+ *                     description: Grupo creado por María López
+ *                     createdBy: 2
+ *                     image: null
+ *                     createdOn: 2024-06-16T20:57:43.000Z
+ *                     participants:
+ *                       - id: 7
+ *                         name: admin
+ *                         email: admin@gmail.com
+ *                         image: null
+ *                         status: Joined
+ *                   expenseStatus: Reported
+ *       404:
+ *         description: No expenses found for this group.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: No expenses found for this group
+ *                 data:
+ *                   type: array
+ *                   example: []
+ *             example:
+ *               success: false
+ *               message: No expenses found for this group
+ *               data: []
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: An error occurred while processing your request.
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *             example:
+ *               success: false
+ *               message: An error occurred while processing your request
+ *               data: null
+ */
 router.get('/group/:groups_id', expensesController.getAllExpensesByGroup);
 
 
