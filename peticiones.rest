@@ -232,7 +232,7 @@ x-access-token: {{TOKEN}}
 }
 
 ### Get Expense Data by expense_id GET {{HOST}}/api/expenses/:expenses_id
-GET {{HOST}}/api/expenses/15
+GET {{HOST}}/api/expenses/1
 x-access-token: {{TOKEN}}
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
