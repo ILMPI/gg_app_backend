@@ -185,7 +185,7 @@ const deleteMembership = async (req, res, next) => {
         const [result] = await Membership.deleteMember(users_id, groups_id);
 
         if (result.affectedRows === 0) {
-            return res.json({
+            return res.status(400).json({
                 success: false,
                 message: 'Si balance no cero o user creator',
                 data: null

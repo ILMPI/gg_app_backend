@@ -30,8 +30,6 @@ const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
 }
 
-
-
 const getAmountTotalGroup = (groups_id) => {
     return db.query('select SUM(amount) as amountTotal from expenses where groups_id=?',[groups_id]);
 }
@@ -50,7 +48,17 @@ const updateExpenseById = (expense_id, concept, amount, date, max_date, image_ur
                     [concept, amount, date, max_date, image_url, payer_user_id, expense_id]);
 }
 
-
+const updateExpenseFields = (expenseId, { concept, expenseDate, maxDate }) => {
+    return db.query(`
+        UPDATE expenses 
+        SET  
+            concept = COALESCE(?, concept), 
+            date = COALESCE(?, date), 
+            max_date = COALESCE(?, max_date)
+        WHERE 
+            expense_id = ?
+    `, [concept, expenseDate, maxDate, expenseId]);
+};
 
 const deleteExpenseById = (expense_id) => {
     const result = db.query('DELETE FROM expense_assignments where expenses_id =?', [expense_id]);    
@@ -164,5 +172,5 @@ module.exports = {
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser,getOnlyExpensesByGroup
+    getOnlyExpensesByUser,getOnlyExpensesByGroup, updateExpenseFields
 }
