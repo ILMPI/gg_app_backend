@@ -1353,7 +1353,9 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
  *                     error: "Error message details here"
  *                   }
  */
-router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfRecentlyInvited, checkIfAlreadyMember,groups.inviteUserToGroup);
+router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfAlreadyMember,groups.inviteUserToGroup);
+
+//router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfRecentlyInvited, checkIfAlreadyMember,groups.inviteUserToGroup);
 
 
 module.exports = router;
