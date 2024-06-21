@@ -187,7 +187,7 @@ const deleteMembership = async (req, res, next) => {
         if (result.affectedRows === 0) {
             return res.json({
                 success: false,
-                message: 'Failed to delete member: Either the user is the creator or the balance is not zero',
+                message: 'Si balance no cero o user creator',
                 data: null
             });
         }
