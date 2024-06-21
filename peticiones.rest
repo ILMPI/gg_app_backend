@@ -235,14 +235,16 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/expenses/1
 x-access-token: {{TOKEN}}
 
-### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/4
-x-access-token: {{TOKEN}}
-
 
 ### Get All Expenses by users_id GET {{HOST}}/api/expenses/users/2
 GET {{HOST}}/api/expenses/users/7
 x-access-token: {{TOKEN}}
+
+
+### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
+GET {{HOST}}/api/expenses/group/4
+x-access-token: {{TOKEN}}
+
 
 
 ### Update Expense PUT {{HOST}}/api/expenses/update/expense_id Content-Type: application/json

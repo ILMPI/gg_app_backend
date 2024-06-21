@@ -318,6 +318,10 @@ const getExpenseById = async (req, res, next) => {
             expenseStatus: participant.participant_expense_status
         }));
 
+//expense overall status
+const [expenseStatusResult] = await Expense.getExpenseOverallStatus(expense_id);
+        const expenseStatus = expenseStatusResult[0].overallStatus;
+console.log(`Expense overall status retrieved: ${expenseStatus}`);
 
         //response contructor
         const detailedExpense = {
@@ -330,6 +334,7 @@ const getExpenseById = async (req, res, next) => {
             expenseDate: new Date(expense.date),
             maxDate: new Date(expense.max_date),
             image: expense.image_url,
+            expenseStatus: expenseStatus,
             participants: expenseParticipants
         };
 
@@ -343,21 +348,6 @@ const getExpenseById = async (req, res, next) => {
     }
 };
 
-
-
-
-// const getExpenseById = async (req, res, next) => {
-//     try{
-//         const [result] = await Expense.getExpenseById(req.params.expenses_id);
-//         res.status(200).json({
-//             success: true,
-//             message: 'Expense retrieved successfully',
-//             data: result
-//         });
-//     }catch (err) {
-//         next(err);
-//     }
-// }
 
 const payExpense = async (req, res, next) => {
     try {

@@ -88,6 +88,33 @@ const getExpenseParticipants = (expense_id) => {
             `, [expense_id])
 }
 
+const getExpenseStatuses = async (expenseId) => {
+    const results = await db.query(`
+        SELECT 
+            ea.status AS expenseStatus
+        FROM 
+            expense_assignments ea
+        WHERE 
+            ea.expenses_id = ?
+    `, [expenseId]);
+    
+    return results;
+};
+
+const getExpenseOverallStatus = async (expenseId) => {
+    return db.query(`
+        SELECT 
+            CASE 
+                WHEN COUNT(CASE WHEN ea.status != 'Paid' THEN 1 END) > 0 THEN 'Reported'
+                ELSE 'Paid'
+            END AS overallStatus
+        FROM 
+            expense_assignments ea
+        WHERE 
+            ea.expenses_id = ?
+    `, [expenseId]);
+};
+
 
 
 
@@ -96,5 +123,5 @@ module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
-    getAmountTotalGroup, getExpenseParticipants
+    getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus
 }

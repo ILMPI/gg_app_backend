@@ -6,7 +6,6 @@ const checkAdmin = require('../../middleware/checkAdmin');
 router.get('/group/:groups_id', expensesController.getAllExpensesByGroup);
 router.get('/users/:users_id', expensesController.getExpensesByUserID);
 
-
 /**
  * @swagger
  * /api/expenses/{expenses_id}:
@@ -115,6 +114,9 @@ router.get('/users/:users_id', expensesController.getExpensesByUserID);
  *                       type: string
  *                       nullable: true
  *                       example: null
+ *                     expenseStatus:
+ *                       type: string
+ *                       example: Reported
  *                     participants:
  *                       type: array
  *                       items:
@@ -195,6 +197,7 @@ router.get('/users/:users_id', expensesController.getExpensesByUserID);
  *                 expenseDate: 2024-06-16T12:00:00.000Z
  *                 maxDate: 2024-07-05T12:00:00.000Z
  *                 image: null
+ *                 expenseStatus: Reported
  *                 participants:
  *                   - idParticipant: 1
  *                     participantName: Juan Pérez
@@ -277,7 +280,7 @@ router.get('/users/:users_id', expensesController.getExpensesByUserID);
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: An error occurred while processing your request
+ *                   example: An error occurred while processing your request.
  *                 data:
  *                   type: null
  *                   example: null
