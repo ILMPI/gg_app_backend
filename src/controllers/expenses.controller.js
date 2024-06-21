@@ -188,9 +188,6 @@ const updateExpense = async (req, res, next) => {
 };
 
 
-
-
-
 const deleteExpense = async (req, res, next) => {
     try {
         const expense_id = req.params.expense_id;
