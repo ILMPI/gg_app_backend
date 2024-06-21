@@ -223,13 +223,17 @@ x-access-token: {{TOKEN}}
 
 {
     "groups_id": "4",
-    "concept": "Taller de Excel",
-    "amount": "70",
-    "date": "2024-06-01 19:30:00",
+    "concept": "Taller de Cocina",
+    "amount": "300",
+    "date": "2024-06-21 10:00:00",
     "max_date": "2024-07-01 14:00:00",
     "image_url": null,
-    "payer_user_id": "7"
+    "payer_user_id": "1"
 }
+
+### Get Expense Data by expense_id GET {{HOST}}/api/expenses/:expenses_id
+GET {{HOST}}/api/expenses/15
+x-access-token: {{TOKEN}}
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
 GET {{HOST}}/api/expenses/group/4
@@ -241,8 +245,8 @@ GET {{HOST}}/api/expenses/users/7
 x-access-token: {{TOKEN}}
 
 
-### Update Expense PUT {{HOST}}/api/expenses/47 Content-Type: application/json
-PUT {{HOST}}/api/expenses/1
+### Update Expense PUT {{HOST}}/api/expenses/update/expense_id Content-Type: application/json
+PUT {{HOST}}/api/expenses/update/1
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 

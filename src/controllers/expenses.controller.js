@@ -1,10 +1,10 @@
 const Expense = require('../models/expenses.model');
 const Notification = require('../models/notifications.model');
+const notificationController = require('../controllers/notifications.controller')
 const User = require('../models/users.model');
 
 const createExpense = async (req, res, next) => {
     try {
-        
         const groups_id = req.body.groups_id;
 
         // Meto en array los datos de los miembros del grupo
@@ -36,11 +36,13 @@ const createExpense = async (req, res, next) => {
                 // Hacer update en balance de tabla membership
                 const [updateBal1] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
 
-                // Notificacion correspondiente al pagador
-                const title = 'Se ha asignado tu parte del gasto';
-                const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
-                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                // // Notificacion correspondiente al pagador
+                //await notificationController.sendPayerExpenseNotification(member.users_id, expense_name, reparto, expenses_id);
+                //console.log('Notification created for payer');
+                // const title = 'Se ha asignado tu parte del gasto';
+                // const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
+                // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                // await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
                 
             } else {
 
@@ -49,11 +51,13 @@ const createExpense = async (req, res, next) => {
                 // A su balance hay que añadir en negativo reparto
                 const balance = Number(listMembersGroup[id].balance) - reparto;
                 const [updateBal2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
-                // Notificacion correspondiente
-                const title = 'Se ha asignado tu parte del gasto';
-                const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
-                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                // // Notificacion correspondiente
+                //await notificationController.sendMemberExpenseNotification(member.users_id, expense_name, reparto, expenses_id);
+                //console.log('Notification created for member');
+                // const title = 'Se ha asignado tu parte del gasto';
+                // const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
+                // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                // await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
                 
              }
         }
@@ -61,7 +65,7 @@ const createExpense = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: 'Expense created and distributed successfully',
-            data: result
+            data: {"id": result.insertId}
         });
     } catch (err) {
         if (!res.headersSent) {
