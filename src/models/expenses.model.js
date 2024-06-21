@@ -30,6 +30,10 @@ const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
 }
 
+const getExpenseDetails = () => {
+    
+}
+
 const getAmountTotalGroup = (groups_id) => {
     return db.query('select SUM(amount) as amountTotal from expenses where groups_id=?',[groups_id]);
 }

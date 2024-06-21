@@ -1,8 +1,10 @@
 const Membership = require('../models/memberships.model');
+const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Notification = require('../models/notifications.model');
+const { sendUserJoinedNotification } = require('../controllers/notifications.controller');
 
-const Dayjs = require('dayjs');
+
 
 const getAllMembership = async (req, res, next) => {
     try {
@@ -90,9 +92,59 @@ const getAllMembershipByGroup = async (req, res, next) => {
 //     }
 // }
 
+
+
 const updateMembership = async (req, res, next) => {
     try {
-        const [result] = await Membership.updateMembershipStatus(req.params.users_id, req.params.groups_id);
+        const users_id = req.params.users_id;
+        const groups_id = req.params.groups_id;
+        const currentUserId = req.userId;
+
+        // Ensure that the user performing the update is the same as the user being updated
+        if (users_id != currentUserId) {
+            return res.json({
+                success: false,
+                message: 'You can only update your own membership status',
+                data: null
+            });
+        }
+
+        // Check if the user is invited to the group
+        const [membershipCheck] = await Membership.selectMember(users_id, groups_id);
+
+        if (membershipCheck.length === 0) {
+            return res.json({
+                success: false,
+                message: 'You are not a member of this group',
+                data: null
+            });
+        }
+
+        const membershipStatus = membershipCheck[0].status;
+
+        // If user already joined
+        if (membershipStatus === 'Joined') {
+            return res.json({
+                success: false,
+                message: 'You already joined this group',
+                data: null
+            });
+        }
+
+        if (membershipStatus !== 'Invited') {
+            return res.json({
+                success: false,
+                message: 'You are not invited to this group',
+                data: null
+            });
+        }
+
+        // Update the membership status
+        const [result] = await Membership.updateMembershipStatus(users_id, groups_id);
+        
+        // Send notifications
+        await sendUserJoinedNotification(users_id, groups_id);
+
         res.json({
             success: true,
             message: 'Membership status updated successfully',
@@ -101,12 +153,34 @@ const updateMembership = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};
 
 const deleteMembership = async (req, res, next) => {
     try {
         const users_id = req.params.users_id;
         const groups_id = req.params.groups_id;
+
+        //if the user exists
+        const [userCheck] = await User.selectById(users_id);
+
+        if (userCheck.length === 0) {
+            return res.json({
+                success: false,
+                message: 'User does not exist',
+                data: null
+            });
+        }
+
+        //is this user member of the group
+        const [membershipCheck] = await Membership.selectMember(users_id, groups_id);
+
+        if (membershipCheck.length === 0) {
+            return res.json({
+                success: false,
+                message: 'User is not a member of the group',
+                data: null
+            });
+        }
 
         const [result] = await Membership.deleteMember(users_id, groups_id);
 
@@ -121,12 +195,13 @@ const deleteMembership = async (req, res, next) => {
         res.json({
             success: true,
             message: 'Member deleted successfully',
-            data: result
+            data: null
         });
     } catch (err) {
         next(err);
     }
 }
+
 
 module.exports = {
     getAllMembership,
