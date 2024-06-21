@@ -60,6 +60,7 @@ const deleteExpenseById = (expense_id) => {
 const getExpensesByUsers = (users_id) => {
     return db.query('SELECT * FROM expense_assignments where users_id =?',[users_id]);
 }
+
 const getOnlyExpensesByUser = (users_id) => {
     return db.query(`SELECT 
             e.expense_id AS id,
@@ -70,14 +71,36 @@ const getOnlyExpensesByUser = (users_id) => {
             e.created_on AS createdBy,
             e.date AS expenseDate,
             e.max_date AS maxDate,
-            e.image_url AS image
+            e.image_url AS image,
+            ea.cost AS myAmount,
+            ea.status AS myStatus
         FROM 
             expenses e
         JOIN 
             expense_assignments ea ON e.expense_id = ea.expenses_id
         WHERE 
-            ea.users_id = 1;`,[users_id]);
+            ea.users_id = ?;`,[users_id]);
 }
+ const getOnlyExpensesByGroup = (groups_id) => {
+    return db.query(`   SELECT 
+                e.expense_id AS id,
+                e.groups_id AS group_id,
+                e.concept,
+                e.amount,
+                e.payer_user_id AS paidBy,
+                e.created_on AS createdBy,
+                e.date AS expenseDate,
+                e.max_date AS maxDate,
+                e.image_url AS image,
+                ea.cost AS myAmount,
+                ea.status AS myStatus
+            FROM 
+                expenses e
+            LEFT JOIN 
+                expense_assignments ea ON e.expense_id = ea.expenses_id
+            WHERE 
+                e.groups_id = ?`, [groups_id]);
+ }
 
 const payExpense = (users_id, groups_id, expenses_id, balance) => {
     const result = db.query('UPDATE membership SET balance = ? WHERE users_id = ? AND groups_id = ?', [balance, users_id, groups_id]);
@@ -141,5 +164,5 @@ module.exports = {
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser
+    getOnlyExpensesByUser,getOnlyExpensesByGroup
 }

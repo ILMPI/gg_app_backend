@@ -5,10 +5,6 @@ const User = require('../models/users.model');
 const { constructDetailedExpense, getExpenseParticipants } = require('../utils/expenseUtils');
 
 
-
-
-
-
 const createExpense = async (req, res, next) => {
     try {
         const groups_id = req.body.groups_id;
@@ -88,23 +84,62 @@ const createExpense = async (req, res, next) => {
 
 const getAllExpensesByGroup = async (req, res, next) => {
     try {
-        const [result] = await Expense.selectExpensesByGroup(req.params.groups_id);
+        const userId = req.userId;
+        const groupId = req.params.groups_id;
+        console.log(groupId, userId);
+
+        const [expensesResult] = await Expense.getOnlyExpensesByGroup(groupId, userId);
+
+        if (expensesResult.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No expenses found for this group',
+                data: []
+            });
+        }
+
+        const detailedExpenses = await Promise.all(expensesResult.map(async (expense) => {
+            const result = await constructDetailedExpense(expense.id);
+            return {
+                ...expense,
+                group: result.group,
+                expenseStatus: result.expenseStatus
+            };
+        }));
+
+        console.log(detailedExpenses);
+
         res.status(200).json({
             success: true,
             message: 'Expenses retrieved successfully',
-            data: result
+            data: detailedExpenses
         });
     } catch (err) {
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to retrieve expenses',
-                data: null
-            });
-        }
         next(err);
     }
-}
+};
+
+
+
+// const getAllExpensesByGroup = async (req, res, next) => {
+//     try {
+//         const [result] = await Expense.selectExpensesByGroup(req.params.groups_id);
+//         res.status(200).json({
+//             success: true,
+//             message: 'Expenses retrieved successfully',
+//             data: result
+//         });
+//     } catch (err) {
+//         if (!res.headersSent) {
+//             res.status(500).json({
+//                 success: false,
+//                 message: 'Failed to retrieve expenses',
+//                 data: null
+//             });
+//         }
+//         next(err);
+//     }
+// }
 
 const updateExpense = async (req, res, next) => {
     try {
@@ -189,25 +224,60 @@ const deleteExpense = async (req, res, next) => {
 
 const getExpensesByUserID = async (req, res, next) => {
     try {
-        const [result] = await Expense.getOnlyExpensesByUser(req.params.users_id);
+        const userId = req.params.users_id;
+        const [expensesResult] = await Expense.getOnlyExpensesByUser(userId);
+
+        if (expensesResult.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No expenses found for this user',
+                data: []
+            });
+        }
+
+        const detailedExpenses = await Promise.all(expensesResult.map(async (expense) => {
+            const result = await constructDetailedExpense(expense.id);
+            return {
+                ...expense,
+                group: result.group,
+                expenseStatus: result.expenseStatus
+            };
+        }));
+
+        console.log(detailedExpenses);
+
         res.status(200).json({
             success: true,
             message: 'Expenses retrieved successfully',
-            data: result
+            data: detailedExpenses
         });
-        
-
     } catch (err) {
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to retrieve expenses',
-                data: null
-            });
-        }
         next(err);
     }
-}
+};
+
+
+// const getExpensesByUserID = async (req, res, next) => {
+//     try {
+//         const [result] = await Expense.getOnlyExpensesByUser(req.params.users_id);
+//         res.status(200).json({
+//             success: true,
+//             message: 'Expenses retrieved successfully',
+//             data: result
+//         });
+        
+
+//     } catch (err) {
+//         if (!res.headersSent) {
+//             res.status(500).json({
+//                 success: false,
+//                 message: 'Failed to retrieve expenses',
+//                 data: null
+//             });
+//         }
+//         next(err);
+//     }
+// }
 
 const getExpensesByUserGroup = async (req, res, next) => {
     // devuelve los gastos asignados a un usuario en un grupo, los campos a visualizar en el front
