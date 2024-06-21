@@ -747,6 +747,8 @@ router.get('/group/:groups_id', expensesController.getAllExpensesByGroup);
 
 router.get('/usersgroup/:users_id/:groups_id', expensesController.getExpensesByUserGroup)
 //router.get('/balance/:users_id/:groups_id', expensesController.getExpenseBalanceByUserGroup);
+
+
 /**
  * @swagger
  * /api/expenses:
@@ -769,36 +771,36 @@ router.get('/usersgroup/:users_id/:groups_id', expensesController.getExpensesByU
  *             properties:
  *               groups_id:
  *                 type: integer
- *                 example: 4
+ *                 example: 2
  *                 description: The ID of the group
  *               concept:
  *                 type: string
- *                 example: Taller de Paella
+ *                 example: Un taller de salsa
  *                 description: The concept of the expense
  *               amount:
  *                 type: number
  *                 format: float
- *                 example: 800
+ *                 example: 120
  *                 description: The amount of the expense
- *               date:
+ *               expenseDate:
  *                 type: string
  *                 format: date-time
- *                 example: "2024-06-21 10:00:00"
+ *                 example: "2024-06-22 10:00:00"
  *                 description: The date of the expense
- *               max_date:
+ *               maxDate:
  *                 type: string
  *                 format: date-time
- *                 example: "2024-07-01 14:00:00"
+ *                 example: "2024-07-22 14:00:00"
  *                 description: The deadline to settle the expense
- *               image_url:
+ *               image:
  *                 type: string
  *                 format: uri
  *                 nullable: true
  *                 example: null
  *                 description: The URL of the expense image
- *               payer_user_id:
+ *               paidBy:
  *                 type: integer
- *                 example: 1
+ *                 example: 2
  *                 description: The ID of the user who paid the expense
  *     responses:
  *       201:
@@ -819,14 +821,14 @@ router.get('/usersgroup/:users_id/:groups_id', expensesController.getExpensesByU
  *                   properties:
  *                     id:
  *                       type: integer
- *                       example: 46
+ *                       example: 8
  *             example:
  *               success: true
  *               message: Expense created and distributed successfully
  *               data:
- *                 id: 46
+ *                 id: 8
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
@@ -882,18 +884,18 @@ router.post('/', checkAdmin, expensesController.createExpense);
  *               amount:
  *                 type: string
  *                 example: "100"
- *               date:
+ *               expenseDate:
  *                 type: string
  *                 format: date-time
  *                 example: "2024-06-21 19:00"
- *               max_date:
+ *               maxDate:
  *                 type: string
  *                 format: date-time
  *                 example: "2024-06-30 19:00"
- *               image_url:
+ *               image:
  *                 type: string
  *                 example: "/tickets/051.jpg"
- *               payer_user_id:
+ *               paidBy:
  *                 type: string
  *                 example: "4"
  *     responses:
@@ -961,6 +963,8 @@ router.post('/', checkAdmin, expensesController.createExpense);
  *                   type: null
  *                   example: null
  */
+router.put('/update/:expenses_id', checkAdmin, expensesController.updateExpense);
+
 router.put('/update/:expenses_id',checkAdmin, expensesController.updateExpense);
 router.delete('/:expenses_id',checkAdmin, expensesController.deleteExpense);
 
