@@ -242,7 +242,7 @@ x-access-token: {{TOKEN}}
 
 
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/4
+GET {{HOST}}/api/expenses/group/2
 x-access-token: {{TOKEN}}
 
 
