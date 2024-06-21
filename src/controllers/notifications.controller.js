@@ -3,7 +3,7 @@ const Dayjs = require('dayjs');
 const Notification = require('../models/notifications.model');
 const User = require('../models/users.model');
 const { transformNotificationDescription } = require('../utils/notificationUtils');
-const { sendMail } = require('../utils/emailUtils');  
+//const { sendMail } = require('../utils/emailUtils');  
 
 const getAllNotifications = async (req, res, next) => { 
     try {
@@ -43,7 +43,7 @@ const createNotification = async (req, res, next) => {
         const [user] = await User.selectById(users_id);
         const email = user[0].email;
         const textSubject = `Notificacion de gg_app ${title}`;
-        await sendmail(email,textSubject,description);
+        //await sendmail(email,textSubject,description);
 
         res.status(201).json({
             success: true,
@@ -97,7 +97,7 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
         console.log('Notification inserted successfully');
         
         const email = User.selectById(userId).email;
-        await sendMail(email, notifTitle, notifDescription);
+        //await sendMail(email, notifTitle, notifDescription);
 
     } catch (error) {
         console.error('Error inserting notification:', error);

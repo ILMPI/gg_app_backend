@@ -18,7 +18,8 @@ const selectMembersDataByGroupId = (groups_id)=>{
             u.name, 
             u.email, 
             u.image_url,
-            m.status
+            m.status,
+            m.balance
          FROM membership m
          JOIN users u ON m.users_id = u.id
          WHERE m.groups_id = ?`,

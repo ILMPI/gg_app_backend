@@ -1,4 +1,5 @@
 const Membership = require('../models/memberships.model');
+const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Notification = require('../models/notifications.model');
 
@@ -103,11 +104,34 @@ const updateMembership = async (req, res, next) => {
     }
 }
 
+
 const deleteMembership = async (req, res, next) => {
     try {
         const users_id = req.params.users_id;
+        console.log(req.params.users_id)
         const groups_id = req.params.groups_id;
 
+        // Check if the user exists
+        const [userCheck] = await User.selectById(users_id);
+
+        if (userCheck.length === 0) {
+            return res.json({
+                success: false,
+                message: 'User does not exist',
+                data: null
+            });
+        }
+
+        //is this user member of the group
+        const [membershipCheck] = await Membership.selectMember(users_id, groups_id);
+
+        if (membershipCheck.length === 0) {
+            return res.json({
+                success: false,
+                message: 'User is not a member of the group',
+                data: null
+            });
+        }
         const [result] = await Membership.deleteMember(users_id, groups_id);
 
         if (result.affectedRows === 0) {
@@ -121,12 +145,13 @@ const deleteMembership = async (req, res, next) => {
         res.json({
             success: true,
             message: 'Member deleted successfully',
-            data: result
+            data: null
         });
     } catch (err) {
         next(err);
     }
 }
+
 
 module.exports = {
     getAllMembership,

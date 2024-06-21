@@ -3,9 +3,7 @@ const router = express.Router();
 const membershipsController = require('../../controllers/memberships.controller');
 const checkAdmin = require('../../middleware/checkAdmin');
 
-
 router.get('/', membershipsController.getAllMembership);
-
 /**
  * @swagger
  * /api/membership/group/{groups_id}:
@@ -53,6 +51,12 @@ router.get('/', membershipsController.getAllMembership);
  *                       email:
  *                         type: string
  *                         example: juan.perez@gmail.com
+ *                       status:
+ *                         type: string
+ *                         example: Joined
+ *                       balance:
+ *                         type: string
+ *                         example: "223"
  *                       image:
  *                         type: string
  *                         nullable: true
@@ -65,61 +69,57 @@ router.get('/', membershipsController.getAllMembership);
  *                   users_id: 1,
  *                   name: "Juan Pérez",
  *                   email: "juan.perez@gmail.com",
+ *                   status: "Joined",
+ *                   balance: "223",
  *                   image: "https://picsum.photos/id/237/200"
  *                 },
  *                 {
  *                   users_id: 2,
  *                   name: "María López",
  *                   email: "maria.lopez@example.com",
+ *                   status: "Joined",
+ *                   balance: "-53",
  *                   image: "https://picsum.photos/seed/picsum/200"
  *                 },
  *                 {
  *                   users_id: 3,
  *                   name: "Carlos García",
  *                   email: "carlos.garcia@yahoo.com",
+ *                   status: "Joined",
+ *                   balance: "-53",
  *                   image: null
  *                 },
  *                 {
  *                   users_id: 4,
  *                   name: "Ana Fernández",
  *                   email: "ana.fernandez@example.com",
+ *                   status: "Joined",
+ *                   balance: "-53",
  *                   image: null
  *                 },
  *                 {
  *                   users_id: 5,
  *                   name: "Luis Martínez",
  *                   email: "luis.martinez@gmail.com",
+ *                   status: "Joined",
+ *                   balance: "-53",
  *                   image: null
  *                 },
  *                 {
  *                   users_id: 6,
  *                   name: "Marina Garcia",
  *                   email: "marina.garcia@gmail.com",
+ *                   status: "Joined",
+ *                   balance: "-53",
  *                   image: null
  *                 },
  *                 {
  *                   users_id: 7,
  *                   name: "admin",
  *                   email: "admin@gmail.com",
+ *                   status: "Joined",
+ *                   balance: "17",
  *                   image: "https://picsum.photos/id/8/200"
- *                 },
- *                 {
- *                   users_id: 8,
- *                   name: "Alex Brown",
- *                   email: "al_brown@gmail.com",
- *                   image: null
- *                 },
- *                 {
- *                   users_id: 9,
- *                   name: "Vanessa Brown",
- *                   email: "van_brown@gmail.com",
- *                   image: null
- *                 },
- *                 {
- *                   users_id: 10,
- *                   name: "Vanessa Brown",
- *                   email: "vanda_brown@gmail.com",
- *                   image: null
  *                 }
  *               ]
  *       404:
@@ -156,8 +156,12 @@ router.get('/', membershipsController.getAllMembership);
  *                   example: null
  */
 router.get('/group/:groups_id', membershipsController.getAllMembershipByGroup);
+
 //router.post('/', membershipsController.addMemberToGroup);
+
 router.put('/:users_id/:groups_id', membershipsController.updateMembership);
+
+
 router.delete('/:users_id/:groups_id', checkAdmin, membershipsController.deleteMembership);
 
 module.exports = router;

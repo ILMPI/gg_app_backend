@@ -2,6 +2,7 @@ const User = require('../models/users.model');
 
 const verifyUser = async (req, res, next) => {
   try {
+    const userId = req.params.id;
     const results = await User.selectById(req.userId);
     const user = results[0];
 

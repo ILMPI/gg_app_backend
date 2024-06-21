@@ -11,8 +11,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Vanessa Brown",
-    "email": "vanda_brown@gmail.com"
+    "name": "Vanessa May",
+    "email": "vanessaM@gmail.com"
 }
 
 ### Login User
@@ -24,15 +24,6 @@ Content-Type: application/json
     "password": "password"
 }
 
-
-### Login User
-POST {{HOST}}/api/auth/login
-Content-Type: application/json
-
-{
-    "email": "admin@gmail.com",
-    "password": "password"
-}
 
 ### USERS
 
@@ -41,30 +32,30 @@ GET {{HOST}}/api/users
 x-access-token: {{TOKEN}}
 
 ### Get User by Id
-GET {{HOST}}/api/users/7
+GET {{HOST}}/api/users/14
 x-access-token: {{TOKEN}}
 
 
 ### Update User Profile
-PUT {{HOST}}/api/users/10
+PUT {{HOST}}/api/users/7
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "name": "Alexander"
+    "name": "Admin"
 }
 
 ### Search User by Email
 GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
-### Search User by Email
+### Search for Users with Common Groups
 GET {{HOST}}/api/users/7/common-groups
 x-access-token: {{TOKEN}}
 
 
 ### Delete User Profile (if no active connections)
-DELETE {{HOST}}/api/users/8
+DELETE {{HOST}}/api/users/14
 x-access-token: {{TOKEN}}
 
 ###GROUPS
@@ -78,7 +69,7 @@ GET {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/1
+GET {{HOST}}/api/groups/creator/7
 x-access-token: {{TOKEN}}
 
 ### Get All Groups by User Id
@@ -101,7 +92,7 @@ x-access-token: {{TOKEN}}
 }
 
 ### Update Group
-PUT {{HOST}}/api/groups/20
+PUT {{HOST}}/api/groups/21
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -124,7 +115,7 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/20/invite
+POST {{HOST}}/api/groups/4/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -133,7 +124,7 @@ x-access-token: {{TOKEN}}
         {
             "id": 1,
             "name": "John D",
-            "email": "johnd@gmail.com"
+            "email": "vanda_brown@gmail.com"
         },
         {
             "email": "janes@gmail.com"
@@ -208,17 +199,18 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/membership/group/4
 x-access-token: {{TOKEN}}
 
-### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json
-POST {{HOST}}/api/membership
-Content-Type: application/json
-x-access-token: {{TOKEN}}
+# this method is commented now --> look for method Invite to the Group
+# ### Add Member To Group POST {{HOST}}/api/membership Content-Type: application/json
+# POST {{HOST}}/api/membership
+# Content-Type: application/json
+# x-access-token: {{TOKEN}}
 
-{
-    "users_id": "7",
-    "groups_id": "4",
-    "status": "Invited",
-    "balance": "0"
-}
+# {
+#     "users_id": "7",
+#     "groups_id": "4",
+#     "status": "Invited",
+#     "balance": "0"
+# }
 
 ### Update membership status, only put Joined status PUT {{HOST}}/api/membership/4/1
 PUT {{HOST}}/api/membership/5/11
@@ -227,7 +219,7 @@ x-access-token: {{TOKEN}}
 
 
 ### Delete membership DELETE {{HOST}}/api/membership/users_id/groups_id
-DELETE {{HOST}}/api/membership/3/11
+DELETE {{HOST}}/api/membership/10/4
 x-access-token: {{TOKEN}}
 
 

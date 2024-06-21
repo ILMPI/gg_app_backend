@@ -113,7 +113,6 @@ const { validateUserArray } = require('../../middleware/validateUserArray.middle
  *               data: null
  */
 router.post('/', groups.createGroup);
-
 /**
  * @swagger
  * /api/groups:
@@ -228,8 +227,6 @@ router.post('/', groups.createGroup);
  *               }
  */
 router.get('/', groups.getGroups);
-
-
 /**
  * @swagger
  * /api/groups/{id}:
@@ -361,7 +358,6 @@ router.get('/', groups.getGroups);
  *               }
  */
 router.get('/:id', groups.getGroupById);
-
 /**
  * @swagger
  * /api/groups/creator/{creator_id}:
