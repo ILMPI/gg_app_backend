@@ -9,8 +9,6 @@ const getAllNotifications = async (req, res, next) => {
     try {
         const [result] = await Notification.selectAll();
 
-        this.saludar();
-
         res.json({
             success: true,
             message: 'Notifications retrieved successfully',
@@ -37,8 +35,8 @@ const getNotificationsByUsersID = async (req, res, next) => {
 
 const createNotification = async (req, res, next) => {
     try {
-        const {users_id, status, date, title, description} = req.body;
-        await Notification.insertNotification(users_id, status, date, title, description );
+        const {users_id, status, date, title, description, group_id, expense_id} = req.body;
+        await Notification.insertNotification(users_id, status, date, title, description, group_id, expense_id );
         
         const [user] = await User.selectById(users_id);
         const email = user[0].email;

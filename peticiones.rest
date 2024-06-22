@@ -294,7 +294,7 @@ x-access-token: {{TOKEN}}
 
 ### Get Notifications by Users_id
 GET {{HOST}}/api/notifications/6
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+x-access-token: {{TOKEN}}
 
 
 ### Create a Notification
@@ -303,11 +303,13 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users_id": "6",
+    "users_id": "7",
     "status": "Unread",
     "date": "2024-06-25 19:00",
-    "title": "Notificacion prueba",
-    "description": "Desde peticiones.rest, no generada automaticamente"
+    "title": "Notificacion prueba group y expnses",
+    "description": "Desde peticiones.rest, no generada automaticamente desde metodo",
+    "group_id": "4",
+    "expense_id": ""
 }
 
 ### Update a Notification 
