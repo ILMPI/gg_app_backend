@@ -3,7 +3,7 @@ const Notification = require('../models/notifications.model');
 const notificationController = require('../controllers/notifications.controller')
 const User = require('../models/users.model');
 const { constructDetailedExpense, getExpenseParticipants } = require('../utils/expenseUtils');
-
+const Dayjs = require('dayjs');
 
 const createExpense = async (req, res, next) => {
     try {
@@ -49,6 +49,7 @@ const createExpense = async (req, res, next) => {
         for (let id = 0; id < listMembersGroup.length; id++) {
             if (payer_user_id === listMembersGroup[id].users_id) {
                 // Es el usuario que ha pagado el ticket
+                console.log('insert en expense assingments');
                 const [assingn1] = await Expense.asignExpense(listMembersGroup[id].users_id, expenses_id, groups_id, reparto, 'Paid');
                 const resultado = Number(req.body.amount) - reparto;
                 // A su balance hay que añadir resultado, en positivo, por pagarlo
@@ -56,13 +57,13 @@ const createExpense = async (req, res, next) => {
                 // Hacer update en balance de tabla membership
                 const [updateBal1] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
 
-                // // Notificacion correspondiente al pagador
-                //await notificationController.sendPayerExpenseNotification(member.users_id, expense_name, reparto, expenses_id);
-                //console.log('Notification created for payer');
-                // const title = 'Se ha asignado tu parte del gasto';
-                // const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
-                // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                // await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                // Notificacion correspondiente al pagador
+                //await notificationController.sendPayerExpenseNotification(listMembersGroup[id].users_id, expense_name, reparto, expenses_id);
+                console.log('Notification created for payer');
+                const title = 'Se ha asignado tu parte del gasto';
+                const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
+                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description, null);
 
             } else {
                 // Es usuario que no ha pagado el ticket
@@ -70,13 +71,13 @@ const createExpense = async (req, res, next) => {
                 // A su balance hay que añadir en negativo reparto
                 const balance = Number(listMembersGroup[id].balance) - reparto;
                 const [updateBal2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
-                // // Notificacion correspondiente
-                //await notificationController.sendMemberExpenseNotification(member.users_id, expense_name, reparto, expenses_id);
-                //console.log('Notification created for member');
-                // const title = 'Se ha asignado tu parte del gasto';
-                // const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
-                // const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                // await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description);
+                // Notificacion correspondiente
+                // await notificationController.sendMemberExpenseNotification(member.users_id, expense_name, reparto, expenses_id);
+                console.log('Notification created for member');
+                const title = 'Se ha asignado tu parte del gasto';
+                const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
+                const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description,null);
 
              }
         }

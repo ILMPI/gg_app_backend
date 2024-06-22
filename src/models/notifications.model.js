@@ -10,9 +10,13 @@ const selectInvitesForUserAndGroup = (users_id, groups_id) => {
     return db.query('SELECT * FROM notifications WHERE users_id = ? AND group_id = ? AND title = ?', [users_id, groups_id, 'Has sido invitado a un nuevo grupo']);
 };
 
+const insertNotificationWhithoutExpense = (users_id, status, date, title, description, group_id) => {
+    return db.query('INSERT INTO ggapp.notifications (users_id, status, date, title, description, group_id) VALUES (?, ?, ?, ?, ?, ?)', [users_id, status, date, title, description, group_id]);
+}
+
 const insertNotification = (users_id, status, date, title, description, group_id, expense_id) => {
     return db.query(
-        'INSERT INTO notifications (users_id, status, date, title, description, group_id, expense_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO ggapp.notifications (users_id, status, date, title, description, group_id, expense_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [users_id, status, date, title, description, group_id, expense_id]
     );
 }
@@ -30,6 +34,7 @@ module.exports = {
     selectAll,
     selectByUsersId,
     insertNotification,
+    insertNotificationWhithoutExpense,
     updateNotification,
     deleteNotification,
     selectInvitesForUserAndGroup,
