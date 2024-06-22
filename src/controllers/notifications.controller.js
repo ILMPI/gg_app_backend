@@ -34,6 +34,20 @@ const getNotificationsByUsersID = async (req, res, next) => {
     }
 }
 
+const getNotificationsByUserGroup = async (req, res, next) => {
+    try{
+        const { users_id , groups_id} = req.params;
+        const notifications = await Notification.selectByUserGroup(users_id, groups_id);
+        res.status(200).json({
+            success: true,
+            message: 'Notifications retrieved successfully',
+            data: notifications[0]
+        });
+    }catch(err){
+        next(err);
+    }
+}
+
 const createNotification = async (req, res, next) => {
     try {
         const {users_id, status, date, title, description, group_id, expense_id} = req.body;
@@ -72,10 +86,38 @@ const updateNotification = async (req, res, next) => {
 const deleteNotification = async (req, res, next) => {
     try{
         const { id } = req.params;
-        await Notification.deleteNotification(id);
+        const [result] =await Notification.deleteNotification(id);
+
         res.status(200).json({
             succes: true,
             message: 'Notification deleted successfully',
+            data: null
+        })
+    }catch(error){
+        next(error);
+    }
+}
+
+const deleteNotificationsByUserGroup = async (req, res, next) => {
+    try{
+        const { users_id, groups_id } = req.params;
+        const [result] = await Notification.selectByUserGroup(users_id, groups_id);
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No hay notificaciones para ese usuario en ese grupo',
+                data: null
+            });
+        }
+
+        for (let i=0; i<result.length;i++){
+            const id = result[i].id;
+            await Notification.deleteNotification(id);  
+        }
+        
+        res.status(200).json({
+            succes: true,
+            message: 'Notifications deleted successfully',
             data: null
         })
     }catch(error){
@@ -182,16 +224,47 @@ const sendMemberExpenseNotification = async (users_id, expense_name, reparto, ex
     }
 };
 
+const setStatusReadNotificationsUserGroup = async (req, res, next) => {
+    try {
+        const { users_id , groups_id} = req.params;
+        const [result] = await Notification.selectByUserGroup(users_id, groups_id);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No hay notificaciones para ese usuario en ese grupo',
+                data: null
+            });
+        }
+
+        for (let i=0; i<result.length;i++){
+            const id = result[i].id;
+            const [notifications] = await Notification.setStatusReadNotifications(id);  
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Notifications setting Read successfully',
+            data: null
+        });
+    } catch (error) {
+        console.error('Error setting status Unread in notifications:', error);
+        next(error);
+    }
+}
+
 module.exports = {
     getAllNotifications,
     getNotificationsByUsersID,
+    getNotificationsByUserGroup,
     createNotification,
     updateNotification,
     deleteNotification,
+    deleteNotificationsByUserGroup,
     sendInviteUserToGroupNotification,
     sendUserJoinedNotification,
     sendPayerExpenseNotification,
     sendMemberExpenseNotification,
     notifyPaymentMade,
-    notifyPaymentReceived
+    notifyPaymentReceived,
+    setStatusReadNotificationsUserGroup
 }

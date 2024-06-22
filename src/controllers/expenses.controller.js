@@ -63,7 +63,7 @@ const createExpense = async (req, res, next) => {
                 const title = 'Se ha asignado tu parte del gasto';
                 const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€`;
                 const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description, null);
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description, groups_id, expenses_id);
 
             } else {
                 // Es usuario que no ha pagado el ticket
@@ -77,7 +77,7 @@ const createExpense = async (req, res, next) => {
                 const title = 'Se ha asignado tu parte del gasto';
                 const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo`;
                 const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description,null);
+                await Notification.insertNotification(listMembersGroup[id].users_id, 'Unread', currentDate, title, description, groups_id, expenses_id);
 
              }
         }
@@ -418,7 +418,6 @@ const payExpense = async (req, res, next) => {
     }
 };
 
-module.exports = payExpense;
 
 
 module.exports = {

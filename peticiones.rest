@@ -232,8 +232,8 @@ x-access-token: {{TOKEN}}
 
 {
     "groups_id": "6",
-    "concept": "Cena, ver notificaciones",
-    "amount": "210",
+    "concept": "Gasto de grupo 6, pagado por 8 . ver notificaciones si añade grupo id y expenses id",
+    "amount": "240",
     "expenseDate": "2024-06-22 00:00:00",
     "maxDate": "2024-07-02 00:00:00",
     "image": null,
@@ -305,6 +305,10 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/notifications/6
 x-access-token: {{TOKEN}}
 
+### Get Notifications by Users_id and Groups_id
+GET {{HOST}}/api/notifications/9/6
+x-access-token: {{TOKEN}}
+
 
 ### Create a Notification
 POST {{HOST}}/api/notifications
@@ -312,19 +316,18 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users_id": "7",
+    "users_id": "9",
     "status": "Unread",
-    "date": "2024-06-25 19:00",
-    "title": "Notificacion prueba group y expnses",
+    "date": "2024-06-22 19:00",
+    "title": "Notificacion 4 para luego borrar con metodo por user y group",
     "description": "Desde peticiones.rest, no generada automaticamente desde metodo",
-    "group_id": "4"
+    "group_id": "6"
 }
 
 ### Update a Notification 
 PUT {{HOST}}/api/notifications/1
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
-
+x-access-token: {{TOKEN}}
 {
     "users_id": "6",
     "status": "Read",
@@ -333,15 +336,17 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDM
     "description": "Desde peticiones.rest, no generada automaticamente"
 }
 
+### Set status Read in all notifications of user users_id on a group groups_id
+PUT {{HOST}}/api/notifications/changestatus/9/5
+x-access-token: {{TOKEN}}
+
 ### Delete Notification
 DELETE {{HOST}}/api/notifications/1
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+x-access-token: {{TOKEN}}
 
-### Delete Notifications by group and users_id
-// añadir a tabla notifications groups_id, este metodo es para borrar las notificaciones
-// a un usuario referidas a un grupo, para cuando se borre el grupo (se haya acabado su finalidad)
-// y ya no aparezcan en su vista de notificaciones 
-
+### Delete Notifications by users_id and groups_id 
+DELETE {{HOST}}/api/notifications/usersgroups/9/6
+x-access-token: {{TOKEN}}
 
 ### INVITATIONS
 
