@@ -1264,5 +1264,7 @@ router.post('/payment', expensesController.payExpense);
  */
 router.get('/balance/:users_id/:groups_id', expensesController.getExpenseBalanceByUserGroup);
 
+// Añadir un metodo que devuelva el balance total de un usuario, en TODOS los grupos en que participe, en la ggapp
+
 
 module.exports = router;

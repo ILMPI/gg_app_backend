@@ -1,8 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE5MDE2MzMzLCJleHAiOjE3MTkxMDI3MzN9.rllXdfepXyU5tq8Lff6pztc6iRPA-fUezUWIJeYKCvg
-
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MDUyOTk3LCJleHAiOjE3MTkxMzkzOTd9.vchI37f_yL3Nmhu7JOkIeqH_HJdO2a8aT3yg37MW7cg
 ###AUTH
 
 ### Register User
@@ -11,17 +10,27 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Vanessa May",
-    "email": "vanessaM@gmail.com"
+    "name": "EdLlaOr",
+    "email": "ellaria@gmail.com"
 }
-### maria.lopez@example.com password2
+### vanessaM@gmail.com password
 ### Login User
 POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "maria.lopez@example.com",
-    "password": "password2"
+    "email": "vanessaM@gmail.com",
+    "password": "password"
+}
+
+
+### Login User
+POST {{HOST}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "ellaria@gmail.com",
+    "password": "password"
 }
 
 
@@ -32,7 +41,7 @@ GET {{HOST}}/api/users
 x-access-token: {{TOKEN}}
 
 ### Get User by Id
-GET {{HOST}}/api/users/14
+GET {{HOST}}/api/users/5
 x-access-token: {{TOKEN}}
 
 
@@ -69,7 +78,7 @@ GET {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/7
+GET {{HOST}}/api/groups/creator/8
 x-access-token: {{TOKEN}}
 
 ### Get All Groups by User Id
@@ -86,8 +95,8 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Group Experementators",
-  "description": "Description",
+  "name": "Otro grupo para pruebas",
+  "description": "Otra prueba de Eduardo, con el user Vanessa, id_8",
   "image": "https://picsum.photos/id/26/200/200"
 }
 
@@ -115,14 +124,14 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/5/invite
+POST {{HOST}}/api/groups/6/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
     "participants": [
         {
-            "email": "admin@gmail.com"
+            "email": "ellaria@gmail.com"
         }
     ]
 
@@ -130,7 +139,7 @@ x-access-token: {{TOKEN}}
 
 
 ### Invite Users to Group
-POST {{HOST}}/api/groups/4/invite
+POST {{HOST}}/api/groups/5/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -186,7 +195,7 @@ GET {{HOST}}/api/membership
 x-access-token: {{TOKEN}}
 
 ### Get All Membership of a group GET {{HOST}}/api/membership/group/1
-GET {{HOST}}/api/membership/group/5
+GET {{HOST}}/api/membership/group/6
 x-access-token: {{TOKEN}}
 
 # this method is commented now --> look for method Invite to the Group
@@ -203,7 +212,7 @@ x-access-token: {{TOKEN}}
 # }
 
 ### Update membership status, only put Joined status PUT {{HOST}}/api/membership/userid/groupid
-PUT {{HOST}}/api/membership/7/5
+PUT {{HOST}}/api/membership/9/6
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -222,13 +231,13 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "groups_id": "5",
-    "concept": "AsyaPusikoness3",
-    "amount": "20",
+    "groups_id": "6",
+    "concept": "Gasto de grupo 6, pagado por 8 . ver notificaciones si añade grupo id y expenses id",
+    "amount": "240",
     "expenseDate": "2024-06-22 00:00:00",
     "maxDate": "2024-07-02 00:00:00",
     "image": null,
-    "paidBy": "2"
+    "paidBy": "8"
 }
 
 ### Get Expense Data by expense_id GET {{HOST}}/api/expenses/:expenses_id
@@ -271,10 +280,10 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-   "users_id": "7",
-   "expenses_id": "18",
-   "groups_id": "5",
-   "cost": "10",
+   "users_id": "9",
+   "expenses_id": "11",
+   "groups_id": "6",
+   "cost": "70",
    "status": "Reported"
 }
 
@@ -296,6 +305,10 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/notifications/6
 x-access-token: {{TOKEN}}
 
+### Get Notifications by Users_id and Groups_id
+GET {{HOST}}/api/notifications/9/6
+x-access-token: {{TOKEN}}
+
 
 ### Create a Notification
 POST {{HOST}}/api/notifications
@@ -303,20 +316,18 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users_id": "7",
+    "users_id": "9",
     "status": "Unread",
-    "date": "2024-06-25 19:00",
-    "title": "Notificacion prueba group y expnses",
+    "date": "2024-06-22 19:00",
+    "title": "Notificacion 4 para luego borrar con metodo por user y group",
     "description": "Desde peticiones.rest, no generada automaticamente desde metodo",
-    "group_id": "4",
-    "expense_id": ""
+    "group_id": "6"
 }
 
 ### Update a Notification 
 PUT {{HOST}}/api/notifications/1
 Content-Type: application/json
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
-
+x-access-token: {{TOKEN}}
 {
     "users_id": "6",
     "status": "Read",
@@ -325,15 +336,17 @@ x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDM
     "description": "Desde peticiones.rest, no generada automaticamente"
 }
 
+### Set status Read in all notifications of user users_id on a group groups_id
+PUT {{HOST}}/api/notifications/changestatus/9/5
+x-access-token: {{TOKEN}}
+
 ### Delete Notification
 DELETE {{HOST}}/api/notifications/1
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+x-access-token: {{TOKEN}}
 
-### Delete Notifications by group and users_id
-// añadir a tabla notifications groups_id, este metodo es para borrar las notificaciones
-// a un usuario referidas a un grupo, para cuando se borre el grupo (se haya acabado su finalidad)
-// y ya no aparezcan en su vista de notificaciones 
-
+### Delete Notifications by users_id and groups_id 
+DELETE {{HOST}}/api/notifications/usersgroups/9/6
+x-access-token: {{TOKEN}}
 
 ### INVITATIONS
 

@@ -54,3 +54,22 @@ Format of the answers
     DELETE /api/membership/users_id/groups_id Borra el miembro users_id del grupo groups_id. Solo se puede borrar si su balance es cero, no le debe a ningun miembro, ni ningun miembro le debe a él
 
 #API NOTIFICATIONS
+
+    GET /api/notifications Devuelve todas las notificaciones
+
+    GET /api/notifications/:users_id Devuelve todas las notificaciones de un usuario
+
+    GET /api/notifications/:users_id/groups_id Devuelve todas las notificaciones de un usuario users_id en un grupo groups_id
+
+    POST /api/notifications Crea una notificacion BODY: { users_id, status, date, title, description, group_id, expense_id}
+
+    PUT /api/notifications/:id Update de la notificacion :id. BODY: { users_id, status, date, title, description, group_id, expense_id}
+
+    PUT /api/notifications/changestatus/:users_id/:groups_id Pone todas las notificaciones de un usuario users_id en un grupo groups_id con el status 'Read'
+
+    DELETE /api/notifications/:id Borra la notificacion :id
+   
+    DELETE /api/notifications/users_id/groups_id Borra las notificaciones del usuario users_id que tenga del grupo groups_id.
+
+
+

@@ -50,12 +50,11 @@ const createGroup = async (req, res, next) => {
         const balance = 0;
         await Membership.insertMemberToGroup({ users_id: creator_id, groups_id: groupId, status, balance });
 
-        //state = 'Active'
+        state = 'Active'
         await Group.activateGroup(groupId);
 
         //notification
         await sendGroupCreationNotification(creator_id, groupName);
-
 
         res.status(201).json({
             success: true,

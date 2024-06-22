@@ -2,6 +2,7 @@ const Nodemailer = require('nodemailer');
 const Dayjs = require('dayjs');
 const Notification = require('../models/notifications.model');
 const User = require('../models/users.model');
+const Group = require('../models/groups.model');
 const { transformNotificationDescription } = require('../utils/notificationUtils');
 //const { sendMail } = require('../utils/emailUtils');  
 
@@ -23,6 +24,20 @@ const getNotificationsByUsersID = async (req, res, next) => {
     try{
         const { users_id } = req.params;
         const notifications = await Notification.selectByUsersId(users_id);
+        res.status(200).json({
+            success: true,
+            message: 'Notifications retrieved successfully',
+            data: notifications[0]
+        });
+    }catch(err){
+        next(err);
+    }
+}
+
+const getNotificationsByUserGroup = async (req, res, next) => {
+    try{
+        const { users_id , groups_id} = req.params;
+        const notifications = await Notification.selectByUserGroup(users_id, groups_id);
         res.status(200).json({
             success: true,
             message: 'Notifications retrieved successfully',
@@ -71,7 +86,8 @@ const updateNotification = async (req, res, next) => {
 const deleteNotification = async (req, res, next) => {
     try{
         const { id } = req.params;
-        await Notification.deleteNotification(id);
+        const [result] =await Notification.deleteNotification(id);
+
         res.status(200).json({
             succes: true,
             message: 'Notification deleted successfully',
@@ -82,18 +98,45 @@ const deleteNotification = async (req, res, next) => {
     }
 }
 
-const notifyPaymentMade = async (users_id, expenseName, cost) => {
+const deleteNotificationsByUserGroup = async (req, res, next) => {
+    try{
+        const { users_id, groups_id } = req.params;
+        const [result] = await Notification.selectByUserGroup(users_id, groups_id);
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No hay notificaciones para ese usuario en ese grupo',
+                data: null
+            });
+        }
+
+        for (let i=0; i<result.length;i++){
+            const id = result[i].id;
+            await Notification.deleteNotification(id);  
+        }
+        
+        res.status(200).json({
+            succes: true,
+            message: 'Notifications deleted successfully',
+            data: null
+        })
+    }catch(error){
+        next(error);
+    }
+}
+
+const notifyPaymentMade = async (users_id, expenseName, cost, groups_id) => {
     const title = 'Has pagado tu parte de un gasto';
     const description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description, groups_id, null);
 };
 
-const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName) => {
+const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName, groups_id) => {
     const title = 'Has cobrado una parte de un gasto';
     const description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
+    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description, groups_id, null);
 };
 
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
@@ -105,7 +148,7 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
         notifDescription = await transformNotificationDescription(notifDescription, inviterId, groupId);
 
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId);
+        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId, null);
         console.log('Notification inserted successfully');
         
         const email = User.selectById(userId).email;
@@ -121,6 +164,7 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
 const sendUserJoinedNotification = async (users_id, groups_id) => {
     try {
         // Get the group admin and the user details
+        
         const [groupAdmin] = await User.selectAdminByGroupId(groups_id);
         const [user] = await User.selectById(users_id);
         const [group] = await Group.selectById(groups_id);
@@ -131,16 +175,8 @@ const sendUserJoinedNotification = async (users_id, groups_id) => {
 
         // Send a notification to the group admin
         const notificationTitle = 'Nuevo miembro se unió al grupo';
-        const notificationDescription = `${user[0].name} se ha unido al grupo`;
-
-        await Notification.insertNotification({
-            users_id: groupAdmin[0].id,
-            status: 'Unread',
-            date: Dayjs().format('YYYY-MM-DD HH:mm'),
-            title: notificationTitle,
-            description: notificationDescription,
-            group_id: groups_id
-        });
+        const notificationDescription = `${user[0].name} se ha unido al grupo`;        
+        await Notification.insertNotification(groupAdmin[0].id,'Unread', Dayjs().format('YYYY-MM-DD HH:mm'), notificationTitle, notificationDescription, groups_id, null);
 
         // Find all existing notifications for the user about the invite to this group and delete them
         const [existingInvites] = await Notification.selectInvitesForUserAndGroup(users_id, groups_id);
@@ -152,15 +188,7 @@ const sendUserJoinedNotification = async (users_id, groups_id) => {
         // Add a new notification for the user indicating they successfully joined the group
         const userNotificationTitle = 'Te has unido al grupo exitosamente';
         const userNotificationDescription = `Te has unido al grupo ${group[0].title} exitosamente`;
-
-        await Notification.insertNotification({
-            users_id,
-            status: 'Unread',
-            date: Dayjs().format('YYYY-MM-DD HH:mm'),
-            title: userNotificationTitle,
-            description: userNotificationDescription,
-            group_id: groups_id
-        });
+        await Notification.insertNotification( users_id, 'Unread', Dayjs().format('YYYY-MM-DD HH:mm'), userNotificationTitle, userNotificationDescription, groups_id, null);
 
     } catch (error) {
         console.error('Error creating notification:', error);
@@ -175,14 +203,7 @@ const sendPayerExpenseNotification = async (users_id, expense_name, reparto, exp
         const title = 'Se ha asignado tu parte del gasto';
         const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€.`;
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification({
-            users_id,
-            status: 'Unread',
-            date: currentDate,
-            title,
-            description,
-            expense_id: expenses_id
-        });
+        await Notification.insertNotification( users_id, 'Unread', currentDate, title, description, expenses_id);
         console.log('Notification created for payer');
     } catch (error) {
         console.error('Error creating payer notification:', error);
@@ -195,14 +216,7 @@ const sendMemberExpenseNotification = async (users_id, expense_name, reparto, ex
         const title = 'Se ha asignado tu parte del gasto';
         const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo.`;
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification({
-            users_id,
-            status: 'Unread',
-            date: currentDate,
-            title,
-            description,
-            expense_id: expenses_id
-        });
+        await Notification.insertNotification( users_id, 'Unread', currentDate, title, description, expense_id);
         console.log('Notification created for member');
     } catch (error) {
         console.error('Error creating member notification:', error);
@@ -210,16 +224,47 @@ const sendMemberExpenseNotification = async (users_id, expense_name, reparto, ex
     }
 };
 
+const setStatusReadNotificationsUserGroup = async (req, res, next) => {
+    try {
+        const { users_id , groups_id} = req.params;
+        const [result] = await Notification.selectByUserGroup(users_id, groups_id);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No hay notificaciones para ese usuario en ese grupo',
+                data: null
+            });
+        }
+
+        for (let i=0; i<result.length;i++){
+            const id = result[i].id;
+            const [notifications] = await Notification.setStatusReadNotifications(id);  
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Notifications setting Read successfully',
+            data: null
+        });
+    } catch (error) {
+        console.error('Error setting status Unread in notifications:', error);
+        next(error);
+    }
+}
+
 module.exports = {
     getAllNotifications,
     getNotificationsByUsersID,
+    getNotificationsByUserGroup,
     createNotification,
     updateNotification,
     deleteNotification,
+    deleteNotificationsByUserGroup,
     sendInviteUserToGroupNotification,
     sendUserJoinedNotification,
     sendPayerExpenseNotification,
     sendMemberExpenseNotification,
     notifyPaymentMade,
-    notifyPaymentReceived
+    notifyPaymentReceived,
+    setStatusReadNotificationsUserGroup
 }
