@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE4OTk4MzUzLCJleHAiOjE3MTkwODQ3NTN9.lx6-tOUap_2gTakKIo0DnLiOqil7S9xEXvowyg39yE0
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE5MDE2MzMzLCJleHAiOjE3MTkxMDI3MzN9.rllXdfepXyU5tq8Lff6pztc6iRPA-fUezUWIJeYKCvg
 
 ###AUTH
 
@@ -14,7 +14,7 @@ Content-Type: application/json
     "name": "Vanessa May",
     "email": "vanessaM@gmail.com"
 }
-
+### maria.lopez@example.com password2
 ### Login User
 POST {{HOST}}/api/auth/login
 Content-Type: application/json
@@ -86,7 +86,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Group de Vanessa M",
+  "name": "Group Experementators",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
@@ -115,7 +115,7 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/23/invite
+POST {{HOST}}/api/groups/5/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -186,7 +186,7 @@ GET {{HOST}}/api/membership
 x-access-token: {{TOKEN}}
 
 ### Get All Membership of a group GET {{HOST}}/api/membership/group/1
-GET {{HOST}}/api/membership/group/4
+GET {{HOST}}/api/membership/group/5
 x-access-token: {{TOKEN}}
 
 # this method is commented now --> look for method Invite to the Group
@@ -203,7 +203,7 @@ x-access-token: {{TOKEN}}
 # }
 
 ### Update membership status, only put Joined status PUT {{HOST}}/api/membership/userid/groupid
-PUT {{HOST}}/api/membership/7/23
+PUT {{HOST}}/api/membership/7/5
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -222,11 +222,11 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "groups_id": "2",
-    "concept": "Un taller de salsa",
-    "amount": "120",
-    "expenseDate": "2024-06-22 10:00:00",
-    "maxDate": "2024-07-22 14:00:00",
+    "groups_id": "5",
+    "concept": "AsyaPusikoness3",
+    "amount": "20",
+    "expenseDate": "2024-06-22 00:00:00",
+    "maxDate": "2024-07-02 00:00:00",
     "image": null,
     "paidBy": "2"
 }
@@ -261,8 +261,8 @@ x-access-token: {{TOKEN}}
     "paidBy": "4"
 }
 
-### Delete Expense by expense_id DELETE {{HOST}}/api/expenses/39
-DELETE {{HOST}}/api/expenses/10
+### Delete Expense by expense_id DELETE {{HOST}}/api/expenses/delete/:groups_id/:expenses_id
+DELETE {{HOST}}/api/expenses/5/16
 x-access-token: {{TOKEN}}
 
 ### Pay expense_assingment
@@ -271,12 +271,19 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-   "users_id" : "10",
-   "expenses_id" : "33",
-   "groups_id" : "38",
-   "cost" : "50",
+   "users_id": "7",
+   "expenses_id": "18",
+   "groups_id": "5",
+   "cost": "10",
    "status": "Reported"
 }
+
+### BALANCE
+###/balance/:users_id/:groups_id'
+GET {{HOST}}/api/expenses/balance/7/5
+x-access-token: {{TOKEN}}
+
+
 
 
 ### NOTIFICATIONS

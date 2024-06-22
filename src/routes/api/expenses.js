@@ -966,8 +966,207 @@ router.post('/', checkAdmin, expensesController.createExpense);
 router.put('/update/:expenses_id', checkAdmin, expensesController.updateExpense);
 
 router.put('/update/:expenses_id',checkAdmin, expensesController.updateExpense);
-router.delete('/:expenses_id',checkAdmin, expensesController.deleteExpense);
 
+/**
+ * @swagger
+ * /api/expenses/delete/{groups_id}/{expenses_id}:
+ *   delete:
+ *     summary: Delete an expense by ID and update balances
+ *     tags: [Expenses]
+ *     parameters:
+ *       - in: path
+ *         name: groups_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the group
+ *       - in: path
+ *         name: expenses_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the expense to delete
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Access token for authorization
+ *     responses:
+ *       200:
+ *         description: Expense deleted and balances updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Expense deleted and balances updated successfully
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *             example:
+ *               success: true
+ *               message: Expense deleted and balances updated successfully
+ *               data: null
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Failed to delete expense
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *             example:
+ *               success: false
+ *               message: Failed to delete expense
+ *               data: null
+ */
+router.delete('/:groups_id/:expenses_id',checkAdmin, expensesController.deleteExpense);
+
+/**
+ * @swagger
+ * /api/expenses/payment:
+ *   post:
+ *     summary: Pay an expense assignment
+ *     tags: [Expenses]
+ *     parameters:
+ *       - in: header
+ *         name: x-access-token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Access token for authorization
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               users_id:
+ *                 type: integer
+ *                 example: 7
+ *                 description: The ID of the user making the payment
+ *               expenses_id:
+ *                 type: integer
+ *                 example: 18
+ *                 description: The ID of the expense being paid
+ *               groups_id:
+ *                 type: integer
+ *                 example: 5
+ *                 description: The ID of the group associated with the expense
+ *               cost:
+ *                 type: number
+ *                 format: float
+ *                 example: 10
+ *                 description: The amount being paid
+ *               status:
+ *                 type: string
+ *                 example: Reported
+ *                 description: The current status of the expense assignment
+ *     responses:
+ *       200:
+ *         description: Expense assignment paid successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Expense assignment paid successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     fieldCount:
+ *                       type: integer
+ *                       example: 0
+ *                     affectedRows:
+ *                       type: integer
+ *                       example: 1
+ *                     insertId:
+ *                       type: integer
+ *                       example: 0
+ *                     info:
+ *                       type: string
+ *                       example: "Rows matched: 1  Changed: 1  Warnings: 0"
+ *                     serverStatus:
+ *                       type: integer
+ *                       example: 2
+ *                     warningStatus:
+ *                       type: integer
+ *                       example: 0
+ *                     changedRows:
+ *                       type: integer
+ *                       example: 1
+ *             example:
+ *               success: true
+ *               message: Expense assignment paid successfully
+ *               data:
+ *                 fieldCount: 0
+ *                 affectedRows: 1
+ *                 insertId: 0
+ *                 info: "Rows matched: 1  Changed: 1  Warnings: 0"
+ *                 serverStatus: 2
+ *                 warningStatus: 0
+ *                 changedRows: 1
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid request parameters
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *             example:
+ *               success: false
+ *               message: Invalid request parameters
+ *               data: null
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Failed to pay expense assignment
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *             example:
+ *               success: false
+ *               message: Failed to pay expense assignment
+ *               data: null
+ */
 router.post('/payment', expensesController.payExpense);
 
 
