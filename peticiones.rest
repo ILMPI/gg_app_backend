@@ -280,10 +280,10 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-   "users_id": "7",
-   "expenses_id": "18",
-   "groups_id": "5",
-   "cost": "10",
+   "users_id": "9",
+   "expenses_id": "11",
+   "groups_id": "6",
+   "cost": "70",
    "status": "Reported"
 }
 

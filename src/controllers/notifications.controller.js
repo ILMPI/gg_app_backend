@@ -83,18 +83,18 @@ const deleteNotification = async (req, res, next) => {
     }
 }
 
-const notifyPaymentMade = async (users_id, expenseName, cost) => {
+const notifyPaymentMade = async (users_id, expenseName, cost, groups_id) => {
     const title = 'Has pagado tu parte de un gasto';
     const description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description, groups_id, null);
 };
 
-const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName) => {
+const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName, groups_id) => {
     const title = 'Has cobrado una parte de un gasto';
     const description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
+    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description, groups_id, null);
 };
 
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
@@ -106,7 +106,7 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
         notifDescription = await transformNotificationDescription(notifDescription, inviterId, groupId);
 
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId);
+        await Notification.insertNotification(userId, 'Unread', currentDate, notifTitle, notifDescription, groupId, null);
         console.log('Notification inserted successfully');
         
         const email = User.selectById(userId).email;

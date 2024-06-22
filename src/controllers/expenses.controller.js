@@ -1,6 +1,6 @@
 const Expense = require('../models/expenses.model');
 const Notification = require('../models/notifications.model');
-const notificationController = require('../controllers/notifications.controller')
+const {notifyPaymentMade, notifyPaymentReceived}= require('../controllers/notifications.controller')
 const User = require('../models/users.model');
 const { constructDetailedExpense, getExpenseParticipants } = require('../utils/expenseUtils');
 const Dayjs = require('dayjs');
@@ -370,6 +370,7 @@ const payExpense = async (req, res, next) => {
 
         const [response] = await Expense.getBalance(users_id, groups_id);
         const balanceAnterior = Number(response[0].balance);
+        console.log(balanceAnterior);
         
         if (status === 'Paid') {
             const [result] = [];
@@ -385,11 +386,12 @@ const payExpense = async (req, res, next) => {
         const [result] = await Expense.payExpense(users_id, groups_id, expenses_id, balance);
 
         // Fetch expense details
+
         const [expense] = await Expense.getExpenseById(expenses_id);
         const expenseName = expense[0].concept;
 
         // Notify the debtor
-       // await notifyPaymentMade(users_id, expenseName, cost);
+       await notifyPaymentMade(users_id, expenseName, cost, groups_id);
 
         // Fetch payer details
         const payer_user_id = expense[0].payer_user_id;
@@ -403,7 +405,7 @@ const payExpense = async (req, res, next) => {
         await Expense.updateBalance(payer_user_id, groups_id, balancePayer);
 
         // Notify the payer
-     //   await notifyPaymentReceived(payer_user_id, expenseName, cost, payerName);
+        await notifyPaymentReceived(payer_user_id, expenseName, cost, payerName, groups_id);
 
         res.status(200).json({
             success: true,
