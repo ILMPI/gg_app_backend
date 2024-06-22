@@ -98,8 +98,6 @@ const createExpense = async (req, res, next) => {
         next(err);
     }
 };
-
-
 const getAllExpensesByGroup = async (req, res, next) => {
     try {
         const userId = req.userId;
@@ -136,8 +134,6 @@ const getAllExpensesByGroup = async (req, res, next) => {
         next(err);
     }
 };
-
-
 const updateExpense = async (req, res, next) => {
     try {
         const expense_id = req.params.expenses_id;
@@ -187,37 +183,55 @@ const updateExpense = async (req, res, next) => {
     }
 };
 
-
 const deleteExpense = async (req, res, next) => {
     try {
-        const expense_id = req.params.expense_id;
+        const expense_id = req.params.expenses_id;
         const [expense] = await Expense.getExpenseById(expense_id);
+
+        if (!expense || expense.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Expense not found',
+                data: null
+            });
+        }
+
         const groups_id = expense[0].groups_id;
         const amount = Number(expense[0].amount);
         const payer_user_id = expense[0].payer_user_id;
         const [listMembersGroup] = await Expense.listMembers(groups_id);
         const reparto = amount / listMembersGroup.length;
 
+        console.log(`Expense amount: ${amount}, Payer user ID: ${payer_user_id}, Reparto: ${reparto}`);
+
         // Balancear al reves
         for (let id = 0; id < listMembersGroup.length; id++) {
-            if (Number(payer_user_id) === listMembersGroup[id].users_id) {
+            const member = listMembersGroup[id];
+            let balance;
+
+            if (Number(payer_user_id) === member.users_id) {
                 // Es el usuario que habia pagado el ticket
                 const resultado = amount - reparto;
                 // A su balance hay que restar resultado, para balanceo al reves
-                const balance = Number(listMembersGroup[id].balance) - resultado;
-                const [result2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
+                balance = Number(member.balance) - resultado;
+                console.log(`Updating balance for payer user ID ${member.users_id}: new balance ${balance}`);
             } else {
                 // Es usuario que no ha pagado el ticket, a su balance hay que sumar reparto
-                const balance = Number(listMembersGroup[id].balance) + reparto;
-                const [result2] = await Expense.updateBalance(listMembersGroup[id].users_id, groups_id, balance);
+                balance = Number(member.balance) + reparto;
+                console.log(`Updating balance for non-payer user ID ${member.users_id}: new balance ${balance}`);
             }
+
+            const [result2] = await Expense.updateBalance(member.users_id, groups_id, balance);
+            console.log(`Update result for user ID ${member.users_id}: ${JSON.stringify(result2)}`);
         }
 
         const [result] = await Expense.deleteExpenseById(expense_id);
+        console.log(`Expense deletion result: ${JSON.stringify(result)}`);
+
         res.status(200).json({
             success: true,
             message: 'Expense deleted and balances updated successfully',
-            data: result
+            data: null
         });
     } catch (err) {
         if (!res.headersSent) {
@@ -229,7 +243,7 @@ const deleteExpense = async (req, res, next) => {
         }
         next(err);
     }
-}
+};
 
 
 const getExpensesByUserID = async (req, res, next) => {
@@ -265,29 +279,6 @@ const getExpensesByUserID = async (req, res, next) => {
         next(err);
     }
 };
-
-
-// const getExpensesByUserID = async (req, res, next) => {
-//     try {
-//         const [result] = await Expense.getOnlyExpensesByUser(req.params.users_id);
-//         res.status(200).json({
-//             success: true,
-//             message: 'Expenses retrieved successfully',
-//             data: result
-//         });
-        
-
-//     } catch (err) {
-//         if (!res.headersSent) {
-//             res.status(500).json({
-//                 success: false,
-//                 message: 'Failed to retrieve expenses',
-//                 data: null
-//             });
-//         }
-//         next(err);
-//     }
-// }
 
 const getExpensesByUserGroup = async (req, res, next) => {
     // devuelve los gastos asignados a un usuario en un grupo, los campos a visualizar en el front
@@ -372,7 +363,6 @@ const getExpenseById = async (req, res, next) => {
     }
 };
 
-
 const payExpense = async (req, res, next) => {
     try {
         const { users_id, expenses_id, groups_id, cost, status } = req.body;
@@ -380,11 +370,11 @@ const payExpense = async (req, res, next) => {
         const [response] = await Expense.getBalance(users_id, groups_id);
         const balanceAnterior = Number(response[0].balance);
         
-        if (status==='Paid'){
+        if (status === 'Paid') {
             const [result] = [];
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
-                message: 'Expense already payed',
+                message: 'Expense already paid',
                 data: result
             });
         }
@@ -392,41 +382,41 @@ const payExpense = async (req, res, next) => {
         // El deudor paga y se queda el balance en cero
         const balance = balanceAnterior + Number(cost);
         const [result] = await Expense.payExpense(users_id, groups_id, expenses_id, balance);
-        // Notificar al deudor que ha pagado
+
+        // Fetch expense details
         const [expense] = await Expense.getExpenseById(expenses_id);
         const expenseName = expense[0].concept;
-        var title = 'Has pagado tu parte de un gasto';
-        var description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
-        var currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
 
-        // El pagador del gasto cobra la parte correspondiente del deudor
+        // Notify the debtor
+       // await notifyPaymentMade(users_id, expenseName, cost);
+
+        // Fetch payer details
         const payer_user_id = expense[0].payer_user_id;
         const [payer] = await User.selectById(payer_user_id);
         const payerName = payer[0].name;
+
+        // Update payer's balance
         const [response2] = await Expense.getBalance(payer_user_id, groups_id);
         const balancePayerAnterior = Number(response2[0].balance);
         const balancePayer = balancePayerAnterior - Number(cost);
         await Expense.updateBalance(payer_user_id, groups_id, balancePayer);
-        // Notificar al pagador inicial del gasto total, que el usuario le ha pagado su parte al gasto referido
-        title = 'Has cobrado una parte de un gasto';
-        description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
-        currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
 
-        
-        
+        // Notify the payer
+     //   await notifyPaymentReceived(payer_user_id, expenseName, cost, payerName);
 
         res.status(200).json({
             success: true,
-            message: 'Expense assignment payed successfully',
+            message: 'Expense assignment paid successfully',
             data: result
         });
 
-    }catch (err) {
+    } catch (err) {
         next(err);
     }
-}
+};
+
+module.exports = payExpense;
+
 
 module.exports = {
     createExpense,

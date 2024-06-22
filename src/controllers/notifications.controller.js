@@ -84,6 +84,20 @@ const deleteNotification = async (req, res, next) => {
     }
 }
 
+const notifyPaymentMade = async (users_id, expenseName, cost) => {
+    const title = 'Has pagado tu parte de un gasto';
+    const description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+};
+
+const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName) => {
+    const title = 'Has cobrado una parte de un gasto';
+    const description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
+};
+
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
     try {
         const notifTitle = `Has sido invitado a un nuevo grupo`;
@@ -207,5 +221,7 @@ module.exports = {
     sendInviteUserToGroupNotification,
     sendUserJoinedNotification,
     sendPayerExpenseNotification,
-    sendMemberExpenseNotification
+    sendMemberExpenseNotification,
+    notifyPaymentMade,
+    notifyPaymentReceived
 }
