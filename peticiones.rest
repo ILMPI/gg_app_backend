@@ -10,8 +10,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "EdLlaOr",
-    "email": "ellaria@gmail.com"
+    "name": "eduCarr",
+    "email": "eduardo.carriojanas@gmail.com"
 }
 ### vanessaM@gmail.com password
 ### Login User
