@@ -365,9 +365,9 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users_id": "10", 
-    "groups_id": "38",
+    "users_id": "7", 
+    "groups_id": "7",
      "sent_on": "2024-06-01 00:00",
      "responded_on": "2024-06-02 00:00",
-     "email": "eduardo.llaria@bi-bat.com"
+     "email": "edllaor77@gmail.com"
 }

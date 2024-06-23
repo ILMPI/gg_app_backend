@@ -4,7 +4,7 @@ const Notification = require('../models/notifications.model');
 const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const { transformNotificationDescription } = require('../utils/notificationUtils');
-//const { sendMail } = require('../utils/emailUtils');  
+const { sendEmail } = require('../utils/emailUtils');  
 
 const getAllNotifications = async (req, res, next) => { 
     try {
@@ -141,7 +141,7 @@ const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName
 
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
     try {
-        const notifTitle = `Has sido invitado a un nuevo grupo`;
+        const notifTitle = `Has sido invitado a un nuevo grupo de GG-APP`;
 
         let notifDescription = `Has sido invitado al grupo ${groupId} por ${inviterId}`;
 
@@ -152,7 +152,8 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
         console.log('Notification inserted successfully');
         
         const email = User.selectById(userId).email;
-        //await sendMail(email, notifTitle, notifDescription);
+        
+        await sendEmail(email, notifTitle, notifDescription);
 
     } catch (error) {
         console.error('Error inserting notification:', error);

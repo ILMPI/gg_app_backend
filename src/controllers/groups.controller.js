@@ -2,10 +2,11 @@ const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Membership = require('../models/memberships.model');
 const Notification = require('../models/notifications.model');
-const {sendInviteUserToGroupNotification} = require('../controllers/notifications.controller')
+const {sendInviteUserToGroupNotification} = require('../controllers/notifications.controller');
 const Invitation = require('../models/invitations.model');
 const Dayjs = require('dayjs');
 const { transformGroupData } = require('../utils/groupUtils');
+const Email = require('../utils/emailUtils');
 
 
 
@@ -295,6 +296,9 @@ const inviteUserToGroup = async (req, res, next) => {
                         message = 'User added to the group';
                     } else {
                         await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+                        const [inviter] = await User.selectById(inviterId);
+                        const [group] = await Group.selectById(groupId);
+                        await Email.sendEmail(email,`${inviter[0].name} te ha invitado a registrarte en GG-APP`, `Registrate para que te añadas a un grupo para gestionar gastos compartidos con el, en relacion con grupo ${group[0].title}`);
                         message = 'Invitation sent to the email';
                     }
                 }

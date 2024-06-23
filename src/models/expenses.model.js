@@ -164,8 +164,6 @@ const getExpenseOverallStatus = async (expenseId) => {
 
 
 
-
-
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
