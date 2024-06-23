@@ -10,6 +10,10 @@ const listMembers = (groups_id) => {
     return db.query('SELECT * FROM membership where groups_id = ?',[groups_id]);
 }
 
+const membershipBalance = (users_id) => {
+    return db.query('SELECT * FROM membership where users_id = ?',[users_id]);
+}
+
 const updateBalance = (users_id, groups_id, balance) =>{
     return db.query('UPDATE membership SET balance=? where (users_id =? AND groups_id=?)',[balance, users_id, groups_id]);
 }
@@ -28,6 +32,11 @@ const getExpensesByUserGroup = (users_id, groups_id) => {
 
 const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
+}
+
+const getExpensesInfoByUser = (users_id) => {
+    // Devuelve todos los campos de una asignacion de gasto, unido a tabla de gasto y de grupo, para tener toda informacion disponible
+    return db.query('SELECT *  FROM ggapp.expense_assignments ea inner join ggapp.groups g inner join ggapp.expenses e on ea.group_id=g.id and ea.expenses_id=e.expense_id where users_id =? order by ea.group_id asc;',[users_id]);
 }
 
 const getAmountTotalGroup = (groups_id) => {
@@ -160,7 +169,7 @@ const getExpenseOverallStatus = async (expenseId) => {
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
-    getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
+    getExpensesByUsers, getExpensesInfoByUser, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser,getOnlyExpensesByGroup
+    getOnlyExpensesByUser,getOnlyExpensesByGroup, membershipBalance
 }

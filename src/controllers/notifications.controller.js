@@ -252,6 +252,33 @@ const setStatusReadNotificationsUserGroup = async (req, res, next) => {
     }
 }
 
+const setStatusReadNotificationId = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const [result] = await Notification.selectById(id);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No existe esa notificacion',
+                data: null
+            });
+        }
+
+        await Notification.setStatusReadNotifications(id);  
+        
+        res.status(200).json({
+            success: true,
+            message: 'Notification setting Read successfully',
+            data: null
+        });
+    } catch (error) {
+        console.error('Error setting status Unread in notifications:', error);
+        next(error);
+    }
+}
+
+
 module.exports = {
     getAllNotifications,
     getNotificationsByUsersID,
@@ -266,5 +293,6 @@ module.exports = {
     sendMemberExpenseNotification,
     notifyPaymentMade,
     notifyPaymentReceived,
-    setStatusReadNotificationsUserGroup
+    setStatusReadNotificationsUserGroup,
+    setStatusReadNotificationId
 }
