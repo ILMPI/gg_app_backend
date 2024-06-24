@@ -395,31 +395,31 @@ const getExpenseById = async (req, res, next) => {
 const payExpense = async (req, res, next) => {
     try {
         const { users_id, expenses_id, groups_id, cost, status } = req.body;
-        // fetch expense_assignment status for the user
-                const [expenseAssignment] = await Expense.getExpenseAssignmentStatus(users_id, expenses_id);
-                const currentStatus = expenseAssignment[0]?.status; //status
+//         // fetch expense_assignment status for the user
+//                 const [expenseAssignment] = await Expense.getExpenseAssignmentStatus(users_id, expenses_id);
+//                 const currentStatus = expenseAssignment[0]?.status; //status
         
-                if (currentStatus === 'Paid') {
-                    return res.status(200).json({
-                        success: false,
-                        message: 'Expense already paid by this user',
-                        data: null
-                    });
-                }
+//                 if (currentStatus === 'Paid') {
+//                     return res.status(200).json({
+//                         success: false,
+//                         message: 'Expense already paid by this user',
+//                         data: null
+//                     });
+//                 }
 
 
-// fetch user balance
+// // fetch user balance
         const [response] = await Expense.getBalance(users_id, groups_id);
         const balanceAnterior = Number(response[0].balance);
         
-        // if (status === 'Paid') {
-        //     const [result] = [];
-        //     return res.status(200).json({
-        //         success: true,
-        //         message: 'Expense already paid',
-        //         data: result
-        //     });
-        // }
+        if (status === 'Paid') {
+            const [result] = [];
+            return res.status(200).json({
+                success: true,
+                message: 'Expense already paid',
+                data: result
+            });
+        }
 
         // El deudor paga y se queda el balance en cero
         const balance = balanceAnterior + Number(cost);
@@ -446,26 +446,29 @@ const payExpense = async (req, res, next) => {
         const [listMembersGroup] = await Expense.listMembers(groups_id);
 
         // Notify members who are not the payer
-        for (const member of listMembersGroup) {
-            if (member.users_id !== payer_user_id) {
-                await notificationController.notifyPaymentMade(member.users_id, expenseName, cost, expenses_id, groups_id);
+
+            if (users_id !== payer_user_id) {
+                await notificationController.notifyPaymentMade(users_id, expenseName, cost, expenses_id, groups_id);
             }
-        }
 
         // Initialize the first non-payer user name
-        let firstNonPayerName = null;
+        // let firstNonPayerName = null;
 
         // Get the first non-payer user's name outside the loop
-        for (const member of listMembersGroup) {
-            if (member.users_id !== payer_user_id) {
-                const [nonPayer] = await User.selectById(member.users_id);
-                firstNonPayerName = nonPayer[0].name;
-                break;
-            }
-        }
-                // Notify the payer with the name of the first non-payer user
-                await notificationController.notifyPaymentReceived(payer_user_id, expenseName, payerName, firstNonPayerName, cost, expenses_id, groups_id);
+        // for (const member of listMembersGroup) {
+        //     if (member.users_id !== payer_user_id) {
+        //         const [nonPayer] = await User.selectById(member.users_id);
+        //         firstNonPayerName = nonPayer[0].name;
+        //         break;
+        //     }
+        // }
+  // Check if the payer already has a notification about this expense
+  const [existingNotifications] = await Notification.checkExistingNotification(payer_user_id, expenses_id, 'Has cobrado una parte de un gasto');
 
+  if (!existingNotifications.length) {
+      // Notify the payer if no existing notification is found
+      await notificationController.notifyPaymentReceived(payer_user_id, expenseName, payerName, cost, expenses_id, groups_id);
+  }
 
         res.status(200).json({
             success: true,
@@ -477,8 +480,6 @@ const payExpense = async (req, res, next) => {
         next(err);
     }
 };
-
-module.exports = payExpense;
 
 
 module.exports = {

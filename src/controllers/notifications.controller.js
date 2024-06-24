@@ -265,10 +265,10 @@ const notifyPaymentMade = async (users_id, expenseName, cost, expenses_id, group
     }
 };
 
-const notifyPaymentReceived = async (payer_user_id, expenseName, payerName, firstNonPayerName, cost, expenses_id, groups_id) => {
+const notifyPaymentReceived = async (payer_user_id, expenseName, payerName, cost, expenses_id, groups_id) => {
     try {
     const title = 'Has cobrado una parte de un gasto';
-    const description = `${payerName}, del gasto: ${expenseName}, has cobrado de ${firstNonPayerName}, la parte que te correspondia: ${cost}€`;
+    const description = `${payerName}, del gasto: ${expenseName}, has cobrado, la parte que te correspondia: ${cost}€`;
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
     await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description, groups_id, expenses_id);
     console.log('Notification created for payer');

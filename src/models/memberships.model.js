@@ -83,5 +83,6 @@ module.exports = {
     selectMember,
     deleteMember,
     selectMembersDataByGroupId,
-    getTotalBalanceByUserId
+    getTotalBalanceByUserId,
+    insertMemberFromInvitation
 }

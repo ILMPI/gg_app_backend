@@ -52,6 +52,16 @@ const unreadNotifications = (userId) => {
 `, [userId]);
 };
 
+const checkExistingNotification = (users_id, expenses_id, title) => {
+    return db.query(`
+        SELECT * 
+        FROM notifications 
+        WHERE users_id = ? 
+        AND expense_id = ? 
+        AND title = ?
+    `, [users_id, expenses_id, title]);
+};
+
 
 
 module.exports = {
@@ -65,5 +75,6 @@ module.exports = {
     selectInvitesForUserAndGroup,
     setStatusReadNotifications,
     setAllNotificationsAsRead,
-    unreadNotifications
+    unreadNotifications,
+    checkExistingNotification
 }
