@@ -4,10 +4,9 @@ const selectAll = () => {
 }
 
 const selectByGroupId = (groups_id) => {
-    
     return db.query(`select * from membership where groups_id= ?`,[groups_id]);
-    
 }
+
 //select * from membership where groups_id= ? and status = 'Joined'
 
 // to get the data of users from the exact group
