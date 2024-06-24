@@ -128,43 +128,75 @@ const getAllExpensesByGroup = async (req, res, next) => {
         next(err);
     }
 };
+// const updateExpense = async (req, res, next) => {
+//     try {
+//         const expense_id = req.params.expenses_id;
+//         const [expenseAnterior] = await Expense.getExpenseById(expense_id);
+
+//         const amountAnterior = Number(expenseAnterior[0].amount);
+//         const payer_user_idAnterior = expenseAnterior[0].payer_user_id;
+//         const amountNum = Number(req.body.amount);
+
+//         // Use payer_user_id if provided, otherwise use paidBy
+//         const payer_user_id = req.body.payer_user_id ? Number(req.body.payer_user_id) : Number(req.body.paidBy);
+
+//         // Use image_url if provided, otherwise use image
+//         const image_url = req.body.image_url ? req.body.image_url : req.body.image;
+
+//         // Use max_date if provided, otherwise use maxDate
+//         const max_date = req.body.max_date ? req.body.max_date : req.body.maxDate;
+
+//         // Use date if provided, otherwise use expenseDate
+//         const date = req.body.date ? req.body.date : req.body.expenseDate;
+
+//         // Comprobar si el update es porque el coste del gasto es igual o distinto
+//         if ((amountNum === amountAnterior) && (payer_user_id === payer_user_idAnterior)) {
+//             // Es igual, se actualiza sin repercutir en balances ni asignamientos
+//             const [resultado] = await Expense.updateExpenseById(expense_id, req.body.concept, req.body.amount, date, max_date, image_url, payer_user_id);
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Expense updated successfully without changing balances',
+//                 data: null
+//             });
+//         } else {
+//             res.status(400).json({
+//                 success: false,
+//                 message: 'Update not allowed: cost or payer changed',
+//                 data: null
+//             });
+//         }
+//     } catch (err) {
+//         if (!res.headersSent) {
+//             res.status(500).json({
+//                 success: false,
+//                 message: 'Failed to update expense',
+//                 data: null
+//             });
+//         }
+//         next(err);
+//     }
+// };
+
 const updateExpense = async (req, res, next) => {
     try {
         const expense_id = req.params.expenses_id;
-        const [expenseAnterior] = await Expense.getExpenseById(expense_id);
 
-        const amountAnterior = Number(expenseAnterior[0].amount);
-        const payer_user_idAnterior = expenseAnterior[0].payer_user_id;
-        const amountNum = Number(req.body.amount);
+        // Prepare the data to update
+        const updateData = {
+            concept: req.body.concept,
+            date: req.body.date ? req.body.date : req.body.expenseDate,
+            maxDate: req.body.max_date ? req.body.max_date : req.body.maxDate,
+            imageUrl: req.body.image_url ? req.body.image_url : req.body.image
+        };
 
-        // Use payer_user_id if provided, otherwise use paidBy
-        const payer_user_id = req.body.payer_user_id ? Number(req.body.payer_user_id) : Number(req.body.paidBy);
+        // Update the expense fields
+        await Expense.updateExpenseFields(expense_id, updateData);
 
-        // Use image_url if provided, otherwise use image
-        const image_url = req.body.image_url ? req.body.image_url : req.body.image;
-
-        // Use max_date if provided, otherwise use maxDate
-        const max_date = req.body.max_date ? req.body.max_date : req.body.maxDate;
-
-        // Use date if provided, otherwise use expenseDate
-        const date = req.body.date ? req.body.date : req.body.expenseDate;
-
-        // Comprobar si el update es porque el coste del gasto es igual o distinto
-        if ((amountNum === amountAnterior) && (payer_user_id === payer_user_idAnterior)) {
-            // Es igual, se actualiza sin repercutir en balances ni asignamientos
-            const [resultado] = await Expense.updateExpenseById(expense_id, req.body.concept, req.body.amount, date, max_date, image_url, payer_user_id);
-            res.status(200).json({
-                success: true,
-                message: 'Expense updated successfully without changing balances',
-                data: null
-            });
-        } else {
-            res.status(400).json({
-                success: false,
-                message: 'Update not allowed: cost or payer changed',
-                data: null
-            });
-        }
+        res.status(200).json({
+            success: true,
+            message: 'Expense updated successfully',
+            data: null
+        });
     } catch (err) {
         if (!res.headersSent) {
             res.status(500).json({
@@ -176,6 +208,9 @@ const updateExpense = async (req, res, next) => {
         next(err);
     }
 };
+
+
+
 
 const deleteExpense = async (req, res, next) => {
     try {
@@ -360,18 +395,31 @@ const getExpenseById = async (req, res, next) => {
 const payExpense = async (req, res, next) => {
     try {
         const { users_id, expenses_id, groups_id, cost, status } = req.body;
+        // fetch expense_assignment status for the user
+                const [expenseAssignment] = await Expense.getExpenseAssignmentStatus(users_id, expenses_id);
+                const currentStatus = expenseAssignment[0]?.status; //status
+        
+                if (currentStatus === 'Paid') {
+                    return res.status(200).json({
+                        success: false,
+                        message: 'Expense already paid by this user',
+                        data: null
+                    });
+                }
 
+
+// fetch user balance
         const [response] = await Expense.getBalance(users_id, groups_id);
         const balanceAnterior = Number(response[0].balance);
         
-        if (status === 'Paid') {
-            const [result] = [];
-            return res.status(200).json({
-                success: true,
-                message: 'Expense already paid',
-                data: result
-            });
-        }
+        // if (status === 'Paid') {
+        //     const [result] = [];
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: 'Expense already paid',
+        //         data: result
+        //     });
+        // }
 
         // El deudor paga y se queda el balance en cero
         const balance = balanceAnterior + Number(cost);

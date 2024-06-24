@@ -34,19 +34,33 @@ const getAmountTotalGroup = (groups_id) => {
     return db.query('select SUM(amount) as amountTotal from expenses where groups_id=?',[groups_id]);
 }
 
-const updateExpenseById = (expense_id, concept, amount, date, max_date, image_url, payer_user_id)=>{
+// const updateExpenseById = (expense_id, concept, amount, date, max_date, image_url, payer_user_id)=>{
  
-    return db.query(`UPDATE expenses 
-                    SET  
-                    concept = ?, 
-                    amount = ?, 
-                    date = ?, 
-                    max_date = ?, 
-                    image_url = ?, 
-                    payer_user_id = ? 
-                    WHERE expense_id = ?`,
-                    [concept, amount, date, max_date, image_url, payer_user_id, expense_id]);
-}
+//     return db.query(`UPDATE expenses 
+//                     SET  
+//                     concept = ?, 
+//                     amount = ?, 
+//                     date = ?, 
+//                     max_date = ?, 
+//                     image_url = ?, 
+//                     payer_user_id = ? 
+//                     WHERE expense_id = ?`,
+//                     [concept, amount, date, max_date, image_url, payer_user_id, expense_id]);
+// }
+
+const updateExpenseFields = (expenseId, { concept, date, maxDate, imageUrl }) => {
+    return db.query(`
+        UPDATE expenses 
+        SET  
+            concept = COALESCE(?, concept), 
+            date = COALESCE(?, date), 
+            max_date = COALESCE(?, max_date), 
+            image_url = COALESCE(?, image_url)
+        WHERE 
+            expense_id = ?
+    `, [concept, date, maxDate, imageUrl, expenseId]);
+};
+
 
 const deleteExpenseById = (expense_id) => {
     const result = db.query('DELETE FROM expense_assignments where expenses_id =?', [expense_id]);    
@@ -190,14 +204,20 @@ const getExpenseOverallStatus = async (expenseId) => {
     `, [expenseId]);
 };
 
-
+const getExpenseAssignmentStatus = (users_id, expenses_id) => {
+    return db.query(`
+        SELECT status 
+        FROM expense_assignments 
+        WHERE users_id = ? AND expenses_id = ?
+    `, [users_id, expenses_id]);
+};
 
 
 
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
-    selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
+    selectExpensesByGroup, getExpenseById, updateExpenseFields, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser,getOnlyExpensesByGroup
+    getOnlyExpensesByUser,getOnlyExpensesByGroup, getExpenseAssignmentStatus
 }
