@@ -85,21 +85,19 @@ const deleteNotification = async (req, res, next) => {
         next(error);
     }
 }
+/*--------------------------------------------------------------*/
+//CREATE group
 
-const notifyPaymentMade = async (users_id, expenseName, cost) => {
-    const title = 'Has pagado tu parte de un gasto';
-    const description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
+const sendGroupCreationNotification = async (users_id, title, group_id) => {
+    const notifTitle = `Grupo ${title} creado`;
+    const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
     const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+    await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription, group_id);
 };
+/*---------------------------------------------------------------*/
+//INVITE to group
 
-const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName) => {
-    const title = 'Has cobrado una parte de un gasto';
-    const description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
-    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
-};
-// user accept invite to the group
+// invite to the group
 const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => {
     try {
         const notifTitle = `Has sido invitado a un nuevo grupo`;
@@ -120,58 +118,6 @@ const sendInviteUserToGroupNotification = async (userId, inviterId, groupId) => 
         throw error;
     }
 };
-// user refuse to unite
-const sendRefusalNotification = async (users_id, groups_id) => {
-    try {
-        // Get the group admin and the user details
-        const [groupAdmin] = await User.selectAdminByGroupId(groups_id);
-        const [user] = await User.selectById(users_id);
-        const [group] = await Group.selectById(groups_id);
-
-        if (groupAdmin.length === 0 || user.length === 0 || group.length === 0) {
-            throw new Error('Group admin, user, or group not found');
-        }
-
-        // Send a notification to the group admin about the user's refusal
-        const notificationTitle = 'Un usuario ha rechazado la invitación al grupo';
-        const notificationDescription = `${user[0].name} ha rechazado la invitación para unirse al grupo`;
-
-        await Notification.insertNotification(
-            groupAdmin[0].id,
-            'Unread',
-            Dayjs().format('YYYY-MM-DD HH:mm'),
-            notificationTitle,
-            notificationDescription,
-            groups_id
-        );
-
-        // Find all existing notifications for the user about the invite to this group and delete them
-        const [existingInvites] = await Notification.selectInvitesForUserAndGroup(users_id, groups_id);
-
-        for (const invite of existingInvites) {
-            await Notification.deleteNotification(invite.id);
-        }
-
-        // Add a new notification for the user indicating they have refused the group invitation
-        const userNotificationTitle = 'Has rechazado la invitación al grupo';
-        const userNotificationDescription = `Has rechazado la invitación para unirte al grupo ${group[0].title}`;
-
-        await Notification.insertNotification(
-            users_id,
-            'Unread',
-            Dayjs().format('YYYY-MM-DD HH:mm'),
-            userNotificationTitle,
-            userNotificationDescription,
-            groups_id
-        );
-
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-};
-
-
 
 //notification on update user status
 const sendUserJoinedNotification = async (users_id, groups_id) => {
@@ -223,6 +169,76 @@ const sendUserJoinedNotification = async (users_id, groups_id) => {
         throw error;
     }
 };
+
+// user refuse to unite
+const sendRefusalNotification = async (users_id, groups_id) => {
+    try {
+        // Get the group admin and the user details
+        const [groupAdmin] = await User.selectAdminByGroupId(groups_id);
+        const [user] = await User.selectById(users_id);
+        const [group] = await Group.selectById(groups_id);
+
+        if (groupAdmin.length === 0 || user.length === 0 || group.length === 0) {
+            throw new Error('Group admin, user, or group not found');
+        }
+
+        // Send a notification to the group admin about the user's refusal
+        const notificationTitle = 'Un usuario ha rechazado la invitación al grupo';
+        const notificationDescription = `${user[0].name} ha rechazado la invitación para unirse al grupo`;
+
+        await Notification.insertNotification(
+            groupAdmin[0].id,
+            'Unread',
+            Dayjs().format('YYYY-MM-DD HH:mm'),
+            notificationTitle,
+            notificationDescription,
+            groups_id
+        );
+
+        // Find all existing notifications for the user about the invite to this group and delete them
+        const [existingInvites] = await Notification.selectInvitesForUserAndGroup(users_id, groups_id);
+
+        for (const invite of existingInvites) {
+            await Notification.deleteNotification(invite.id);
+        }
+
+        // Add a new notification for the user indicating they have refused the group invitation
+        const userNotificationTitle = 'Has rechazado la invitación al grupo';
+        const userNotificationDescription = `Has rechazado la invitación para unirte al grupo ${group[0].title}`;
+
+        await Notification.insertNotification(
+            users_id,
+            'Unread',
+            Dayjs().format('YYYY-MM-DD HH:mm'),
+            userNotificationTitle,
+            userNotificationDescription,
+            groups_id
+        );
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+/*------------------------------------------------*/
+
+const notifyPaymentMade = async (users_id, expenseName, cost) => {
+    const title = 'Has pagado tu parte de un gasto';
+    const description = `Del gasto: ${expenseName}, has pagado tu parte correspondiente: ${cost}€`;
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(users_id, 'Unread', currentDate, title, description);
+};
+
+const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName) => {
+    const title = 'Has cobrado una parte de un gasto';
+    const description = `Del gasto: ${expenseName}, has cobrado de ${payerName}, la parte que le correspondia: ${cost}€`;
+    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
+    await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
+};
+
+
+
+
 
 
 //expenses
@@ -337,5 +353,6 @@ module.exports = {
     notifyPaymentReceived,
     setStatusReadNotificationId,
     setStatusReadAllNotifications,
-    sendRefusalNotification
+    sendRefusalNotification,
+    sendGroupCreationNotification
 }

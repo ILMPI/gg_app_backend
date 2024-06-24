@@ -209,7 +209,7 @@ x-access-token: {{TOKEN}}
 # }
 
 ### Update membership status, only put Joined status PUT {{HOST}}/api/membership/userid/groupid
-PUT {{HOST}}/api/membership/7/11
+PUT {{HOST}}/api/membership/7/15
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 

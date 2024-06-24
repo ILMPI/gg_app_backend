@@ -2,19 +2,17 @@ const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Membership = require('../models/memberships.model');
 const Notification = require('../models/notifications.model');
-const {sendInviteUserToGroupNotification} = require('../controllers/notifications.controller')
+const {
+    sendInviteUserToGroupNotification,
+    sendGroupCreationNotification
+} = require('../controllers/notifications.controller')
 const Invitation = require('../models/invitations.model');
 const Dayjs = require('dayjs');
 const { transformGroupData } = require('../utils/groupUtils');
 
 
 
-const sendGroupCreationNotification = async (users_id, title) => {
-    const notifTitle = `Grupo ${title} creado`;
-    const notifDescription = 'Ahora añade miembros al grupo y gestiona sus gastos';
-    const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-    await Notification.insertNotification(users_id, 'Unread', currentDate, notifTitle, notifDescription);
-};
+
 const createGroup = async (req, res, next) => {
     try {
         const { title, name, description, image, image_url } = req.body;
@@ -53,8 +51,8 @@ const createGroup = async (req, res, next) => {
         //state = 'Active'
         await Group.activateGroup(groupId);
 
-        //notification
-        await sendGroupCreationNotification(creator_id, groupName);
+        //notification to the creator of the group
+        await sendGroupCreationNotification(creator_id, groupName, groupId);
 
 
         res.status(201).json({
