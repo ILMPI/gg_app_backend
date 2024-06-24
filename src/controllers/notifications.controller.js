@@ -236,46 +236,28 @@ const notifyPaymentReceived = async (payer_user_id, expenseName, cost, payerName
     await Notification.insertNotification(payer_user_id, 'Unread', currentDate, title, description);
 };
 
-
-
-
-
-
-//expenses
-
-const sendPayerExpenseNotification = async (users_id, expense_name, reparto, expenses_id) => {
+/*----____________________________________________________________-*/
+// CREATE expense
+// to the payer
+const sendPayerExpenseNotification = async (users_id, expense_name, reparto, expenses_id, group_id) => {
     try {
         const title = 'Se ha asignado tu parte del gasto';
         const description = `Del gasto: ${expense_name}, has pagado la totalidad, pero al participar, se descuenta tu parte correspondiente, que son: ${reparto}€.`;
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification({
-            users_id,
-            status: 'Unread',
-            date: currentDate,
-            title,
-            description,
-            expense_id: expenses_id
-        });
+        await Notification.insertNotification(users_id, 'Unread', currentDate, title, description, group_id, expenses_id);
         console.log('Notification created for payer');
     } catch (error) {
         console.error('Error creating payer notification:', error);
         throw error;
     }
 };
-
-const sendMemberExpenseNotification = async (users_id, expense_name, reparto, expenses_id) => {
+//to the participant of the expense
+const sendMemberExpenseNotification = async (users_id, expense_name, reparto, expenses_id, group_id) => {
     try {
         const title = 'Se ha asignado tu parte del gasto';
         const description = `Del gasto: ${expense_name}, te corresponde pagar ${reparto}€. No te demores en hacerlo.`;
         const currentDate = Dayjs().format('YYYY-MM-DD HH:mm');
-        await Notification.insertNotification({
-            users_id,
-            status: 'Unread',
-            date: currentDate,
-            title,
-            description,
-            expense_id: expenses_id
-        });
+        await Notification.insertNotification(users_id, 'Unread', currentDate, title, description, group_id, expenses_id);
         console.log('Notification created for member');
     } catch (error) {
         console.error('Error creating member notification:', error);
@@ -283,6 +265,8 @@ const sendMemberExpenseNotification = async (users_id, expense_name, reparto, ex
     }
 };
 
+/*----------------------------------------------------- */
+// STATUS change of notification
 // make a one notification read
 const setStatusReadNotificationId = async (req, res, next) => {
     try {
@@ -335,7 +319,7 @@ const setStatusReadAllNotifications = async (req, res, next) => {
         next(error);
     }
 };
-
+/*--------------------------------------------------------------- */
 
 
 
