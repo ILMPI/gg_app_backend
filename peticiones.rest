@@ -1,7 +1,8 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MjAzMjA0LCJleHAiOjE3MTkyODk2MDR9.ClfzvLrQW7fgNApuC2et-bVvE-MY13S0fqcPWbfhcEA
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MjQ2Njg0LCJleHAiOjE3MTkzMzMwODR9.uXAVh8IBLfAI9RV9dN1qzzHwGIEwTOVe6hBbVE0Eak4
+
 
 ###AUTH
 
@@ -86,7 +87,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Locos",
+  "name": "Musicants",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
@@ -115,7 +116,7 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/12/invite
+POST {{HOST}}/api/groups/18/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -237,13 +238,13 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "groups_id": "5",
+    "groups_id": "18",
     "concept": "AsyaPusikoness3",
     "amount": "20",
     "expenseDate": "2024-06-22 00:00:00",
     "maxDate": "2024-07-02 00:00:00",
     "image": null,
-    "paidBy": "2"
+    "paidBy": "7"
 }
 
 ### Get Expense Data by expense_id GET {{HOST}}/api/expenses/:expenses_id
@@ -286,9 +287,9 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-   "users_id": "7",
-   "expenses_id": "18",
-   "groups_id": "5",
+   "users_id": "8",
+   "expenses_id": "13",
+   "groups_id": "18",
    "cost": "10",
    "status": "Reported"
 }

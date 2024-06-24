@@ -381,8 +381,6 @@ const payExpense = async (req, res, next) => {
         const [expense] = await Expense.getExpenseById(expenses_id);
         const expenseName = expense[0].concept;
 
-        // Notify the debtor
-       // await notifyPaymentMade(users_id, expenseName, cost);
 
         // Fetch payer details
         const payer_user_id = expense[0].payer_user_id;
@@ -395,8 +393,31 @@ const payExpense = async (req, res, next) => {
         const balancePayer = balancePayerAnterior - Number(cost);
         await Expense.updateBalance(payer_user_id, groups_id, balancePayer);
 
-        // Notify the payer
-     //   await notifyPaymentReceived(payer_user_id, expenseName, cost, payerName);
+      
+        // Fetch the list of members of the group
+        const [listMembersGroup] = await Expense.listMembers(groups_id);
+
+        // Notify members who are not the payer
+        for (const member of listMembersGroup) {
+            if (member.users_id !== payer_user_id) {
+                await notificationController.notifyPaymentMade(member.users_id, expenseName, cost, expenses_id, groups_id);
+            }
+        }
+
+        // Initialize the first non-payer user name
+        let firstNonPayerName = null;
+
+        // Get the first non-payer user's name outside the loop
+        for (const member of listMembersGroup) {
+            if (member.users_id !== payer_user_id) {
+                const [nonPayer] = await User.selectById(member.users_id);
+                firstNonPayerName = nonPayer[0].name;
+                break;
+            }
+        }
+                // Notify the payer with the name of the first non-payer user
+                await notificationController.notifyPaymentReceived(payer_user_id, expenseName, payerName, firstNonPayerName, cost, expenses_id, groups_id);
+
 
         res.status(200).json({
             success: true,
