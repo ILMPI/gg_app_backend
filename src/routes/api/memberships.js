@@ -415,5 +415,7 @@ router.put('/:users_id/:groups_id', membershipsController.updateMembership);
  *                   data: null
  */
 router.delete('/:users_id/:groups_id', checkAdmin, membershipsController.deleteMembership);
-
+//refuse with notifications
+router.delete('/refuse/:users_id/:groups_id', membershipsController.refuseInvitation);
+router.get('/balance', membershipsController.getBalance);
 module.exports = router;

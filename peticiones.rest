@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE5MDE2MzMzLCJleHAiOjE3MTkxMDI3MzN9.rllXdfepXyU5tq8Lff6pztc6iRPA-fUezUWIJeYKCvg
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MjAzMjA0LCJleHAiOjE3MTkyODk2MDR9.ClfzvLrQW7fgNApuC2et-bVvE-MY13S0fqcPWbfhcEA
 
 ###AUTH
 
@@ -11,8 +11,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Vanessa May",
-    "email": "vanessaM@gmail.com"
+    "name": "Oliver Twist",
+    "email": "oliver_twistM@gmail.com"
 }
 ### maria.lopez@example.com password2
 ### Login User
@@ -20,8 +20,8 @@ POST {{HOST}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "maria.lopez@example.com",
-    "password": "password2"
+    "email": "oliver_twistM@gmail.com",
+    "password": "password"
 }
 
 
@@ -32,12 +32,12 @@ GET {{HOST}}/api/users
 x-access-token: {{TOKEN}}
 
 ### Get User by Id
-GET {{HOST}}/api/users/14
+GET {{HOST}}/api/users/7
 x-access-token: {{TOKEN}}
 
 
 ### Update User Profile
-PUT {{HOST}}/api/users/7
+PUT {{HOST}}/api/users/2
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -50,7 +50,7 @@ GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
 ### Search for Users with Common Groups
-GET {{HOST}}/api/users/7/common-groups
+GET {{HOST}}/api/users/2/common-groups
 x-access-token: {{TOKEN}}
 
 
@@ -69,7 +69,7 @@ GET {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/7
+GET {{HOST}}/api/groups/creator/2
 x-access-token: {{TOKEN}}
 
 ### Get All Groups by User Id
@@ -86,7 +86,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Group Experementators",
+  "name": "Locos",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
@@ -115,7 +115,7 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/5/invite
+POST {{HOST}}/api/groups/12/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -177,6 +177,12 @@ x-access-token: {{TOKEN}}
     ]
 }
 
+### Get Group Image
+GET {{HOST}}/api/groups/1/image
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+
 
 
 ### MEMEMBERSHIP
@@ -203,13 +209,22 @@ x-access-token: {{TOKEN}}
 # }
 
 ### Update membership status, only put Joined status PUT {{HOST}}/api/membership/userid/groupid
-PUT {{HOST}}/api/membership/7/5
+PUT {{HOST}}/api/membership/7/11
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
-
 ### Delete membership DELETE {{HOST}}/api/membership/users_id/groups_id
 DELETE {{HOST}}/api/membership/9/4
+x-access-token: {{TOKEN}}
+
+### Refuse Invitation  userId/groupId
+DELETE {{HOST}}/api/membership/refuse/7/10
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+### Get User Balance
+GET {{HOST}}/api/membership/balance
+Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 
@@ -293,9 +308,18 @@ GET {{HOST}}/api/notifications
 x-access-token: {{TOKEN}}
 
 ### Get Notifications by Users_id
-GET {{HOST}}/api/notifications/6
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzE4NDMxNDU5LCJleHAiOjE3MTg1MTc4NTl9.EIlHUrsoOfClCyjgmlTgtnRkQm0d34wcZrNJldKUDGg
+GET {{HOST}}/api/notifications/7
+x-access-token: {{TOKEN}}
 
+### Set Notification to Read
+PUT {{HOST}}/api/notifications/changestatus/8
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+### Set All Notifications to Read for a User
+PUT {{HOST}}/api/notifications/changestatus/all/4
+Content-Type: application/json
+x-access-token: {{TOKEN}}
 
 ### Create a Notification
 POST {{HOST}}/api/notifications

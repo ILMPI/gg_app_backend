@@ -2,8 +2,16 @@ const selectAll = () => {
     return db.query('select * from notifications');
 }
 
+const selectById = (id) => {
+    return db.query('SELECT * FROM notifications WHERE id =?', [id]);
+}
+
 const selectByUsersId = (users_id) => {
     return db.query('select * from notifications where users_id=?', [users_id]);
+}
+
+const selectByUserGroup = (users_id, groups_id) => {
+    return db.query('SELECT * FROM notifications WHERE users_id = ? AND group_id = ?', [users_id, groups_id]);
 }
 
 const selectInvitesForUserAndGroup = (users_id, groups_id) => {
@@ -26,11 +34,36 @@ const deleteNotification = (id) => {
 }
 
 
+const setStatusReadNotifications = (id) => {
+    return db.query(`UPDATE notifications SET status='Read' WHERE id = ?`, [id]);
+}
+
+const setAllNotificationsAsRead = (userId) => {
+    return db.query(`
+        UPDATE notifications 
+        SET status = 'Read' 
+        WHERE users_id = ? AND status = 'Unread'
+    `, [userId]);
+};
+const unreadNotifications = (userId) => {
+    return db.query(`
+    SELECT * FROM notifications 
+    WHERE users_id = ? AND status = 'Unread'
+`, [userId]);
+};
+
+
+
 module.exports = {
     selectAll,
+    selectById,
     selectByUsersId,
+    selectByUserGroup,
     insertNotification,
     updateNotification,
     deleteNotification,
     selectInvitesForUserAndGroup,
+    setStatusReadNotifications,
+    setAllNotificationsAsRead,
+    unreadNotifications
 }

@@ -2,7 +2,7 @@ const Membership = require('../models/memberships.model');
 const User = require('../models/users.model');
 const Group = require('../models/groups.model');
 const Notification = require('../models/notifications.model');
-const { sendUserJoinedNotification } = require('../controllers/notifications.controller');
+const { sendUserJoinedNotification, sendRefusalNotification } = require('../controllers/notifications.controller');
 
 
 
@@ -148,7 +148,7 @@ const updateMembership = async (req, res, next) => {
         res.json({
             success: true,
             message: 'Membership status updated successfully',
-            data: result
+            data: null
         });
     } catch (err) {
         next(err);
@@ -202,11 +202,86 @@ const deleteMembership = async (req, res, next) => {
     }
 }
 
+const refuseInvitation = async (req, res, next) => {
+    try {
+        const users_id = req.params.users_id;
+        const groups_id = req.params.groups_id;
+        const currentUserId = req.userId;
+
+        // Ensure that the user performing the update is the same as the user being updated
+        if (users_id != currentUserId) {
+            return res.json({
+                success: false,
+                message: 'You can only refuse your own membership status',
+                data: null
+            });
+        }
+
+
+        const [membership] = await Membership.selectMember(users_id, groups_id);
+        if (!membership.length || membership[0].status !== 'Invited') {
+            return res.status(404).json({
+                success: false,
+                message: 'No invitation found for this user in this group',
+                data: null
+            });
+        }
+
+        //delete the membership
+        await Membership.deleteMember(users_id, groups_id);
+
+        // Send refusal notification
+        await sendRefusalNotification(users_id, groups_id);
+
+        res.json({
+            success: true,
+            message: 'The group refused successfully',
+            data: null
+        });
+
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+};
+
+    
+
+//get balance from membership by userId from all groups
+const getBalance = async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const [result] = await Membership.getTotalBalanceByUserId(userId);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No balance found for this user',
+                data: null
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'User balance retrieved successfully',
+            data: result[0]
+        });
+
+    } catch (error) {
+        console.error('Error retrieving user balance:', error);
+        next(error);
+    }
+};
+
+
+
 
 module.exports = {
     getAllMembership,
     getAllMembershipByGroup,
    // addMemberToGroup,
     updateMembership,
-    deleteMembership
+    deleteMembership,
+    refuseInvitation,
+    getBalance
 }

@@ -60,6 +60,20 @@ const deleteMember = (users_id, groups_id) => {
     `, [users_id, groups_id, groups_id]);
 }
 
+const getTotalBalanceByUserId = (userId) => {
+    return db.query(`
+        SELECT 
+            users_id, 
+            SUM(balance) AS total_balance
+        FROM 
+            membership
+        WHERE 
+            users_id = ?
+        GROUP BY 
+            users_id
+    `, [userId]);
+};
+
 
 module.exports = {
     selectAll,
@@ -69,4 +83,5 @@ module.exports = {
     selectMember,
     deleteMember,
     selectMembersDataByGroupId,
+    getTotalBalanceByUserId
 }

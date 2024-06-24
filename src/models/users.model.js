@@ -76,7 +76,7 @@ const selectUserNameById = (userId) => {
 };
 
 const selectAdminByGroupId = (groupId) => {
-    return db.query('SELECT u.id, u.name, u.email FROM users u JOIN groups g ON u.id = g.creator_id WHERE g.id = ?', [groupId]);
+    return db.query('SELECT u.id, u.name, u.email FROM users u JOIN `groups` g ON u.id = g.creator_id WHERE g.id = ?', [groupId]);
 }
 
 

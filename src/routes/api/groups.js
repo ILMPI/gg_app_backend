@@ -1356,6 +1356,6 @@ router.post('/:id/activate', checkAdmin, groups.activateGroup);
 router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfAlreadyMember,groups.inviteUserToGroup);
 
 //router.post('/:id/invite', inviteRateLimiter, validateUserArray, checkAdmin, checkIfRecentlyInvited, checkIfAlreadyMember,groups.inviteUserToGroup);
-
+router.get('/:groupId/image', groups.getGroupImage);
 
 module.exports = router;
