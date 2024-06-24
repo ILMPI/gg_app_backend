@@ -9,8 +9,12 @@ const {
 const Invitation = require('../models/invitations.model');
 const Dayjs = require('dayjs');
 const { transformGroupData } = require('../utils/groupUtils');
+<<<<<<< HEAD
 const Email = require('../utils/emailUtils');
 
+=======
+const {sendEmail} = require('../utils/emailUtils');
+>>>>>>> 30c8c3fe5e8e240d6eb414a710e68b3f6363311f
 
 
 
@@ -288,17 +292,28 @@ const inviteUserToGroup = async (req, res, next) => {
                 }
 
                 if (success) {
+                    
                     if (userId) {
+                        const [user] = await User.selectById(userId);
+                        const [group] = await Group.selectById(groupId);
                         await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
                         await sendInviteUserToGroupNotification(userId, inviterId, groupId);
                         await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
                         message = 'User added to the group';
+                        await Notification.insertNotification(inviterId, 'Unread', sentOn, `Se ha añadido un nuevo miembro al grupo: ${group[0].title}`, `Se ha añadido el usuario ${user[0].name} a dicho grupo`);
                     } else {
+                        const [inviter] = await User.selectById(inviterId);
+                        const [group] = await Group.selectById(groupId);
                         await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+<<<<<<< HEAD
                         const [inviter] = await User.selectById(inviterId);
                         const [group] = await Group.selectById(groupId);
                         await Email.sendEmail(email,`${inviter[0].name} te ha invitado a registrarte en GG-APP`, `Registrate para que te añadas a un grupo para gestionar gastos compartidos con el, en relacion con grupo ${group[0].title}`);
+=======
+                        await sendEmail(email,`Registrate en GG-APP, de parte de ${inviter[0].name}`, `Te quiere añadir a un grupo para compartir gastos. El grupo: ${group[0].title}`)
+>>>>>>> 30c8c3fe5e8e240d6eb414a710e68b3f6363311f
                         message = 'Invitation sent to the email';
+                        await Notification.insertNotification(userId, 'Unread', sentOn, `Se le ha enviado un mail a ${email}`, `Cuando se registre se añadira al grupo ${group[0].title}`);
                     }
                 }
             } catch (error) {
