@@ -1,7 +1,8 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE5MDE2MzMzLCJleHAiOjE3MTkxMDI3MzN9.rllXdfepXyU5tq8Lff6pztc6iRPA-fUezUWIJeYKCvg
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzE5MTkyNDQ3LCJleHAiOjE3MTkyNzg4NDd9.hO7KnOvgJVpZUK0F4Zjog3aCvOr6p5nrmHbwFo9MRQg
+
 
 ###AUTH
 
@@ -11,8 +12,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "Vanessa May",
-    "email": "vanessaM@gmail.com"
+    "name": "Oliver Twist",
+    "email": "oliver_twistM@gmail.com"
 }
 ### maria.lopez@example.com password2
 ### Login User
@@ -32,12 +33,12 @@ GET {{HOST}}/api/users
 x-access-token: {{TOKEN}}
 
 ### Get User by Id
-GET {{HOST}}/api/users/14
+GET {{HOST}}/api/users/7
 x-access-token: {{TOKEN}}
 
 
 ### Update User Profile
-PUT {{HOST}}/api/users/7
+PUT {{HOST}}/api/users/2
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
@@ -50,7 +51,7 @@ GET {{HOST}}/api/users/email/admin@gmail.com
 x-access-token: {{TOKEN}}
 
 ### Search for Users with Common Groups
-GET {{HOST}}/api/users/7/common-groups
+GET {{HOST}}/api/users/2/common-groups
 x-access-token: {{TOKEN}}
 
 
@@ -69,7 +70,7 @@ GET {{HOST}}/api/groups/4
 x-access-token: {{TOKEN}}
 
 ### Get Groups by Creator Id
-GET {{HOST}}/api/groups/creator/7
+GET {{HOST}}/api/groups/creator/2
 x-access-token: {{TOKEN}}
 
 ### Get All Groups by User Id
@@ -115,7 +116,7 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/5/invite
+POST {{HOST}}/api/groups/2/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 

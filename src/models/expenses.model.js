@@ -77,28 +77,28 @@ const getOnlyExpensesByUser = (users_id) => {
         WHERE 
             ea.users_id = ?;`,[users_id]);
 }
- const getOnlyExpensesByGroup = (groups_id) => {
-    return db.query(`  SELECT 
-    e.expense_id AS id,
-    e.groups_id AS group_id,
-    e.concept,
-    e.amount,
-    e.payer_user_id AS paidBy,
-    e.created_on AS createdBy,
-    e.date AS expenseDate,
-    e.max_date AS maxDate,
-    e.image_url AS image,
-    GROUP_CONCAT(ea.cost SEPARATOR ', ') AS myAmount,
-    GROUP_CONCAT(ea.status SEPARATOR ', ') AS myStatus
-FROM 
-    expenses e
-LEFT JOIN 
-    expense_assignments ea ON e.expense_id = ea.expenses_id
-WHERE 
-    e.groups_id = ?
-GROUP BY 
-    e.expense_id`, [groups_id]);
- }
+const getOnlyExpensesByGroup = (groups_id, users_id) => {
+    return db.query(`  
+        SELECT 
+            e.expense_id AS id,
+            e.groups_id AS group_id,
+            e.concept,
+            e.amount,
+            e.payer_user_id AS paidBy,
+            e.created_on AS createdBy,
+            e.date AS expenseDate,
+            e.max_date AS maxDate,
+            e.image_url AS image,
+            IFNULL((SELECT ea.cost FROM expense_assignments ea WHERE ea.expenses_id = e.expense_id AND ea.users_id = ?), '') AS myAmount,
+            IFNULL((SELECT ea.status FROM expense_assignments ea WHERE ea.expenses_id = e.expense_id AND ea.users_id = ?), '') AS myStatus
+        FROM 
+            expenses e
+        WHERE 
+            e.groups_id = ?
+        GROUP BY 
+            e.expense_id
+    `, [users_id, users_id, groups_id]);
+};
 
 const payExpense = (users_id, groups_id, expenses_id, balance) => {
     const result = db.query('UPDATE membership SET balance = ? WHERE users_id = ? AND groups_id = ?', [balance, users_id, groups_id]);
