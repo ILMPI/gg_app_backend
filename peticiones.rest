@@ -177,6 +177,12 @@ x-access-token: {{TOKEN}}
     ]
 }
 
+### Get Group Image
+GET {{HOST}}/api/groups/1/image
+Content-Type: application/json
+x-access-token: {{TOKEN}}
+
+
 
 
 ### MEMEMBERSHIP
