@@ -77,6 +77,17 @@ const selectGroupTitleById = (groupId) => {
     return db.query('SELECT title FROM `groups` WHERE id = ?', [groupId]);
 };
 
+const getImageByGroupId = (groupId) => {
+    return db.query(`
+        SELECT 
+            image_url
+        FROM 
+            ggapp.groups
+        WHERE 
+            id = ?
+    `, [groupId]);
+};
+
 module.exports = {
     selectAll,
     selectById,
@@ -89,5 +100,6 @@ module.exports = {
     selectCreatorByGroupId,
     selectGroupByCretorAndTitle,
     selectAllGroupsByUserId,
-    selectGroupTitleById
+    selectGroupTitleById,
+    getImageByGroupId
 }

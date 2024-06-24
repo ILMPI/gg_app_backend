@@ -323,6 +323,33 @@ const inviteUserToGroup = async (req, res, next) => {
     }
 };
 
+const getGroupImage = async (req, res, next) => {
+    try {
+        const groupId = req.params.groupId;
+        const [result] = await Group.getImageByGroupId(groupId);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'Group image not found',
+                data: null
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Group image retrieved successfully',
+            data: result[0]
+        });
+
+    } catch (error) {
+        console.error('Error retrieving group image:', error);
+        next(error);
+    }
+};
+
+
+
 //previous version
 // const inviteUserToGroup = async (req, res, next) => {
 //     try {
@@ -430,4 +457,5 @@ module.exports = {
     activateGroup,
     getAllGroupsByUserId,
     inviteUserToGroup,
+    getGroupImage
 };
