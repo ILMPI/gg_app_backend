@@ -10,6 +10,10 @@ const listMembers = (groups_id) => {
     return db.query('SELECT * FROM membership where groups_id = ?',[groups_id]);
 }
 
+const membershipBalance = (users_id) => {
+    return db.query('SELECT * FROM membership where users_id = ?',[users_id]);
+}
+
 const updateBalance = (users_id, groups_id, balance) =>{
     return db.query('UPDATE membership SET balance=? where (users_id =? AND groups_id=?)',[balance, users_id, groups_id]);
 }
@@ -28,6 +32,11 @@ const getExpensesByUserGroup = (users_id, groups_id) => {
 
 const getExpenseById = (expense_id) => {
     return db.query('Select * FROM expenses where expense_id = ?',[expense_id]);
+}
+
+const getExpensesInfoByUser = (users_id) => {
+    // Devuelve todos los campos de una asignacion de gasto, unido a tabla de gasto y de grupo, para tener toda informacion disponible
+    return db.query('SELECT *  FROM ggapp.expense_assignments ea inner join ggapp.groups g inner join ggapp.expenses e on ea.group_id=g.id and ea.expenses_id=e.expense_id where users_id =? order by ea.group_id asc;',[users_id]);
 }
 
 const getAmountTotalGroup = (groups_id) => {
@@ -77,29 +86,30 @@ const getOnlyExpensesByUser = (users_id) => {
         WHERE 
             ea.users_id = ?;`,[users_id]);
 }
- const getOnlyExpensesByGroup = (groups_id) => {
-    return db.query(`  SELECT 
-    e.expense_id AS id,
-    e.groups_id AS group_id,
-    e.concept,
-    e.amount,
-    e.payer_user_id AS paidBy,
-    e.created_on AS createdBy,
-    e.date AS expenseDate,
-    e.max_date AS maxDate,
-    e.image_url AS image,
-    GROUP_CONCAT(ea.cost SEPARATOR ', ') AS myAmount,
-    GROUP_CONCAT(ea.status SEPARATOR ', ') AS myStatus
-FROM 
-    expenses e
-LEFT JOIN 
-    expense_assignments ea ON e.expense_id = ea.expenses_id
-WHERE 
-    e.groups_id = ?
-GROUP BY 
-    e.expense_id`, [groups_id]);
- }
 
+const getOnlyExpensesByGroup = (groups_id, users_id) => {
+    return db.query(`  
+        SELECT 
+            e.expense_id AS id,
+            e.groups_id AS group_id,
+            e.concept,
+            e.amount,
+            e.payer_user_id AS paidBy,
+            e.created_on AS createdBy,
+            e.date AS expenseDate,
+            e.max_date AS maxDate,
+            e.image_url AS image,
+            IFNULL((SELECT ea.cost FROM expense_assignments ea WHERE ea.expenses_id = e.expense_id AND ea.users_id = ?), '') AS myAmount,
+            IFNULL((SELECT ea.status FROM expense_assignments ea WHERE ea.expenses_id = e.expense_id AND ea.users_id = ?), '') AS myStatus
+        FROM 
+            expenses e
+        WHERE 
+            e.groups_id = ?
+        GROUP BY 
+            e.expense_id
+    `, [users_id, users_id, groups_id]);
+};
+ 
 const payExpense = (users_id, groups_id, expenses_id, balance) => {
     const result = db.query('UPDATE membership SET balance = ? WHERE users_id = ? AND groups_id = ?', [balance, users_id, groups_id]);
     return db.query(`UPDATE expense_assignments SET status = 'Paid'  WHERE users_id = ? AND expenses_id = ?`,[users_id, expenses_id]);
@@ -155,12 +165,10 @@ const getExpenseOverallStatus = async (expenseId) => {
 
 
 
-
-
 module.exports = {
     insertExpense, asignExpense, listMembers, updateBalance, getExpenseByConcept, 
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
-    getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
+    getExpensesByUsers, getExpensesInfoByUser, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser,getOnlyExpensesByGroup
+    getOnlyExpensesByUser,getOnlyExpensesByGroup, membershipBalance
 }

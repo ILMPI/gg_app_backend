@@ -290,8 +290,7 @@ const getExpensesByUserGroup = async (req, res, next) => {
             success: true,
             message: 'Expenses retrieved successfully',
             data: result
-        });
-        
+        });        
 
     } catch (err) {
         if (!res.headersSent) {
@@ -306,14 +305,14 @@ const getExpensesByUserGroup = async (req, res, next) => {
 }
 
 const getExpenseBalanceByUserGroup = async (req, res, next) => {
-    // devuelve los datos para poder representar el balance que tiene en un grupo
-    // la suma de los gastos que debe y la suma de los gastos que ha pagado, frente al total de los gastos del grupo
+    // devuelve los datos para poder representar el balance que tiene un usuario en un grupo concreto
+    // la suma de los gastos que debe y la suma de los gastos que ha pagado, frente al total de gastos
     
     try{
         const [expenses] = await Expense.getExpensesByUserGroup(req.params.users_id, req.params.groups_id);
         let cantDebida=0;
         let cantPagada=0;
-    
+        
         for (let id = 0; id < expenses.length; id++) {
             if (expenses[id].status ==='Paid'){
                 cantPagada = cantPagada + Number(expenses[id].cost);
@@ -322,9 +321,7 @@ const getExpenseBalanceByUserGroup = async (req, res, next) => {
             }
         }
         const amountTotal = cantDebida + cantPagada;
-        console.log(cantDebida, cantPagada, amountTotal);
-        
-        
+                
         return res.json({
             success: true,
             message: 'Balance of user on a group',
@@ -332,15 +329,37 @@ const getExpenseBalanceByUserGroup = async (req, res, next) => {
                 cantDebida : cantDebida,
                 cantPagada : cantPagada,
                 amountTotal : amountTotal 
-            }
-            
+            }  
         });
     
     }catch(err){
         next(err);
     }
-
 }
+
+const getExpenseBalanceByUser = async (req, res, next) => {
+    try{
+        
+        const [expensesBalance] = await Expense.membershipBalance(req.params.users_id);
+
+        let balanceAcum=0;
+        for (let id = 0; id < expensesBalance.length; id++) {
+            balanceAcum=balanceAcum+Number(expensesBalance[id].balance);
+        }
+        
+        return res.json({
+            success: true,
+            message: 'Balance of user on all groups',
+            data: {
+                balanceTotalUser : balanceAcum
+            }  
+        });
+    
+    }catch(err){
+        next(err);
+    }
+}
+
 
 const getExpenseById = async (req, res, next) => {
     try {
@@ -428,6 +447,7 @@ module.exports = {
     getExpensesByUserID,
     getExpensesByUserGroup,
     getExpenseBalanceByUserGroup,
+    getExpenseBalanceByUser,
     getExpenseById,
     payExpense
 }

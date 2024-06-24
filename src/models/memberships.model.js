@@ -65,6 +65,7 @@ module.exports = {
     selectAll,
     selectByGroupId,
     insertMemberToGroup,
+    insertMemberFromInvitation,
     updateMembershipStatus,
     selectMember,
     deleteMember,

@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MDUyOTk3LCJleHAiOjE3MTkxMzkzOTd9.vchI37f_yL3Nmhu7JOkIeqH_HJdO2a8aT3yg37MW7cg
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MTQxMzU1LCJleHAiOjE3MTkyMjc3NTV9.St_zix4uOBI5Wy1DViISjqOgtXvjHJv31mQVM4En_Sw
 ###AUTH
 
 ### Register User
@@ -10,8 +10,8 @@ Content-Type: application/json
 
 {
     "password": "password",
-    "name": "EdLlaOr",
-    "email": "ellaria@gmail.com"
+    "name": "eduCarr",
+    "email": "eduardo.carriojanas@gmail.com"
 }
 ### vanessaM@gmail.com password
 ### Login User
@@ -85,7 +85,7 @@ x-access-token: {{TOKEN}}
 GET {{HOST}}/api/groups/user/7
 x-access-token: {{TOKEN}}
 
-### Get ALL Groups by User Id (User not found)
+### Get All Groups by User Id (User not found)
 GET {{HOST}}/api/groups/user/999
 x-access-token: {{TOKEN}}
 
@@ -246,12 +246,11 @@ x-access-token: {{TOKEN}}
 
 
 ### Get All Expenses by users_id GET {{HOST}}/api/expenses/users/2
-GET {{HOST}}/api/expenses/users/7
+GET {{HOST}}/api/expenses/users/8
 x-access-token: {{TOKEN}}
 
-
 ### Get All Expenses by groups_id GET {{HOST}}/api/expenses/group/1
-GET {{HOST}}/api/expenses/group/2
+GET {{HOST}}/api/expenses/group/6
 x-access-token: {{TOKEN}}
 
 
@@ -288,11 +287,14 @@ x-access-token: {{TOKEN}}
 }
 
 ### BALANCE
+
 ###/balance/:users_id/:groups_id'
-GET {{HOST}}/api/expenses/balance/7/5
+GET {{HOST}}/api/expenses/balance/7/4
 x-access-token: {{TOKEN}}
 
-
+###/balance/:users_id
+GET {{HOST}}/api/expenses/balance/7
+x-access-token: {{TOKEN}}
 
 
 ### NOTIFICATIONS
@@ -340,6 +342,10 @@ x-access-token: {{TOKEN}}
 PUT {{HOST}}/api/notifications/changestatus/9/5
 x-access-token: {{TOKEN}}
 
+### Set status Read in notification id
+PUT {{HOST}}/api/notifications/changestatus/2
+x-access-token: {{TOKEN}}
+
 ### Delete Notification
 DELETE {{HOST}}/api/notifications/1
 x-access-token: {{TOKEN}}
@@ -359,9 +365,9 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-    "users_id": "10", 
-    "groups_id": "38",
+    "users_id": "7", 
+    "groups_id": "7",
      "sent_on": "2024-06-01 00:00",
      "responded_on": "2024-06-02 00:00",
-     "email": "eduardo.llaria@bi-bat.com"
+     "email": "edllaor77@gmail.com"
 }

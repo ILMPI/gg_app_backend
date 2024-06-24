@@ -67,6 +67,8 @@ Format of the answers
 
     PUT /api/notifications/changestatus/:users_id/:groups_id Pone todas las notificaciones de un usuario users_id en un grupo groups_id con el status 'Read'
 
+    PUT /api/notifications/changestatus/:id Pone la notificacion id con el status 'Read'
+
     DELETE /api/notifications/:id Borra la notificacion :id
    
     DELETE /api/notifications/users_id/groups_id Borra las notificaciones del usuario users_id que tenga del grupo groups_id.

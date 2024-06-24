@@ -2,6 +2,10 @@ const selectAll = () => {
     return db.query('select * from notifications');
 }
 
+const selectById = (id) => {
+    return db.query('SELECT * FROM notifications WHERE id =?', [id]);
+}
+
 const selectByUsersId = (users_id) => {
     return db.query('select * from notifications where users_id=?', [users_id]);
 }
@@ -39,6 +43,7 @@ const setStatusReadNotifications = (id) => {
 
 module.exports = {
     selectAll,
+    selectById,
     selectByUsersId,
     selectByUserGroup,
     insertNotification,
