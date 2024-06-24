@@ -19,11 +19,11 @@ const getExpenseByConcept = (concept, groups_id) => {
 }
 
 const selectExpensesByGroup = (groups_id) => {
-    return db.query('SELECT * FROM expenses where groups_id = ?',[groups_id]);
+    return db.query('SELECT * FROM expenses where groups_id = ? order by created_on desc',[groups_id]);
 }
 
 const getExpensesByUserGroup = (users_id, groups_id) => {
-    return db.query('SELECT expe.concept, expa.users_id, expa.group_id, expe.amount, expa.cost, expa.status FROM expense_assignments expa inner join expenses expe ON expa.expenses_id = expe.expense_id WHERE expa.users_id= ? and expa.group_id= ?',[users_id, groups_id]);
+    return db.query('SELECT expe.concept, expa.users_id, expa.group_id, expe.amount, expa.cost, expa.status FROM expense_assignments expa inner join expenses expe ON expa.expenses_id = expe.expense_id WHERE expa.users_id= ? and expa.group_id= ? order by expe.created_on desc',[users_id, groups_id]);
 }
 
 const getExpenseById = (expense_id) => {
@@ -54,7 +54,7 @@ const deleteExpenseById = (expense_id) => {
 }
 
 const getExpensesByUsers = (users_id) => {
-    return db.query('SELECT * FROM expense_assignments where users_id =?',[users_id]);
+    return db.query('SELECT * FROM expense_assignments where users_id =? ',[users_id]);
 }
 
 const getOnlyExpensesByUser = (users_id) => {
@@ -75,7 +75,7 @@ const getOnlyExpensesByUser = (users_id) => {
         JOIN 
             expense_assignments ea ON e.expense_id = ea.expenses_id
         WHERE 
-            ea.users_id = ?;`,[users_id]);
+            ea.users_id = ? order by e.created_on desc;`,[users_id]);
 }
 const getOnlyExpensesByGroup = (groups_id, users_id) => {
     return db.query(`  
@@ -97,6 +97,7 @@ const getOnlyExpensesByGroup = (groups_id, users_id) => {
             e.groups_id = ?
         GROUP BY 
             e.expense_id
+        ORDER BY e.created_on desc
     `, [users_id, users_id, groups_id]);
 };
 
