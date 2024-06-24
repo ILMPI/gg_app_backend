@@ -190,7 +190,13 @@ const getExpenseOverallStatus = async (expenseId) => {
     `, [expenseId]);
 };
 
-
+const getExpenseAssignmentStatus = (users_id, expenses_id) => {
+    return db.query(`
+        SELECT status 
+        FROM expense_assignments 
+        WHERE users_id = ? AND expenses_id = ?
+    `, [users_id, expenses_id]);
+};
 
 
 
@@ -199,5 +205,5 @@ module.exports = {
     selectExpensesByGroup, getExpenseById, updateExpenseById, deleteExpenseById,
     getExpensesByUsers, getExpensesByUserGroup, payExpense, getBalance,
     getAmountTotalGroup, getExpenseParticipants, getExpenseStatuses, getExpenseOverallStatus,
-    getOnlyExpensesByUser,getOnlyExpensesByGroup
+    getOnlyExpensesByUser,getOnlyExpensesByGroup, getExpenseAssignmentStatus
 }

@@ -360,18 +360,31 @@ const getExpenseById = async (req, res, next) => {
 const payExpense = async (req, res, next) => {
     try {
         const { users_id, expenses_id, groups_id, cost, status } = req.body;
+        // fetch expense_assignment status for the user
+                const [expenseAssignment] = await Expense.getExpenseAssignmentStatus(users_id, expenses_id);
+                const currentStatus = expenseAssignment[0]?.status; //status
+        
+                if (currentStatus === 'Paid') {
+                    return res.status(200).json({
+                        success: false,
+                        message: 'Expense already paid by this user',
+                        data: null
+                    });
+                }
 
+
+// fetch user balance
         const [response] = await Expense.getBalance(users_id, groups_id);
         const balanceAnterior = Number(response[0].balance);
         
-        if (status === 'Paid') {
-            const [result] = [];
-            return res.status(200).json({
-                success: true,
-                message: 'Expense already paid',
-                data: result
-            });
-        }
+        // if (status === 'Paid') {
+        //     const [result] = [];
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: 'Expense already paid',
+        //         data: result
+        //     });
+        // }
 
         // El deudor paga y se queda el balance en cero
         const balance = balanceAnterior + Number(cost);
