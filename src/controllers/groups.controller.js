@@ -9,12 +9,7 @@ const {
 const Invitation = require('../models/invitations.model');
 const Dayjs = require('dayjs');
 const { transformGroupData } = require('../utils/groupUtils');
-<<<<<<< HEAD
-const Email = require('../utils/emailUtils');
-
-=======
 const {sendEmail} = require('../utils/emailUtils');
->>>>>>> 30c8c3fe5e8e240d6eb414a710e68b3f6363311f
 
 
 
@@ -298,20 +293,13 @@ const inviteUserToGroup = async (req, res, next) => {
                         const [group] = await Group.selectById(groupId);
                         await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
                         await sendInviteUserToGroupNotification(userId, inviterId, groupId);
-                        await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
-                        message = 'User added to the group';
-                        await Notification.insertNotification(inviterId, 'Unread', sentOn, `Se ha añadido un nuevo miembro al grupo: ${group[0].title}`, `Se ha añadido el usuario ${user[0].name} a dicho grupo`);
+                        message = 'User invited to the group';
+                        //await Notification.insertNotification(inviterId, 'Unread', sentOn, `Se ha añadido un nuevo miembro al grupo: ${group[0].title}`, `Se ha añadido el usuario ${user[0].name} a dicho grupo`);
                     } else {
                         const [inviter] = await User.selectById(inviterId);
                         const [group] = await Group.selectById(groupId);
-                        await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
-<<<<<<< HEAD
-                        const [inviter] = await User.selectById(inviterId);
-                        const [group] = await Group.selectById(groupId);
-                        await Email.sendEmail(email,`${inviter[0].name} te ha invitado a registrarte en GG-APP`, `Registrate para que te añadas a un grupo para gestionar gastos compartidos con el, en relacion con grupo ${group[0].title}`);
-=======
+                        await Invitation.insertInvitation(inviterId, groupId, sentOn, groupId, email);
                         await sendEmail(email,`Registrate en GG-APP, de parte de ${inviter[0].name}`, `Te quiere añadir a un grupo para compartir gastos. El grupo: ${group[0].title}`)
->>>>>>> 30c8c3fe5e8e240d6eb414a710e68b3f6363311f
                         message = 'Invitation sent to the email';
                         await Notification.insertNotification(userId, 'Unread', sentOn, `Se le ha enviado un mail a ${email}`, `Cuando se registre se añadira al grupo ${group[0].title}`);
                     }
@@ -339,75 +327,6 @@ const inviteUserToGroup = async (req, res, next) => {
         next(error);
     }
 };
-
-
-// const inviteUserToGroup = async (req, res, next) => {
-//     try {
-//         const { participants, users } = req.body;
-//         const invitees = participants || users;
-//         const groupId = req.params.id;
-//         const inviterId = req.userId;
-//         const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
-
-//         let results = [];
-
-//         for (let user of invitees) {
-//             const { email, name } = user;
-//             let success = true;
-//             let message = '';
-
-//             try {
-//                 const [existingUsers] = await User.selectByEmail(email);
-//                 const userId = existingUsers.length > 0 ? existingUsers[0].id : null;
-
-//                 if (userId) {
-//                     const [existingMembership] = await Membership.selectMember(userId, groupId);
-//                     if (existingMembership.length > 0) {
-//                         message = 'The user is already a member of the group';
-//                         success = false;
-//                     }
-//                 }
-
-//                 const [recentInvitations] = await Invitation.selectRecentInvitation(inviterId, groupId, email);
-//                 if (recentInvitations.length > 0) {
-//                     message = 'An invitation has already been sent to this email for this group in the last 24 hours';
-//                     success = false;
-//                 }
-
-//                 if (success) {
-//                     if (userId) {
-//                         await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
-//                         await sendInviteUserToGroupNotification(userId, inviterId, groupId);
-//                         await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
-//                         message = 'User added to the group';
-//                     } else {
-//                         await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
-//                         message = 'Invitation sent to the email';
-//                     }
-//                 }
-//             } catch (error) {
-//                 success = false;
-//                 message = error.message;
-//             }
-
-//             results.push({
-//                 email,
-//                 success,
-//                 message
-//             });
-//         }
-
-//         const allFailures = results.every(result => !result.success);
-
-//         return res.status(200).json({
-//             success: !allFailures,
-//             message: allFailures ? 'All invitations failed' : 'Batch invitation process completed',
-//             data: results
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
 
 const getGroupImage = async (req, res, next) => {
     try {
