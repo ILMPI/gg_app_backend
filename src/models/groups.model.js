@@ -1,5 +1,5 @@
 const selectAll = () => {
-    return db.query('SELECT * FROM `groups`');
+    return db.query('SELECT * FROM `groups` order by created_on desc');
 }
 
 const selectById = (id) => {
@@ -11,7 +11,7 @@ const insertGroup = ({ creator_id, title, description, image_url }) => {
 }
 
 const selectByCreatorId = (creator_id) => {
-    return db.query('SELECT * FROM `groups` WHERE creator_id = ?', [creator_id]);
+    return db.query('SELECT * FROM `groups` WHERE creator_id = ? order by created_on desc', [creator_id]);
 }
 
 const selectAllGroupsByUserId = (userId) => {
@@ -19,7 +19,7 @@ const selectAllGroupsByUserId = (userId) => {
         SELECT DISTINCT g.* 
         FROM ggapp.groups g
         LEFT JOIN ggapp.membership m ON g.id = m.groups_id
-        WHERE m.users_id = ? OR g.creator_id = ?
+        WHERE m.users_id = ? OR g.creator_id = ? order by created_on desc
     `, [userId, userId]);
 }
 
