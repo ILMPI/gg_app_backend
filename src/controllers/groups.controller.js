@@ -261,6 +261,10 @@ const inviteUserToGroup = async (req, res, next) => {
         const inviterId = req.userId;
         const sentOn = Dayjs().format('YYYY-MM-DD HH:mm:ss');
 
+        console.log('Request Body:', req.body);
+        console.log('Group ID:', groupId);
+        console.log('Inviter ID:', inviterId);
+
         let results = [];
 
         for (let user of invitees) {
@@ -268,45 +272,55 @@ const inviteUserToGroup = async (req, res, next) => {
             let success = true;
             let message = '';
 
+            console.log('Processing Invitee:', user);
+
             try {
                 const [existingUsers] = await User.selectByEmail(email);
                 const userId = existingUsers.length > 0 ? existingUsers[0].id : null;
 
+                console.log('Existing Users:', existingUsers);
+                console.log('User ID:', userId);
+
                 if (userId) {
                     const [existingMembership] = await Membership.selectMember(userId, groupId);
+                    console.log('Existing Membership:', existingMembership);
                     if (existingMembership.length > 0) {
                         message = 'The user is already a member of the group';
                         success = false;
                     }
                 }
-
+                
                 const [recentInvitations] = await Invitation.selectRecentInvitation(inviterId, groupId, email);
+                console.log('Recent Invitations:', recentInvitations);
                 if (recentInvitations.length > 0) {
                     message = 'An invitation has already been sent to this email for this group in the last 24 hours';
                     success = false;
                 }
 
                 if (success) {
-                    
                     if (userId) {
                         const [user] = await User.selectById(userId);
                         const [group] = await Group.selectById(groupId);
+                        console.log('User:', user);
+                        console.log('Group:', group);
                         await Membership.insertMemberToGroup({ users_id: userId, groups_id: groupId, status: 'Invited', balance: 0 });
                         await sendInviteUserToGroupNotification(userId, inviterId, groupId);
                         message = 'User invited to the group';
-                        //await Notification.insertNotification(inviterId, 'Unread', sentOn, `Se ha añadido un nuevo miembro al grupo: ${group[0].title}`, `Se ha añadido el usuario ${user[0].name} a dicho grupo`);
                     } else {
                         const [inviter] = await User.selectById(inviterId);
                         const [group] = await Group.selectById(groupId);
-                        await Invitation.insertInvitation(inviterId, groupId, sentOn, groupId, email);
-                        await sendEmail(email,`Registrate en GG-APP, de parte de ${inviter[0].name}`, `Te quiere añadir a un grupo para compartir gastos. El grupo: ${group[0].title}`)
+                        console.log('Inviter:', inviter);
+                        console.log('Group:', group);
+                        await Invitation.insertInvitation(inviterId, groupId, sentOn, null, email);
+                        await sendEmail(email, `Registrate en GG-APP, de parte de ${inviter[0].name}`, `Te quiere añadir a un grupo para compartir gastos. El grupo: ${group[0].title}`);
                         message = 'Invitation sent to the email';
-                        await Notification.insertNotification(userId, 'Unread', sentOn, `Se le ha enviado un mail a ${email}`, `Cuando se registre se añadira al grupo ${group[0].title}`);
+                        await Notification.insertNotification(inviterId, 'Unread', sentOn, `Se le ha enviado un mail a ${email}`, `Cuando se registre se añadira al grupo ${group[0].title}`);
                     }
                 }
             } catch (error) {
                 success = false;
                 message = error.message;
+                console.log('Error:', error);
             }
 
             results.push({
