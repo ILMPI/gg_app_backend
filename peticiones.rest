@@ -1,7 +1,7 @@
 @PORT = 3000
 @HOST = http://localhost:{{PORT}}
 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5MjQ2Njg0LCJleHAiOjE3MTkzMzMwODR9.uXAVh8IBLfAI9RV9dN1qzzHwGIEwTOVe6hBbVE0Eak4
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzE5NzYxNzI3LCJleHAiOjE3MTk4NDgxMjd9.hnEVQMO6vCo7zSj7MCaOrVMgy16mRZgjr4pr8bUnjsE
 
 
 ###AUTH
@@ -13,7 +13,7 @@ Content-Type: application/json
 {
     "password": "password",
     "name": "Oliver Twist",
-    "email": "oliver_twistM@gmail.com"
+    "email": "oliver_twist1@gmail.com"
 }
 ### maria.lopez@example.com password2
 ### Login User
@@ -87,7 +87,7 @@ Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
-  "name": "Musicants",
+  "name": "Plants lovers",
   "description": "Description",
   "image": "https://picsum.photos/id/26/200/200"
 }
@@ -116,14 +116,14 @@ POST {{HOST}}/api/groups/20/activate
 x-access-token: {{TOKEN}}
 
 ### Invite User to Group
-POST {{HOST}}/api/groups/18/invite
+POST {{HOST}}/api/groups/26/invite
 Content-Type: application/json
 x-access-token: {{TOKEN}}
 
 {
     "participants": [
         {
-            "email": "admin@gmail.com"
+            "email": "admin8@gmail.com"
         }
     ]
 
